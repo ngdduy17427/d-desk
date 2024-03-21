@@ -1,0 +1,35 @@
+.taskbar {
+  width: 100%;
+  background-color: var(--app-color-charcoal);
+  padding: 0 1rem;
+  border-bottom: 1px solid #c3c3c3;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  user-select: none;
+  .title-name {
+    font-size: 1.25rem;
+    color: #e07a5f;
+    cursor: pointer;
+  }
+  ul {
+    height: 100%;
+    display: flex;
+    gap: 1rem;
+    li {
+      height: 100%;
+      color: #ebc490;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      &::before {
+        content: ">";
+        font-size: 0.8rem;
+        margin-right: 0.25rem;
+      }
+      &:hover {
+        color: #e07a5f;
+      }
+    }
+  }
+}
