@@ -1,18 +1,20 @@
 {
   "name": "d-desk",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "author": "ngdduy17427",
   "dependencies": {
     "axios": "^1.6.5",
+    "cursor-effects": "^1.0.15",
+    "moment": "^2.30.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.12.0",
-    "react-markdown": "^9.0.1"
+    "react-select": "^5.8.0"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "npm run clean && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "clean": "rimraf ./build"

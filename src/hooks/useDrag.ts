@@ -1,4 +1,4 @@
-import { RefObject, useCallback, useLayoutEffect, useRef, useState } from "react";
+import { RefObject, startTransition, useCallback, useEffect, useRef, useState } from "react";
 import { clamp } from "utils/utils_helper";
 import useContainerSize from "./useContainerSize";
 
@@ -45,21 +45,24 @@ const useDrag = ({ containerRef, isDraggable = true, onDragStart }: IUseDragOpti
   const onMouseMoveStart = useCallback(
     (event: any) => {
       onDragStart?.();
+
       if (!isDraggable || event.button === 1 || event.button === 2) return;
       overrideEventDefaults(event);
 
-      setDragState((prevState) => ({
-        ...prevState,
-        isPressing: true,
-        relCursor: {
-          relY: Math.floor(
-            event.pageY - (dragRef.current as HTMLElement).getBoundingClientRect().top
-          ),
-          relX: Math.floor(
-            event.pageX - (dragRef.current as HTMLElement).getBoundingClientRect().left
-          ),
-        },
-      }));
+      startTransition(() =>
+        setDragState((prevState) => ({
+          ...prevState,
+          isPressing: true,
+          relCursor: {
+            relY: Math.floor(
+              event.pageY - (dragRef.current as HTMLElement).getBoundingClientRect().top
+            ),
+            relX: Math.floor(
+              event.pageX - (dragRef.current as HTMLElement).getBoundingClientRect().left
+            ),
+          },
+        }))
+      );
     },
     [onDragStart, isDraggable, dragRef]
   );
@@ -109,16 +112,18 @@ const useDrag = ({ containerRef, isDraggable = true, onDragStart }: IUseDragOpti
       (dragRef.current as HTMLElement).style.bottom = `${Math.floor(posBottom)}px`;
       (dragRef.current as HTMLElement).style.right = `${Math.floor(posRight)}px`;
 
-      setDragState((prevState) => ({
-        ...prevState,
-        isDragging: true,
-        position: {
-          top: posTop,
-          left: posLeft,
-          bottom: posBottom,
-          right: posRight,
-        },
-      }));
+      startTransition(() =>
+        setDragState((prevState) => ({
+          ...prevState,
+          isDragging: true,
+          position: {
+            top: posTop,
+            left: posLeft,
+            bottom: posBottom,
+            right: posRight,
+          },
+        }))
+      );
     },
     [isDraggable, dragState, containerSize, dragRef]
   );
@@ -126,18 +131,22 @@ const useDrag = ({ containerRef, isDraggable = true, onDragStart }: IUseDragOpti
   const onMouseMoveEnd = useCallback(
     (event: any) => {
       if (dragState.isPressing)
-        setDragState((prevState) => ({
-          ...prevState,
-          isPressing: false,
-        }));
+        startTransition(() =>
+          setDragState((prevState) => ({
+            ...prevState,
+            isPressing: false,
+          }))
+        );
 
       if (!dragState.isDragging) return;
       overrideEventDefaults(event);
 
-      setDragState((prevState) => ({
-        ...prevState,
-        isDragging: false,
-      }));
+      startTransition(() =>
+        setDragState((prevState) => ({
+          ...prevState,
+          isDragging: false,
+        }))
+      );
 
       (dragRef.current as HTMLElement).style.boxSizing = "";
       (dragRef.current as HTMLElement).style.position = "";
@@ -146,7 +155,7 @@ const useDrag = ({ containerRef, isDraggable = true, onDragStart }: IUseDragOpti
     [dragState]
   );
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseMoveEnd);
 

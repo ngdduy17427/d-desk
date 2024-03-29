@@ -2,32 +2,43 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-@import "./markdown.scss";
+@import "./font.scss";
 
 :root {
-  --app-font-size: 1rem;
-  --app-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-  --app-color-coal: #0f0d0e;
-  --app-color-charcoal: #231f20;
+  --glb-taskbar-height: 2.5rem;
+  --glb-color-charcoal: #231f20;
+  --glb-color-text: #ebc490;
+  --glb-color-title: #e07a5f;
+  --glb-border-color: #c3c3c3;
+  --glb-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
 body {
   width: 100vw;
   height: 100vh;
   font-size: 16px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
-    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  main {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+  font-family: "Source Code Pro", monospace;
+  ::-moz-selection {
+    color: var(--glb-color-title);
+    background: var(--glb-color-text);
+  }
+  ::selection {
+    color: var(--glb-color-title);
+    background: var(--glb-color-text);
+  }
+  > canvas {
+    z-index: 100;
   }
 }
 
-@media all and (max-width: 768px) {
+main {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (max-width: 768px) {
   body {
     font-size: 14px;
   }

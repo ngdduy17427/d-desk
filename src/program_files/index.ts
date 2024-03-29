@@ -1,3 +1,4 @@
+import { Moment } from "moment";
 import * as UtilsHelper from "utils/utils_helper";
 
 export interface IProgramFile {
@@ -14,6 +15,7 @@ export interface IProgramFile {
   };
   isCenter?: boolean;
   isDraggable?: boolean;
+  runtime?: Moment;
 }
 
 export const createProgramFile = (config: IProgramFile) => {
@@ -31,5 +33,6 @@ export const createProgramFile = (config: IProgramFile) => {
     },
     isCenter: config.isCenter ?? true,
     isDraggable: config.isDraggable ?? true,
+    runtime: config.runtime ?? undefined,
   };
 };

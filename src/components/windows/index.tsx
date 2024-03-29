@@ -1,15 +1,15 @@
-import { AppActionType } from "app/app_action";
-import { useAppContext } from "app/app_context";
 import classNames from "classnames";
+import { AppActionType } from "context/actions";
+import { useAppContext } from "context/context";
 import useContainerSize from "hooks/useContainerSize";
 import useDrag from "hooks/useDrag";
 import { IProgramFile } from "program_files";
-import { RefObject, createElement, useMemo, useState } from "react";
+import { RefObject, createElement, startTransition, useEffect, useMemo, useState } from "react";
 import { clamp } from "utils/utils_helper";
-import BtnClose from "./btn_close";
-import BtnMaximize from "./btn_maximize";
-import BtnMinimize from "./btn_minimize";
 import "./css.scss";
+import BtnClose from "./ui/btn_close";
+import BtnMaximize from "./ui/btn_maximize";
+import BtnMinimize from "./ui/btn_minimize";
 
 export enum IWindowsSize {
   NORMAL,
@@ -33,9 +33,24 @@ const Windows = ({
   } = useAppContext();
   const { dragRef, dragLayerRef, dragState } = useDrag({
     containerRef: containerRef,
-    isDraggable: windowsApp.isDraggable,
-    onDragStart: () => appDispatch(AppActionType.CLICK_WINDOWS, windowsApp.id),
+    isDraggable: windowsApp.isDraggable && windowsSize === IWindowsSize.NORMAL,
+    onDragStart: () => appDispatch(AppActionType.CLICK_WINDOWS, { programFileId: windowsApp.id }),
   });
+
+  useEffect(() => {
+    const handleOpenWindows = (event: CustomEventInit) => {
+      if (event.detail.windowsId !== windowsApp.id) return;
+      if (
+        event.detail.windowsSize === IWindowsSize.MINIMIZE &&
+        windowsSize === IWindowsSize.MINIMIZE
+      ) {
+        startTransition(() => setWindowsSize(IWindowsSize.NORMAL));
+      }
+    };
+
+    window.addEventListener("openWindows", handleOpenWindows);
+    return () => window.removeEventListener("openWindows", handleOpenWindows);
+  }, [windowsApp.id, windowsSize]);
 
   const minWidthMinimize = useMemo(
     () => containerSize.offsetWidth / processMinimize?.length,
@@ -46,7 +61,7 @@ const Windows = ({
     [minWidthMinimize]
   );
   const minHeight = useMemo(
-    () => clamp(containerSize.offsetHeight, containerSize.offsetHeight, 32),
+    () => clamp(containerSize.offsetHeight, containerSize.offsetHeight, 40),
     [containerSize.offsetHeight]
   );
   const maxWidth = useMemo(
@@ -88,7 +103,6 @@ const Windows = ({
             bottom: dragState.position?.bottom,
             left: dragState.position?.left,
           };
-
         break;
       case IWindowsSize.MINIMIZE:
         _windowsStyle = {
@@ -103,7 +117,6 @@ const Windows = ({
             processMinimize?.indexOf(windowsApp.id as string),
           zIndex: 0,
         };
-
         break;
       case IWindowsSize.MAXIMIZE:
         _windowsStyle = {
@@ -115,7 +128,6 @@ const Windows = ({
           bottom: containerSize.offsetBottom,
           left: containerSize.offsetLeft,
         };
-
         break;
       default:
         break;
@@ -136,36 +148,41 @@ const Windows = ({
   ]);
 
   return (
-    <div
+    <windows
       ref={dragRef}
       id={windowsApp.id}
       style={windowsStyle}
       className={classNames(
-        "windows",
         { center: windowsApp.isCenter },
         { minimize: windowsSize === IWindowsSize.MINIMIZE },
         { maximize: windowsSize === IWindowsSize.MAXIMIZE }
       )}
-      onClick={() => appDispatch(AppActionType.CLICK_WINDOWS, windowsApp.id)}
+      onClick={() => appDispatch(AppActionType.CLICK_WINDOWS, { programFileId: windowsApp.id })}
     >
       <div ref={dragLayerRef} className="windows-header">
-        <span className="windows-name">{windowsApp.name}</span>
+        <h1 className="windows-name">{windowsApp.name}</h1>
         <div className="windows-nav">
           <BtnMinimize
-            windowsRef={dragRef}
+            windowsId={windowsApp.id as string}
             windowsSize={windowsSize}
-            setWindowsSize={setWindowsSize}
+            setWindowsSize={(size) => startTransition(() => setWindowsSize(size))}
           />
           <BtnMaximize
-            windowsRef={dragRef}
+            windowsId={windowsApp.id as string}
             windowsSize={windowsSize}
-            setWindowsSize={setWindowsSize}
+            setWindowsSize={(size) => startTransition(() => setWindowsSize(size))}
           />
-          <BtnClose windowsRef={dragRef} />
+          <BtnClose
+            onClick={() =>
+              appDispatch(AppActionType.CLOSE_WINDOWS, {
+                programFileId: windowsApp.id,
+              })
+            }
+          />
         </div>
       </div>
       <div className="windows-body">{createElement(windowsApp.component, { ...windowsApp })}</div>
-    </div>
+    </windows>
   );
 };
 

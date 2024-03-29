@@ -1,0 +1,16 @@
+.task-manager-ui {
+  padding: 1rem 1rem 1rem 0.5rem;
+  .app-task {
+    display: flex;
+    align-items: center;
+    .runtime {
+      margin-left: auto;
+    }
+    .btn-end-task {
+      margin-left: 1rem;
+      &:hover {
+        color: var(--glb-color-title);
+      }
+    }
+  }
+}

@@ -1,15 +1,14 @@
-import { AppActionType } from "app/app_action";
-import { useAppContext } from "app/app_context";
-import { RefObject } from "react";
+import { AppActionType } from "context/actions";
+import { useAppContext } from "context/context";
 import { MdMinimize, MdOpenInNew } from "react-icons/md";
-import { IWindowsSize } from ".";
+import { IWindowsSize } from "..";
 
 const BtnMinimize = ({
-  windowsRef,
+  windowsId,
   windowsSize,
   setWindowsSize,
 }: {
-  windowsRef: RefObject<HTMLDivElement>;
+  windowsId: string;
   windowsSize: IWindowsSize;
   setWindowsSize: React.Dispatch<React.SetStateAction<IWindowsSize>>;
 }) => {
@@ -18,10 +17,10 @@ const BtnMinimize = ({
   const handleMinimizeWindow = () => {
     if (windowsSize === IWindowsSize.MINIMIZE) {
       setWindowsSize(IWindowsSize.NORMAL);
-      appDispatch(AppActionType.REMOVE_FROM_PROCESS_MINIMIZE, windowsRef.current?.id);
+      appDispatch(AppActionType.REMOVE_FROM_PROCESS_MINIMIZE, { programFileId: windowsId });
     } else {
       setWindowsSize(IWindowsSize.MINIMIZE);
-      appDispatch(AppActionType.MINIMIZE_WINDOWS, windowsRef.current?.id);
+      appDispatch(AppActionType.MINIMIZE_WINDOWS, { programFileId: windowsId });
     }
   };
 

@@ -1,15 +1,14 @@
-import { AppActionType } from "app/app_action";
-import { useAppContext } from "app/app_context";
-import { RefObject } from "react";
+import { AppActionType } from "context/actions";
+import { useAppContext } from "context/context";
 import { MdWebAsset, MdWebAssetOff } from "react-icons/md";
-import { IWindowsSize } from ".";
+import { IWindowsSize } from "..";
 
 const BtnMaximize = ({
-  windowsRef,
+  windowsId,
   windowsSize,
   setWindowsSize,
 }: {
-  windowsRef: RefObject<HTMLDivElement>;
+  windowsId: string;
   windowsSize: IWindowsSize;
   setWindowsSize: React.Dispatch<React.SetStateAction<IWindowsSize>>;
 }) => {
@@ -19,7 +18,7 @@ const BtnMaximize = ({
     if (windowsSize === IWindowsSize.MAXIMIZE) setWindowsSize(IWindowsSize.NORMAL);
     else setWindowsSize(IWindowsSize.MAXIMIZE);
 
-    appDispatch(AppActionType.REMOVE_FROM_PROCESS_MINIMIZE, windowsRef.current?.id);
+    appDispatch(AppActionType.REMOVE_FROM_PROCESS_MINIMIZE, { programFileId: windowsId });
   };
 
   return (

@@ -1,0 +1,23 @@
+.about-me {
+  padding: 1rem;
+  .my-thumb {
+    float: right;
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    margin-left: 4rem;
+  }
+  a:-webkit-any-link {
+    color: -webkit-link;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .about-me {
+    .my-thumb {
+      margin-left: 0;
+    }
+  }
+}

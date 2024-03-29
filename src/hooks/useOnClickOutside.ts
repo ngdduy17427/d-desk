@@ -1,13 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
-export const useOnClickOutside = (
-  isShowing: boolean,
-  handler: (event: MouseEvent | TouchEvent) => void,
-  ref: HTMLElement
-) => {
+export const useOnClickOutside = (handler: (event: MouseEvent | TouchEvent) => void) => {
+  const ref = useRef<any>(null);
+  const secondRef = useRef<any>(null);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
-      if (!ref || ref.contains(event.target as Node)) return;
+      if (
+        !ref ||
+        !secondRef ||
+        ref.current.contains(event.target as Node) ||
+        secondRef.current.contains(event.target as Node)
+      )
+        return;
 
       handler(event);
     };
@@ -18,5 +23,7 @@ export const useOnClickOutside = (
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("touchstart", handleClickOutside);
     };
-  }, [isShowing, handler, ref]);
+  }, [ref, handler]);
+
+  return { ref, secondRef };
 };
