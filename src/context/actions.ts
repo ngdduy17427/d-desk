@@ -1,6 +1,8 @@
-import { IAppContext } from "@type";
+import { IAppContext, IAppSettings } from "@type";
+import { AppBackgrounds, AppCursors, AppTheme } from "config";
 import moment from "moment";
 import { IProgramFile } from "program_files";
+import localStorageHelper from "utils/local_storage_helper";
 
 export enum AppActionType {
   OPEN_NEW_WINDOWS = "OPEN_WINDOWS",
@@ -9,8 +11,15 @@ export enum AppActionType {
   MINIMIZE_WINDOWS = "MINIMIZE_WINDOWS",
   REMOVE_FROM_PROCESS_MINIMIZE = "REMOVE_FROM_PROCESS_MINIMIZE",
   CLOSE_WINDOWS = "CLOSE_WINDOWS",
-  CHANGE_APP_BACKGROUND = "CHANGE_APP_BACKGROUND",
-  CHANGE_APP_CURSOR = "CHANGE_APP_CURSOR",
+  INITIAL_APP_SETTINGS = "INITIAL_APP_SETTINGS",
+  UPDATE_APP_SETTINGS = "UPDATE_APP_SETTINGS",
+}
+
+export enum AppSettingsType {
+  INIT = "INIT",
+  THEME = "THEME",
+  BACKGROUND = "BACKGROUND",
+  CURSOR = "CURSOR",
 }
 
 export interface AppActionProps {
@@ -74,23 +83,36 @@ export const appAction = (state: IAppContext, action: AppActionProps) => {
           (id: string) => id !== action.payload.programFileId
         ),
       };
-    case AppActionType.CHANGE_APP_BACKGROUND:
+    case AppActionType.INITIAL_APP_SETTINGS: {
+      const initAppSettings: IAppSettings = {
+        appTheme: AppTheme[0],
+        appBackground: AppBackgrounds[0],
+        appCursor: AppCursors[0],
+      };
+
+      state.appSettings.appCursorEffectResult?.destroy();
+      document.body.setAttribute("data-theme", AppTheme[0].theme);
+      localStorageHelper.update("appSettings", initAppSettings);
+
       return {
         ...state,
-        appSettings: {
-          ...state.appSettings,
-          background: action.payload.background,
-        },
+        appSettings: initAppSettings,
       };
-    case AppActionType.CHANGE_APP_CURSOR:
-      state.appSettings.cursorEffectResult?.destroy();
+    }
+    case AppActionType.UPDATE_APP_SETTINGS:
+      delete action.payload.appSettings.appCursorEffectResult;
+
+      state.appSettings.appCursorEffectResult?.destroy();
+      localStorageHelper.update("appSettings", action.payload.appSettings);
+      document.body.setAttribute("data-theme", action.payload.appSettings?.appTheme?.theme);
 
       return {
         ...state,
         appSettings: {
-          ...state.appSettings,
-          cursor: action.payload.cursor,
-          cursorEffectResult: action.payload.cursor.cursor?.(),
+          ...action.payload.appSettings,
+          appCursorEffectResult: AppCursors.filter(
+            (cursor) => cursor.value === action.payload.appSettings.appCursor.value
+          )[0].cursorEffect?.(),
         },
       };
     default:

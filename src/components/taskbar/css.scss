@@ -1,7 +1,7 @@
 taskbar {
   width: 100%;
   height: var(--glb-taskbar-height);
-  background-color: var(--glb-color-charcoal);
+  background-color: var(--glb-bg-header);
   padding: 0 1rem;
   border-bottom: 1px solid var(--glb-border-color);
   display: flex;
@@ -42,7 +42,7 @@ taskbar {
 }
 .mobile-shortcut {
   font-size: 1rem;
-  background-color: var(--glb-color-charcoal);
+  background-color: var(--glb-bg-header);
   border: 1px solid var(--glb-border-color);
   display: none;
   flex-direction: column;

@@ -4,7 +4,7 @@ import "./css.scss";
 const UI = () => {
   return (
     <section className="about-me">
-      <img src="/images/my-thumb.png" alt="My Thumb" className="my-thumb" />
+      <img src="/images/thumb/my-thumb.png" alt="My Thumb" className="my-thumb" />
       <h1 className="text-[1.25rem]">
         <b>
           Hello there!

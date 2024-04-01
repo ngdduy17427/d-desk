@@ -40,7 +40,7 @@ windows {
   .windows-header {
     min-height: var(--glb-taskbar-height);
     color: var(--glb-color-text);
-    background-color: var(--glb-color-charcoal);
+    background-color: var(--glb-bg-header);
     padding: 0 1rem;
     display: flex;
     justify-content: space-between;

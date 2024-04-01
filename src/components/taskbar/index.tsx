@@ -3,6 +3,10 @@ import { AppActionType } from "context/actions";
 import { useAppContext } from "context/context";
 import { useOnClickOutside } from "hooks/useOnClickOutside";
 import { IProgramFile } from "program_files";
+import AboutMeProgram from "program_files/about_me";
+import ProjectsProgram from "program_files/projects";
+import SettingsProgram from "program_files/settings";
+import TaskManagerProgram from "program_files/task_manager";
 import { Fragment } from "react";
 import { MdMenu } from "react-icons/md";
 import { addClassToElement, removeClassFromElement } from "utils/utils_helper";
@@ -10,7 +14,7 @@ import "./css.scss";
 
 const Taskbar = () => {
   const {
-    appContext: { programFiles, appProcesses },
+    appContext: { appProcesses },
     appDispatch,
   } = useAppContext();
   const { ref: mobileShortcutRef, secondRef: mobileMenuRef } = useOnClickOutside(() => {
@@ -46,11 +50,13 @@ const Taskbar = () => {
       <taskbar className="taskbar">
         <p className="title-name">D-Desk</p>
         <ul className="pc-shortcut">
-          {programFiles?.map((programFile) => (
-            <li key={programFile.id} onClick={() => handleOpenWindows(programFile)}>
-              {programFile.name}
-            </li>
-          ))}
+          {[AboutMeProgram, ProjectsProgram, SettingsProgram, TaskManagerProgram].map(
+            (programFile) => (
+              <li key={programFile.id} onClick={() => handleOpenWindows(programFile)}>
+                {programFile.name}
+              </li>
+            )
+          )}
         </ul>
         <button
           ref={mobileMenuRef}
@@ -62,11 +68,13 @@ const Taskbar = () => {
         </button>
       </taskbar>
       <ul ref={mobileShortcutRef} id="mobileShortcut" className="mobile-shortcut">
-        {programFiles?.map((programFile) => (
-          <li key={programFile.id} onClick={() => handleOpenWindows(programFile)}>
-            {programFile.name}
-          </li>
-        ))}
+        {[AboutMeProgram, ProjectsProgram, SettingsProgram, TaskManagerProgram].map(
+          (programFile) => (
+            <li key={programFile.id} onClick={() => handleOpenWindows(programFile)}>
+              {programFile.name}
+            </li>
+          )
+        )}
       </ul>
     </Fragment>
   );

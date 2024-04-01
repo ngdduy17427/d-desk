@@ -48,7 +48,7 @@ const projectList: IProject[] = [
     description:
       "A customizable workspace, which allows to organize digital tasks, notes, and projects in a way that suits their individual preferences and workflow.",
     techs: [techList[0].id, techList[1].id],
-    thumnnail: "/images/d-desk-thumb.png",
+    thumnnail: "/images/thumb/d-desk-thumb.png",
   },
   {
     id: uuidv4(),
@@ -56,7 +56,7 @@ const projectList: IProject[] = [
     description:
       "An online shopping destination that offers a diverse range of products to cater to various consumer needs.",
     techs: [techList[0].id, techList[1].id, techList[2].id],
-    thumnnail: "/images/d-store-thumb.png",
+    thumnnail: "/images/thumb/d-store-thumb.png",
     link: "https://d-store-ssr.vercel.app/",
     linkGit: "https://github.com/ngdduy17427/d-store-ssr",
   },
@@ -66,7 +66,7 @@ const projectList: IProject[] = [
     description:
       "A POS System Software can be used as Restaurant Table App, Restaurant Online Order.",
     techs: [techList[0].id, techList[1].id, techList[3].id],
-    thumnnail: "/images/d-pos-thumb.png",
+    thumnnail: "/images/thumb/d-pos-thumb.png",
     link: "https://drive.google.com/file/d/1Iiu7r-zAeFwqiiMQicY7ImdNfn34QKRw/view?usp=sharing",
     linkGit: "https://github.com/ngdduy17427/d-pos",
   },
@@ -75,7 +75,7 @@ const projectList: IProject[] = [
     title: "cra-template-retypewind",
     description: "Based Typescript template for React application.",
     techs: [techList[0].id, techList[1].id],
-    thumnnail: "/images/retypewind-thumb.png",
+    thumnnail: "/images/thumb/retypewind-thumb.png",
     linkNPM: "https://www.npmjs.com/package/cra-template-retypewind",
     linkGit: "https://github.com/ngdduy17427/cra-template-retypewind",
   },
@@ -84,7 +84,7 @@ const projectList: IProject[] = [
     title: "cra-template-retypetron",
     description: "Based Typescript template for React Electron application.",
     techs: [techList[0].id, techList[1].id, techList[3].id],
-    thumnnail: "/images/retypetron-thumb.png",
+    thumnnail: "/images/thumb/retypetron-thumb.png",
     linkNPM: "https://www.npmjs.com/package/cra-template-retypetron",
     linkGit: "https://github.com/ngdduy17427/cra-template-retypetron",
   },

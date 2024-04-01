@@ -1,27 +1,28 @@
 import { CursorEffectResult, DefaultOptions } from "cursor-effects";
 import { IProgramFile } from "program_files";
 
-export interface IAppBackground {
-  value: string;
-  image: string;
-}
-
-export interface IAppCursor {
+export interface IAppSettingOption {
   value: string;
   label: string;
-  cursor?: (options?: DefaultOptions) => CursorEffectResult;
 }
-
-export interface IAppSetting {
-  background: IAppBackground;
-  cursor: IAppCursor;
-  cursorEffectResult?: CursorEffectResult;
+export interface IAppTheme extends IAppSettingOption {
+  theme: string;
 }
-
+export interface IAppBackground extends IAppSettingOption {
+  image: string;
+}
+export interface IAppCursor extends IAppSettingOption {
+  cursorEffect?: (options?: DefaultOptions) => CursorEffectResult;
+}
+export interface IAppSettings {
+  appTheme?: IAppTheme;
+  appBackground?: IAppBackground;
+  appCursor?: IAppCursor;
+  appCursorEffectResult?: CursorEffectResult;
+}
 export interface IAppContext {
-  programFiles: IProgramFile[];
+  appSettings: IAppSettings;
   appProcesses: IProgramFile[];
   processIndex: string[];
   processMinimize: string[];
-  appSettings: IAppSetting;
 }

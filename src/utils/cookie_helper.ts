@@ -1,4 +1,4 @@
-const Cookies = {
+const cookieHelper = {
   getCookie: (name: string) => {
     const value = `; ${document.cookie}`;
     const parts: any = value.split(`; ${name}=`);
@@ -23,4 +23,4 @@ const Cookies = {
   },
 };
 
-export default Cookies;
+export default cookieHelper;
