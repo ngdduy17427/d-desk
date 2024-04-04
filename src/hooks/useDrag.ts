@@ -75,33 +75,33 @@ const useDrag = ({ containerRef, isDraggable = true, onDragStart }: IUseDragOpti
       let posTop: any = event.pageY - dragState.relCursor.relY;
       let posLeft: any = event.pageX - dragState.relCursor.relX;
       let posBottom: any =
-        containerSize.offsetHeight - (dragRef.current as HTMLElement).offsetHeight - posTop;
+        containerSize.offsetHeight - (dragRef.current as HTMLElement)?.offsetHeight - posTop;
       let posRight: any =
-        containerSize.offsetWidth - (dragRef.current as HTMLElement).offsetWidth - posLeft;
+        containerSize.offsetWidth - (dragRef.current as HTMLElement)?.offsetWidth - posLeft;
 
       posTop = clamp(
         posTop,
         containerSize.offsetTop,
         containerSize.offsetHeight -
-          (dragRef.current as HTMLElement).offsetHeight +
+          (dragRef.current as HTMLElement)?.offsetHeight +
           containerSize.offsetTop
       );
       posLeft = clamp(
         posLeft,
         containerSize.offsetLeft,
         containerSize.offsetWidth -
-          (dragRef.current as HTMLElement).offsetWidth +
+          (dragRef.current as HTMLElement)?.offsetWidth +
           containerSize.offsetLeft
       );
       posBottom = clamp(
         posBottom,
         containerSize.offsetBottom,
-        containerSize.offsetHeight - (dragRef.current as HTMLElement).offsetHeight
+        containerSize.offsetHeight - (dragRef.current as HTMLElement)?.offsetHeight
       );
       posRight = clamp(
         posRight,
         containerSize.offsetRight,
-        containerSize.offsetWidth - (dragRef.current as HTMLElement).offsetWidth
+        containerSize.offsetWidth - (dragRef.current as HTMLElement)?.offsetWidth
       );
 
       (dragRef.current as HTMLElement).style.boxSizing = "border-box";

@@ -1,13 +1,12 @@
+import { IAppContext } from "@type";
 import Windows from "components/windows";
-import { useAppContext } from "context/context";
+import { withContext } from "context/context";
 import { IProgramFile } from "program_files";
 import { useRef } from "react";
 import "./css.scss";
 
-const Desktop = () => {
-  const {
-    appContext: { appProcesses, appSettings },
-  } = useAppContext();
+const Desktop = ({ appContext }: { appContext: IAppContext }) => {
+  const { appSettings, appProcesses } = appContext;
   const desktopRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -24,4 +23,4 @@ const Desktop = () => {
   );
 };
 
-export default Desktop;
+export default withContext(Desktop);

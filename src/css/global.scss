@@ -3,6 +3,8 @@
 @import "tailwindcss/utilities";
 
 @import "./font.scss";
+@import "./markdown.scss";
+@import "./highlight.scss";
 
 :root {
   --glb-taskbar-height: 2.5rem;

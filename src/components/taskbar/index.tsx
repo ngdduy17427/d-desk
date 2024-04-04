@@ -1,22 +1,35 @@
+import { IAppContext, TAppDispatch } from "@type";
 import { IWindowsSize } from "components/windows";
 import { AppActionType } from "context/actions";
-import { useAppContext } from "context/context";
+import { withContext } from "context/context";
 import { useOnClickOutside } from "hooks/useOnClickOutside";
 import { IProgramFile } from "program_files";
 import AboutMeProgram from "program_files/about_me";
 import ProjectsProgram from "program_files/projects";
 import SettingsProgram from "program_files/settings";
+import SkillsProgram from "program_files/skills";
 import TaskManagerProgram from "program_files/task_manager";
 import { Fragment } from "react";
 import { MdMenu } from "react-icons/md";
 import { addClassToElement, removeClassFromElement } from "utils/utils_helper";
 import "./css.scss";
 
-const Taskbar = () => {
-  const {
-    appContext: { appProcesses },
-    appDispatch,
-  } = useAppContext();
+const programFiles = [
+  AboutMeProgram,
+  ProjectsProgram,
+  SkillsProgram,
+  SettingsProgram,
+  TaskManagerProgram,
+];
+
+const Taskbar = ({
+  appContext,
+  appDispatch,
+}: {
+  appContext: IAppContext;
+  appDispatch: TAppDispatch;
+}) => {
+  const { appProcesses } = appContext;
   const { ref: mobileShortcutRef, secondRef: mobileMenuRef } = useOnClickOutside(() => {
     if (document.getElementById("mobileShortcut")?.classList.contains("show")) {
       removeClassFromElement("mobileShortcut", "show");
@@ -41,8 +54,6 @@ const Taskbar = () => {
         })
       );
     } else appDispatch(AppActionType.OPEN_NEW_WINDOWS, { programFile: programFile });
-
-    handleToggleMobileMenu();
   };
 
   return (
@@ -50,13 +61,11 @@ const Taskbar = () => {
       <taskbar className="taskbar">
         <p className="title-name">D-Desk</p>
         <ul className="pc-shortcut">
-          {[AboutMeProgram, ProjectsProgram, SettingsProgram, TaskManagerProgram].map(
-            (programFile) => (
-              <li key={programFile.id} onClick={() => handleOpenWindows(programFile)}>
-                {programFile.name}
-              </li>
-            )
-          )}
+          {programFiles.map((programFile) => (
+            <li key={programFile.id} onClick={() => handleOpenWindows(programFile)}>
+              {programFile.name}
+            </li>
+          ))}
         </ul>
         <button
           ref={mobileMenuRef}
@@ -68,16 +77,20 @@ const Taskbar = () => {
         </button>
       </taskbar>
       <ul ref={mobileShortcutRef} id="mobileShortcut" className="mobile-shortcut">
-        {[AboutMeProgram, ProjectsProgram, SettingsProgram, TaskManagerProgram].map(
-          (programFile) => (
-            <li key={programFile.id} onClick={() => handleOpenWindows(programFile)}>
-              {programFile.name}
-            </li>
-          )
-        )}
+        {programFiles.map((programFile) => (
+          <li
+            key={programFile.id}
+            onClick={() => {
+              handleToggleMobileMenu();
+              handleOpenWindows(programFile);
+            }}
+          >
+            {programFile.name}
+          </li>
+        ))}
       </ul>
     </Fragment>
   );
 };
 
-export default Taskbar;
+export default withContext(Taskbar);

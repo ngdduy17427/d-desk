@@ -67,7 +67,7 @@ const projectList: IProject[] = [
       "A POS System Software can be used as Restaurant Table App, Restaurant Online Order.",
     techs: [techList[0].id, techList[1].id, techList[3].id],
     thumnnail: "/images/thumb/d-pos-thumb.png",
-    link: "https://drive.google.com/file/d/1Iiu7r-zAeFwqiiMQicY7ImdNfn34QKRw/view?usp=sharing",
+    link: "https://drive.google.com/file/d/1-W5bB_AtaYibcxPTPmjZCnyteZjkc2IO/view?usp=sharing",
     linkGit: "https://github.com/ngdduy17427/d-pos",
   },
   {

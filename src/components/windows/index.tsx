@@ -1,10 +1,11 @@
+import { IAppContext, TAppDispatch } from "@type";
 import classNames from "classnames";
 import { AppActionType } from "context/actions";
-import { useAppContext } from "context/context";
+import { withContext } from "context/context";
 import useContainerSize from "hooks/useContainerSize";
 import useDrag from "hooks/useDrag";
 import { IProgramFile } from "program_files";
-import { RefObject, createElement, startTransition, useEffect, useMemo, useState } from "react";
+import { RefObject, startTransition, useEffect, useMemo, useState } from "react";
 import { clamp } from "utils/utils_helper";
 import "./css.scss";
 import BtnClose from "./ui/btn_close";
@@ -21,16 +22,17 @@ export enum IWindowsSize {
 const Windows = ({
   windowsApp,
   containerRef,
+  appContext,
+  appDispatch,
 }: {
   windowsApp: IProgramFile;
   containerRef?: RefObject<any>;
+  appContext: IAppContext;
+  appDispatch: TAppDispatch;
 }) => {
   const [windowsSize, setWindowsSize] = useState(IWindowsSize.NORMAL);
   const { containerSize } = useContainerSize(containerRef as RefObject<any>);
-  const {
-    appContext: { processIndex, processMinimize },
-    appDispatch,
-  } = useAppContext();
+  const { processIndex, processMinimize } = appContext;
   const { dragRef, dragLayerRef, dragState } = useDrag({
     containerRef: containerRef,
     isDraggable: windowsApp.isDraggable && windowsSize === IWindowsSize.NORMAL,
@@ -147,6 +149,8 @@ const Windows = ({
     processIndex,
   ]);
 
+  const WindowsComponent = windowsApp.component;
+
   return (
     <windows
       ref={dragRef}
@@ -181,9 +185,11 @@ const Windows = ({
           />
         </div>
       </div>
-      <div className="windows-body">{createElement(windowsApp.component, { ...windowsApp })}</div>
+      <div className="windows-body">
+        <WindowsComponent windowsApp={windowsApp} />
+      </div>
     </windows>
   );
 };
 
-export default Windows;
+export default withContext(Windows);

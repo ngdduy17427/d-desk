@@ -1,5 +1,6 @@
+import { TAppDispatch } from "@type";
 import { AppActionType } from "context/actions";
-import { useAppContext } from "context/context";
+import { withContext } from "context/context";
 import { MdMinimize, MdOpenInNew } from "react-icons/md";
 import { IWindowsSize } from "..";
 
@@ -7,13 +8,13 @@ const BtnMinimize = ({
   windowsId,
   windowsSize,
   setWindowsSize,
+  appDispatch,
 }: {
   windowsId: string;
   windowsSize: IWindowsSize;
   setWindowsSize: React.Dispatch<React.SetStateAction<IWindowsSize>>;
+  appDispatch: TAppDispatch;
 }) => {
-  const { appDispatch } = useAppContext();
-
   const handleMinimizeWindow = () => {
     if (windowsSize === IWindowsSize.MINIMIZE) {
       setWindowsSize(IWindowsSize.NORMAL);
@@ -31,4 +32,4 @@ const BtnMinimize = ({
   );
 };
 
-export default BtnMinimize;
+export default withContext(BtnMinimize);

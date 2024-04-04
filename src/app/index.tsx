@@ -1,15 +1,13 @@
-import { IAppSettings } from "@type";
+import { IAppSettings, TAppDispatch } from "@type";
 import Desktop from "components/desktop";
 import Taskbar from "components/taskbar";
 import { AppActionType } from "context/actions";
 import AboutMeProgram from "program_files/about_me";
 import { Fragment, useCallback, useEffect } from "react";
 import localStorageHelper from "utils/local_storage_helper";
-import { AppProvider, useAppContext } from "../context/context";
+import { AppProvider, withContext } from "../context/context";
 
-const AppInit = () => {
-  const { appDispatch } = useAppContext();
-
+const AppInit = withContext(({ appDispatch }: { appDispatch: TAppDispatch }) => {
   useEffect(() => {
     appDispatch(AppActionType.OPEN_NEW_WINDOWS, { programFile: AboutMeProgram });
   }, [appDispatch]);
@@ -46,7 +44,7 @@ const AppInit = () => {
       <Desktop />
     </Fragment>
   );
-};
+});
 
 const App = () => (
   <AppProvider

@@ -1,15 +1,47 @@
 .task-manager-ui {
   padding: 1rem 1rem 1rem 0.5rem;
   .app-task {
-    display: flex;
-    align-items: center;
-    .runtime {
-      margin-left: auto;
+    position: relative;
+    cursor: pointer;
+    .app-task-summary {
+      display: flex;
+      align-items: center;
+      .runtime {
+        margin-left: auto;
+      }
+      .btn-end-task {
+        margin-left: 1rem;
+        &:hover {
+          color: var(--glb-color-title);
+        }
+      }
     }
-    .btn-end-task {
-      margin-left: 1rem;
-      &:hover {
-        color: var(--glb-color-title);
+    .app-task-detail {
+      p {
+        padding-left: 1rem;
+        margin-left: 1.5rem;
+        position: relative;
+        &::before {
+          content: "";
+          width: 1px;
+          height: 1rem;
+          background-color: #000;
+          display: inline-block;
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+        &::after {
+          content: "";
+          width: 1px;
+          height: 0.5rem;
+          background-color: #000;
+          display: inline-block;
+          position: absolute;
+          top: 12px;
+          left: 4px;
+          transform: rotate(90deg);
+        }
       }
     }
   }

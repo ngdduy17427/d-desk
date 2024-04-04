@@ -1,6 +1,11 @@
-import { IAppContext } from "@type";
-import React, { useCallback, useMemo } from "react";
+import { IAppContext, TAppDispatch } from "@type";
+import React from "react";
 import { AppActionType, appAction } from "./actions";
+
+interface IContextProps {
+  appContext: IAppContext;
+  appDispatch: TAppDispatch;
+}
 
 const AppContext = React.createContext<any>({});
 const AppProvider = ({
@@ -12,8 +17,8 @@ const AppProvider = ({
 }) => {
   const [appContext, setAppContext] = React.useState<IAppContext>(initialValue);
 
-  const appMemoContext = useMemo(() => appContext, [appContext]);
-  const appCallbackDispatch = useCallback(
+  const appContextMemo = React.useMemo(() => appContext, [appContext]);
+  const appDispatchCallback = React.useCallback(
     (type: AppActionType, payload?: any) =>
       React.startTransition(() =>
         setAppContext((prevState) => appAction(prevState, { type, payload }))
@@ -25,16 +30,21 @@ const AppProvider = ({
     AppContext.Provider,
     {
       value: {
-        appContext: appMemoContext,
-        appDispatch: appCallbackDispatch,
+        appContext: appContextMemo,
+        appDispatch: appDispatchCallback,
       },
     },
     children
   );
 };
-const useAppContext = () =>
-  React.useContext<{
-    appContext: IAppContext;
-    appDispatch: (type: AppActionType, payload?: any) => void;
-  }>(AppContext);
-export { AppProvider, useAppContext };
+
+const withContext = <P>(Component: React.JSXElementConstructor<P>) => {
+  const WrappedComponent = (props: Omit<P, keyof IContextProps>): React.JSX.Element =>
+    React.createElement(Component, {
+      ...(props as P),
+      ...React.useContext<IContextProps>(AppContext),
+    });
+
+  return WrappedComponent;
+};
+export { AppProvider, withContext };

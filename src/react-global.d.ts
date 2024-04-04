@@ -5,7 +5,3 @@ declare namespace JSX {
     windows: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
   }
 }
-declare module "*.md" {
-  const src: string;
-  export default src;
-}

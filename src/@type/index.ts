@@ -1,3 +1,4 @@
+import { AppActionType } from "context/actions";
 import { CursorEffectResult, DefaultOptions } from "cursor-effects";
 import { IProgramFile } from "program_files";
 
@@ -20,6 +21,8 @@ export interface IAppSettings {
   appCursor?: IAppCursor;
   appCursorEffectResult?: CursorEffectResult;
 }
+
+export type TAppDispatch = (type: AppActionType, payload?: any) => void;
 export interface IAppContext {
   appSettings: IAppSettings;
   appProcesses: IProgramFile[];

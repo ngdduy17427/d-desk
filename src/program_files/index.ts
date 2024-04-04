@@ -1,9 +1,9 @@
 import { Moment } from "moment";
-import * as UtilsHelper from "utils/utils_helper";
+import { uuidv4 } from "utils/utils_helper";
 
 export interface IProgramFile {
   id?: string;
-  component: () => JSX.Element;
+  component: (...args: any) => React.ReactNode;
   name: string;
   width: number;
   height: number;
@@ -18,21 +18,19 @@ export interface IProgramFile {
   runtime?: Moment;
 }
 
-export const createProgramFile = (config: IProgramFile) => {
-  return {
-    id: UtilsHelper.uuidv4(),
-    component: config.component,
-    name: config.name,
-    width: config.width,
-    height: config.height,
-    position: {
-      top: config.position?.top,
-      right: config.position?.right,
-      bottom: config.position?.bottom,
-      left: config.position?.left,
-    },
-    isCenter: config.isCenter ?? true,
-    isDraggable: config.isDraggable ?? true,
-    runtime: config.runtime ?? undefined,
-  };
-};
+export const createProgramFile = (config: IProgramFile) => ({
+  id: config.id ?? uuidv4(),
+  component: config.component,
+  name: config.name,
+  width: config.width,
+  height: config.height,
+  position: {
+    top: config.position?.top,
+    right: config.position?.right,
+    bottom: config.position?.bottom,
+    left: config.position?.left,
+  },
+  isCenter: config.isCenter ?? true,
+  isDraggable: config.isDraggable ?? true,
+  runtime: config.runtime ?? undefined,
+});

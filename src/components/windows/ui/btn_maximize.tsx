@@ -1,5 +1,6 @@
+import { TAppDispatch } from "@type";
 import { AppActionType } from "context/actions";
-import { useAppContext } from "context/context";
+import { withContext } from "context/context";
 import { MdWebAsset, MdWebAssetOff } from "react-icons/md";
 import { IWindowsSize } from "..";
 
@@ -7,13 +8,13 @@ const BtnMaximize = ({
   windowsId,
   windowsSize,
   setWindowsSize,
+  appDispatch,
 }: {
   windowsId: string;
   windowsSize: IWindowsSize;
   setWindowsSize: React.Dispatch<React.SetStateAction<IWindowsSize>>;
+  appDispatch: TAppDispatch;
 }) => {
-  const { appDispatch } = useAppContext();
-
   const handleMaximizeWindow = () => {
     if (windowsSize === IWindowsSize.MAXIMIZE) setWindowsSize(IWindowsSize.NORMAL);
     else setWindowsSize(IWindowsSize.MAXIMIZE);
@@ -28,4 +29,4 @@ const BtnMaximize = ({
   );
 };
 
-export default BtnMaximize;
+export default withContext(BtnMaximize);
