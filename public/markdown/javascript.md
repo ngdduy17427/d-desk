@@ -7,7 +7,7 @@
 ### 2. What is the `this` keyword in JavaScript?
 
 - Functions in JavaScript are essential objects. Like objects, it can be assign to variables, pass to other functions, and return from functions. And much like objects, they have their own properties.
-- `this` stores the current execution context of the JavaScript program. Thus, when it use inside a function, the value of ‘this’ will change depending on how the function is defined, how it is invoked, and the default execution context.
+- `this` stores the current execution context of the JavaScript program. Thus, when it use inside a function, the value of `this` will change depending on how the function is defined, how it is invoked, and the default execution context.
 
 ### 3. What are the keywords used to declare a variable in JavaScript?
 

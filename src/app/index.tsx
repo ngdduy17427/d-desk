@@ -2,14 +2,14 @@ import { IAppSettings, TAppDispatch } from "@type";
 import Desktop from "components/desktop";
 import Taskbar from "components/taskbar";
 import { AppActionType } from "context/actions";
-import AboutMeProgram from "program_files/about_me";
+import SkillsProgram from "program_files/skills";
 import { Fragment, useCallback, useEffect } from "react";
 import localStorageHelper from "utils/local_storage_helper";
 import { AppProvider, withContext } from "../context/context";
 
 const AppInit = withContext(({ appDispatch }: { appDispatch: TAppDispatch }) => {
   useEffect(() => {
-    appDispatch(AppActionType.OPEN_NEW_WINDOWS, { programFile: AboutMeProgram });
+    appDispatch(AppActionType.OPEN_NEW_WINDOWS, { programFile: SkillsProgram });
   }, [appDispatch]);
 
   const loadLocalSettings = useCallback(() => {

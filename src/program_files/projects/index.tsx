@@ -93,7 +93,9 @@ const projectList: IProject[] = [
 const UI = () => {
   return (
     <section className="projects-ui">
-      {projectList?.map((project) => <ProjectCard key={project.id} project={project} />)}
+      <container className="projects-container">
+        {projectList?.map((project) => <ProjectCard key={project.id} project={project} />)}
+      </container>
     </section>
   );
 };

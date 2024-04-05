@@ -2,7 +2,7 @@ import { MdArrowBack, MdArrowUpward } from "react-icons/md";
 
 const SkillNav = ({ handleGoBack }: { handleGoBack: () => void }) => {
   const handleScrollTop = () =>
-    document.getElementById("skillComponent")?.scrollTo({ top: 0, behavior: "smooth" });
+    document.getElementById("skillsComponent")?.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
     <div className="skill-nav">

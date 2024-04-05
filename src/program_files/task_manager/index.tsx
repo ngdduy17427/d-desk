@@ -8,11 +8,13 @@ const UI = withContext(({ appContext }: { appContext: IAppContext }) => {
   const { appProcesses } = appContext;
 
   return (
-    <div className="task-manager-ui">
-      {appProcesses?.map((appInProcess: IProgramFile) => (
-        <AppTask key={appInProcess.id} appInProcess={appInProcess} />
-      ))}
-    </div>
+    <section className="task-manager-ui">
+      <container className="task-manager-container">
+        {appProcesses?.map((appInProcess: IProgramFile) => (
+          <AppTask key={appInProcess.id} appInProcess={appInProcess} />
+        ))}
+      </container>
+    </section>
   );
 });
 

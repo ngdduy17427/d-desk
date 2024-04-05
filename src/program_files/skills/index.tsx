@@ -6,6 +6,7 @@ import {
   SiExpress,
   SiJavascript,
   SiMongodb,
+  SiMysql,
   SiReact,
   SiSocketdotio,
   SiTypescript,
@@ -81,14 +82,19 @@ const skills = [
     markdown: "markdown/expressjs.md",
   }),
   createSkill({
+    name: "MySQL",
+    icon: <SiMysql color="#136494" />,
+    markdown: "markdown/mysql.md",
+  }),
+  createSkill({
     name: "MongoDB",
     icon: <SiMongodb color="#4faa41" />,
     markdown: "markdown/mongodb.md",
   }),
   createSkill({
-    name: "Socket.io",
+    name: "WebSocket",
     icon: <SiSocketdotio color="#000" />,
-    markdown: "markdown/socketio.md",
+    markdown: "markdown/websocket.md",
   }),
 ];
 
@@ -125,7 +131,7 @@ const UI = ({ windowsApp }: { windowsApp: IProgramFile }) => {
 
   return (
     <section className="skills-ui">
-      <div className="skill-container">
+      <container className="skills-container">
         {skills.map(({ id, name, icon, markdown }) => {
           return (
             <span
@@ -137,9 +143,9 @@ const UI = ({ windowsApp }: { windowsApp: IProgramFile }) => {
             </span>
           );
         })}
-      </div>
-      <div id="skillComponent" className={classNames("skill-component", { show: selectedSkill })}>
-        <div className="skill-content">
+      </container>
+      <div id="skillsComponent" className={classNames("skills-component", { show: selectedSkill })}>
+        <container className="skill-content">
           <SkillNav handleGoBack={handleGoBack} />
           <Markdown
             className="markdown-body"
@@ -148,7 +154,7 @@ const UI = ({ windowsApp }: { windowsApp: IProgramFile }) => {
           >
             {skillMarkdown}
           </Markdown>
-        </div>
+        </container>
       </div>
     </section>
   );

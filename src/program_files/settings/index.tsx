@@ -25,48 +25,50 @@ const UI = withContext(
     const { appSettings } = appContext;
 
     return (
-      <div className="settings-ui">
-        <SelectField
-          label="Theme:"
-          options={AppTheme}
-          value={appSettings.appTheme}
-          onChange={(option) =>
-            appDispatch(AppActionType.UPDATE_APP_SETTINGS, {
-              appSettings: { ...appSettings, appTheme: option },
-            })
-          }
-        />
-        <SelectField
-          label="Cursor:"
-          options={AppCursors}
-          value={appSettings.appCursor}
-          onChange={(option) =>
-            appDispatch(AppActionType.UPDATE_APP_SETTINGS, {
-              appSettings: { ...appSettings, appCursor: option },
-            })
-          }
-        />
-        <SelectField
-          label="Background:"
-          options={AppBackgrounds}
-          value={appSettings.appBackground}
-          onChange={(option) =>
-            appDispatch(AppActionType.UPDATE_APP_SETTINGS, {
-              appSettings: { ...appSettings, appBackground: option },
-            })
-          }
-          formatOptionLabel={(option) => (
-            <div className="flex items-center gap-4">
-              <img
-                src={(option as IAppBackground).image}
-                alt="App Background"
-                className="size-[60px]"
-              />
-              <p>{(option as IAppBackground).label}</p>
-            </div>
-          )}
-        />
-      </div>
+      <section className="settings-ui">
+        <container className="settings-container">
+          <SelectField
+            label="Theme:"
+            options={AppTheme}
+            value={appSettings.appTheme}
+            onChange={(option) =>
+              appDispatch(AppActionType.UPDATE_APP_SETTINGS, {
+                appSettings: { ...appSettings, appTheme: option },
+              })
+            }
+          />
+          <SelectField
+            label="Cursor:"
+            options={AppCursors}
+            value={appSettings.appCursor}
+            onChange={(option) =>
+              appDispatch(AppActionType.UPDATE_APP_SETTINGS, {
+                appSettings: { ...appSettings, appCursor: option },
+              })
+            }
+          />
+          <SelectField
+            label="Background:"
+            options={AppBackgrounds}
+            value={appSettings.appBackground}
+            onChange={(option) =>
+              appDispatch(AppActionType.UPDATE_APP_SETTINGS, {
+                appSettings: { ...appSettings, appBackground: option },
+              })
+            }
+            formatOptionLabel={(option) => (
+              <div className="flex items-center gap-4">
+                <img
+                  src={(option as IAppBackground).image}
+                  alt="App Background"
+                  className="size-[60px]"
+                />
+                <p>{(option as IAppBackground).label}</p>
+              </div>
+            )}
+          />
+        </container>
+      </section>
     );
   }
 );
