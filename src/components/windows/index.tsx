@@ -22,7 +22,7 @@ export enum IWindowsSize {
 const Windows = ({
   windowsApp,
   containerRef,
-  appContext,
+  appContext: { processIndex, processMinimize },
   appDispatch,
 }: {
   windowsApp: IProgramFile;
@@ -32,8 +32,7 @@ const Windows = ({
 }) => {
   const [windowsSize, setWindowsSize] = useState(IWindowsSize.NORMAL);
   const { containerSize } = useContainerSize(containerRef as RefObject<any>);
-  const { processIndex, processMinimize } = appContext;
-  const { dragRef, dragLayerRef, dragState } = useDrag({
+  const { dragRef, dragLayerRef, dragState } = useDrag<HTMLDivElement>({
     containerRef: containerRef,
     isDraggable: windowsApp.isDraggable && windowsSize === IWindowsSize.NORMAL,
     onDragStart: () => appDispatch(AppActionType.CLICK_WINDOWS, { programFileId: windowsApp.id }),
@@ -41,13 +40,14 @@ const Windows = ({
 
   useEffect(() => {
     const handleOpenWindows = (event: CustomEventInit) => {
-      if (event.detail.windowsId !== windowsApp.id) return;
       if (
-        event.detail.windowsSize === IWindowsSize.MINIMIZE &&
-        windowsSize === IWindowsSize.MINIMIZE
-      ) {
-        startTransition(() => setWindowsSize(IWindowsSize.NORMAL));
-      }
+        event.detail.windowsId !== windowsApp.id ||
+        event.detail.windowsSize !== IWindowsSize.MINIMIZE ||
+        windowsSize !== IWindowsSize.MINIMIZE
+      )
+        return;
+
+      startTransition(() => setWindowsSize(IWindowsSize.NORMAL));
     };
 
     window.addEventListener("openWindows", handleOpenWindows);

@@ -3,8 +3,10 @@ import { IWindowsSize } from "components/windows";
 import { AppActionType } from "context/actions";
 import { withContext } from "context/context";
 import { useOnClickOutside } from "hooks/useOnClickOutside";
+import useScreenDetector from "hooks/useScreenDetector";
 import { IProgramFile } from "program_files";
 import AboutMeProgram from "program_files/about_me";
+import ContactProgram from "program_files/contact";
 import ProjectsProgram from "program_files/projects";
 import SettingsProgram from "program_files/settings";
 import SkillsProgram from "program_files/skills";
@@ -18,18 +20,19 @@ const programFiles = [
   AboutMeProgram,
   ProjectsProgram,
   SkillsProgram,
+  ContactProgram,
   SettingsProgram,
   TaskManagerProgram,
 ];
 
 const Taskbar = ({
-  appContext,
+  appContext: { appProcesses },
   appDispatch,
 }: {
   appContext: IAppContext;
   appDispatch: TAppDispatch;
 }) => {
-  const { appProcesses } = appContext;
+  const { isTablet, isDesktop } = useScreenDetector();
   const { ref: mobileShortcutRef, secondRef: mobileMenuRef } = useOnClickOutside(() => {
     if (document.getElementById("mobileShortcut")?.classList.contains("show")) {
       removeClassFromElement("mobileShortcut", "show");
@@ -60,35 +63,41 @@ const Taskbar = ({
     <Fragment>
       <taskbar className="taskbar">
         <p className="title-name">D-Desk</p>
-        <ul className="pc-shortcut">
+        {isDesktop && (
+          <ul className="pc-shortcut">
+            {programFiles.map((programFile) => (
+              <li key={programFile.id} onClick={() => handleOpenWindows(programFile)}>
+                {programFile.name}
+              </li>
+            ))}
+          </ul>
+        )}
+        {isTablet && (
+          <button
+            ref={mobileMenuRef}
+            type="button"
+            className="mobile-menu"
+            onClick={handleToggleMobileMenu}
+          >
+            <MdMenu />
+          </button>
+        )}
+      </taskbar>
+      {isTablet && (
+        <ul ref={mobileShortcutRef} id="mobileShortcut" className="mobile-shortcut">
           {programFiles.map((programFile) => (
-            <li key={programFile.id} onClick={() => handleOpenWindows(programFile)}>
+            <li
+              key={programFile.id}
+              onClick={() => {
+                handleToggleMobileMenu();
+                handleOpenWindows(programFile);
+              }}
+            >
               {programFile.name}
             </li>
           ))}
         </ul>
-        <button
-          ref={mobileMenuRef}
-          type="button"
-          className="mobile-menu"
-          onClick={handleToggleMobileMenu}
-        >
-          <MdMenu />
-        </button>
-      </taskbar>
-      <ul ref={mobileShortcutRef} id="mobileShortcut" className="mobile-shortcut">
-        {programFiles.map((programFile) => (
-          <li
-            key={programFile.id}
-            onClick={() => {
-              handleToggleMobileMenu();
-              handleOpenWindows(programFile);
-            }}
-          >
-            {programFile.name}
-          </li>
-        ))}
-      </ul>
+      )}
     </Fragment>
   );
 };

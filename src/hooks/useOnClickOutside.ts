@@ -9,8 +9,8 @@ export const useOnClickOutside = (handler: (event: MouseEvent | TouchEvent) => v
       if (
         !ref ||
         !secondRef ||
-        ref.current.contains(event.target as Node) ||
-        secondRef.current.contains(event.target as Node)
+        ref.current?.contains(event.target as Node) ||
+        secondRef.current?.contains(event.target as Node)
       )
         return;
 

@@ -17,7 +17,7 @@ const UI = () => {
         <p>
           I am <b>Duy Nguyen</b>, a husband, a father of one, I was born in&nbsp;
           <a href="https://en.wikipedia.org/wiki/Ho_Chi_Minh_City" target="_blank" rel="noreferrer">
-            Ho Chi Minh, Vietnam
+            Ho Chi Minh city, Vietnam
           </a>
           &nbsp;where I lived most of my life. I am a full-time full-stack developer.
         </p>

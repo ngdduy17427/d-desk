@@ -71,4 +71,11 @@
 }
 
 @media screen and (max-width: 768px) {
+  .skills-ui {
+    .skills-component {
+      .skill-content {
+        padding: 0 1rem 1rem 1rem;
+      }
+    }
+  }
 }

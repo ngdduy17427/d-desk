@@ -23,9 +23,13 @@ interface IDragState {
   };
 }
 
-const useDrag = ({ containerRef, isDraggable = true, onDragStart }: IUseDragOption) => {
-  const dragRef = useRef<HTMLDivElement>(null);
-  const dragLayerRef = useRef<HTMLDivElement>(null);
+const useDrag = <T extends HTMLElement>({
+  containerRef,
+  isDraggable = true,
+  onDragStart,
+}: IUseDragOption) => {
+  const dragRef = useRef<T>(null);
+  const dragLayerRef = useRef<T>(null);
 
   const { containerSize } = useContainerSize(containerRef as RefObject<any>);
   const [dragState, setDragState] = useState<IDragState>({
@@ -55,10 +59,10 @@ const useDrag = ({ containerRef, isDraggable = true, onDragStart }: IUseDragOpti
           isPressing: true,
           relCursor: {
             relY: Math.floor(
-              event.pageY - (dragRef.current as HTMLElement).getBoundingClientRect().top
+              event.pageY - (dragRef.current?.getBoundingClientRect().top as number)
             ),
             relX: Math.floor(
-              event.pageX - (dragRef.current as HTMLElement).getBoundingClientRect().left
+              event.pageX - (dragRef.current?.getBoundingClientRect().left as number)
             ),
           },
         }))
@@ -69,48 +73,42 @@ const useDrag = ({ containerRef, isDraggable = true, onDragStart }: IUseDragOpti
 
   const onMouseMove = useCallback(
     (event: any) => {
-      if (!isDraggable || !dragState.isPressing) return;
+      if (!isDraggable || !dragState.isPressing || !dragRef.current) return;
       overrideEventDefaults(event);
 
       let posTop: any = event.pageY - dragState.relCursor.relY;
       let posLeft: any = event.pageX - dragState.relCursor.relX;
-      let posBottom: any =
-        containerSize.offsetHeight - (dragRef.current as HTMLElement)?.offsetHeight - posTop;
-      let posRight: any =
-        containerSize.offsetWidth - (dragRef.current as HTMLElement)?.offsetWidth - posLeft;
+      let posBottom: any = containerSize.offsetHeight - dragRef.current?.offsetHeight - posTop;
+      let posRight: any = containerSize.offsetWidth - dragRef.current?.offsetWidth - posLeft;
 
       posTop = clamp(
         posTop,
         containerSize.offsetTop,
-        containerSize.offsetHeight -
-          (dragRef.current as HTMLElement)?.offsetHeight +
-          containerSize.offsetTop
+        containerSize.offsetHeight - dragRef.current?.offsetHeight + containerSize.offsetTop
       );
       posLeft = clamp(
         posLeft,
         containerSize.offsetLeft,
-        containerSize.offsetWidth -
-          (dragRef.current as HTMLElement)?.offsetWidth +
-          containerSize.offsetLeft
+        containerSize.offsetWidth - dragRef.current?.offsetWidth + containerSize.offsetLeft
       );
       posBottom = clamp(
         posBottom,
         containerSize.offsetBottom,
-        containerSize.offsetHeight - (dragRef.current as HTMLElement)?.offsetHeight
+        containerSize.offsetHeight - dragRef.current?.offsetHeight
       );
       posRight = clamp(
         posRight,
         containerSize.offsetRight,
-        containerSize.offsetWidth - (dragRef.current as HTMLElement)?.offsetWidth
+        containerSize.offsetWidth - dragRef.current?.offsetWidth
       );
 
-      (dragRef.current as HTMLElement).style.boxSizing = "border-box";
-      (dragRef.current as HTMLElement).style.position = "fixed";
-      (dragRef.current as HTMLElement).style.transition = "none";
-      (dragRef.current as HTMLElement).style.top = `${Math.floor(posTop)}px`;
-      (dragRef.current as HTMLElement).style.left = `${Math.floor(posLeft)}px`;
-      (dragRef.current as HTMLElement).style.bottom = `${Math.floor(posBottom)}px`;
-      (dragRef.current as HTMLElement).style.right = `${Math.floor(posRight)}px`;
+      dragRef.current.style.boxSizing = "border-box";
+      dragRef.current.style.position = "fixed";
+      dragRef.current.style.transition = "none";
+      dragRef.current.style.top = `${Math.floor(posTop)}px`;
+      dragRef.current.style.left = `${Math.floor(posLeft)}px`;
+      dragRef.current.style.bottom = `${Math.floor(posBottom)}px`;
+      dragRef.current.style.right = `${Math.floor(posRight)}px`;
 
       startTransition(() =>
         setDragState((prevState) => ({
@@ -141,16 +139,16 @@ const useDrag = ({ containerRef, isDraggable = true, onDragStart }: IUseDragOpti
       if (!dragState.isDragging) return;
       overrideEventDefaults(event);
 
-      startTransition(() =>
+      startTransition(() => {
         setDragState((prevState) => ({
           ...prevState,
           isDragging: false,
-        }))
-      );
+        }));
 
-      (dragRef.current as HTMLElement).style.boxSizing = "";
-      (dragRef.current as HTMLElement).style.position = "";
-      (dragRef.current as HTMLElement).style.transition = "";
+        (dragRef.current as HTMLElement).style.boxSizing = "";
+        (dragRef.current as HTMLElement).style.position = "";
+        (dragRef.current as HTMLElement).style.transition = "";
+      });
     },
     [dragState]
   );
