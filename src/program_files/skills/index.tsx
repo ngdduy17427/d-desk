@@ -125,7 +125,7 @@ const UI = ({ windowsApp }: { windowsApp: IProgramFile }) => {
 
     updateWindowsTitle(selectedSkill?.name);
 
-    fetch(selectedSkill?.markdown as string)
+    fetch(selectedSkill?.markdown as string, { cache: "force-cache" })
       .then((response) => response.text())
       .then((response) => setSkillMarkdown(response));
   }, [updateWindowsTitle, selectedSkill]);
