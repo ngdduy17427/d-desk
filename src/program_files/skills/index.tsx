@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { IProgramFile, createProgramFile } from "program_files";
-import { useCallback, useEffect, useState } from "react";
+import { startTransition, useCallback, useEffect, useState } from "react";
 import { IoLogoCss3, IoLogoElectron, IoLogoHtml5, IoLogoNodejs } from "react-icons/io5";
 import {
   SiExpress,
@@ -113,18 +113,19 @@ const UI = ({ windowsApp }: { windowsApp: IProgramFile }) => {
     [windowsApp.id, selectedSkill?.name]
   );
 
-  const handleGoBack = () => {
-    updateWindowsTitle(undefined);
-    setSelectedSkill(undefined);
-    setSkillMarkdown(undefined);
-  };
+  const handleGoBack = () =>
+    startTransition(() => {
+      updateWindowsTitle(undefined);
+      setSelectedSkill(undefined);
+      setSkillMarkdown(undefined);
+    });
 
   useEffect(() => {
     if (!selectedSkill) return;
 
     updateWindowsTitle(selectedSkill?.name);
 
-    fetch(selectedSkill?.markdown as string, { cache: "force-cache" })
+    fetch(selectedSkill?.markdown as string)
       .then((response) => response.text())
       .then((response) => setSkillMarkdown(response));
   }, [updateWindowsTitle, selectedSkill]);

@@ -97,7 +97,12 @@ const Windows = ({
 
     switch (windowsSize) {
       case IWindowsSize.NORMAL:
-        if (dragState.position)
+        if (
+          dragState.position.top !== undefined &&
+          dragState.position.right !== undefined &&
+          dragState.position.bottom !== undefined &&
+          dragState.position.left !== undefined
+        )
           _windowsStyle = {
             ..._windowsStyle,
             top: dragState.position?.top,

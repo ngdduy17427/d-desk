@@ -21,8 +21,8 @@ const programFiles = [
   ProjectsProgram,
   SkillsProgram,
   ContactProgram,
-  SettingsProgram,
   TaskManagerProgram,
+  SettingsProgram,
 ];
 
 const Taskbar = ({
