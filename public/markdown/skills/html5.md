@@ -1,10 +1,10 @@
-### 1. What is HTML?
+### 1. <ins>What is `HTML`?</ins>
 
 - HTML stands for HyperText Markup Language.
 - It is a standard text formatting language used for developing web pages released in 1993.
 - HTML is a language that is interpreted by the browser and it tells the browser what to display and how to display.
 
-### 2. What are the key differences between HTML and HTML5?
+### 2. <ins>What are the key differences between `HTML` and `HTML5`?</ins>
 
 - HTML5 supports video, graphics, and audio, whereas HTML only supports them through third-party extensions.
 - HTML5 is mobile-friendly, whereas HTML is not.
@@ -12,7 +12,7 @@
 - HTML5 offers several options for local storage, whereas HTML only offers cookies.
 - HTML5 supports multi-threading, whereas HTML operates only in one thread.
 
-### 3. What are tags in HTML5 and how many are required to make a basic web page?
+### 3. <ins>What are `tags` in HTML5 and how many are required to make a basic web page?</ins>
 
 - Tags are pieces of HTML5 code used to define the structure of the page.
 - There are more than 100 tags in HTML5, with each one serving a unique purpose, such as positioning text or supporting audio.
@@ -28,12 +28,12 @@
 </html>
 ```
 
-### 4. What are elements in HTML5?
+### 4. <ins>What are `elements` in HTML5?</ins>
 
 - Elements are components of HTML5 code that instruct the web browser how to structure and interpret the HTML5 document.
 - Typically, they encompass an opening tag, a closing tag, and specified content between the opening and closing tags, depending on the type of tag used.
 
-### 5. What are void elements in HTML?
+### 5. <ins>What are `void elements` in HTML?</ins>
 
 - HTML elements which do not have closing tags or do not need to be closed are Void elements. For Example:
 
@@ -43,13 +43,13 @@
 <hr />
 ```
 
-### 6. What are attributes in HTML5?
+### 6. <ins>What are `attributes` in HTML5?</ins>
 
 - Attributes are special properties or characteristics used within an element to modify its behavior.
 - For example, attributes can be used to specify the dimensions or positioning values of an image.
 - Attributes are specified within the opening tag and must be enclosed in quotation marks.
 
-### 7. What is the canvas element in HTML5?
+### 7. <ins>What is the `canvas` element in HTML5?</ins>
 
 - The `<canvas>` element is a container that is used to draw graphics on the web page using scripting language like JavaScript.
 - It allows for dynamic and scriptable rendering of 2D shapes and bitmap images.
@@ -61,7 +61,7 @@
 </canvas>
 ```
 
-### 8. How do you set language in HTML?
+### 8. <ins>How do you set `language` in HTML?</ins>
 
 - There are multiple ways to set language in HTML
 
@@ -76,7 +76,7 @@
 <html lang="en"></html>
 ```
 
-### 9. How to create a nested webpage in HTML?
+### 9. <ins>How to create a `nested webpage` in HTML?</ins>
 
 - The HTML `iframe` tag is used to display a nested webpage. In other words, it represents a webpage within a webpage. The HTML `<iframe>` tag defines an inline frame. For example:
 
@@ -91,7 +91,7 @@
 </html>
 ```
 
-### 10. Explain the layout of HTML?
+### 10. <ins>Explain the `layout` of HTML?</ins>
 
 - HTML layout specifies a way in which the web page is arranged.
 - Following are different HTML5 elements which are used to define the different parts of a webpage:
@@ -103,7 +103,7 @@
   - `<aside>`: It is used to define content aside from the content (like a sidebar).
   - `<footer>`: It is used to define a footer for a document or a section.
 
-### 11. Does a `<!DOCTYPE html>` tag is a HTML tag?
+### 11. <ins>Does a `<!DOCTYPE html>` tag is a HTML tag?</ins>
 
 - No, the `<!DOCTYPE html>` declaration is not an HTML tag. There are many type of HTML. For example:
 
@@ -117,6 +117,6 @@
 
 - So, `<!DOCTYPE html>` is used to instruct the web browser about the HTML page.
 
-### 12. If I do not put `<!DOCTYPE html>` will HTML 5 work?
+### 12. <ins>If I do not put `<!DOCTYPE html>` will HTML 5 work?</ins>
 
 - No, the browser will not be able to identify that it is an HTML document and HTML 5 tags do not function properly.

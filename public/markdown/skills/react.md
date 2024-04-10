@@ -1,15 +1,15 @@
-### 1. What is `React`?
+### 1. <ins>What is `React`?</ins>
 
 - React is a JavaScript library created by Facebook
 - React is a User Interface (UI) library
 - React is a tool for building UI components
 
-### 2. What is `Virtual DOM` in React?
+### 2. <ins>What is `Virtual DOM` in React?</ins>
 
 - **Virtual DOM** is a lightweight copy of the actual DOM. So for every object that exists in the original DOM, there is an object for that in React Virtual DOM. It is exactly the same, but it does not have the power to directly change the layout of the document.
 - **Manipulating DOM is slow, but manipulating Virtual DOM is fast** as nothing gets drawn on the screen. So each time there is a change in the state of our application, the virtual DOM gets updated first instead of the real DOM.
 
-### 3. What is `JSX`?
+### 3. <ins>What is `JSX`?</ins>
 
 - JSX is stands for JavaScript XML, is a syntax extension for JavaScript that allows you to write HTML-like code within JavaScript.
 - JSX makes it easier to write and understand React components by combining the power of JavaScript with the familiarity of HTML syntax.
@@ -32,7 +32,7 @@ function Welcome(props) {
 const element = <Welcome name="John" />;
 ```
 
-### 4. What are the key differences between `Props` and `State` in React?
+### 4. <ins>What are the key differences between `Props` and `State` in React?</ins>
 
 | Props                                                                                                      | State                                                                                                     |
 | ---------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
@@ -41,11 +41,11 @@ const element = <Welcome name="John" />;
 | Used for configuring a component when it is created and remain fixed throughout the component's lifecycle. | Changes to state trigger re-renders of the component, allowing it to reflect the updated state in the UI. |
 | Props are read-only.                                                                                       | The state is both read and write.                                                                         |
 
-### 5. What is `context` API?
+### 5. <ins>What is `context` API?</ins>
 
 - The Context API is a feature in React, a popular JavaScript library for building user interfaces, that allows you to manage state at a global level in your application without having to pass props down through every level of the component tree.
 
-### 6. What is the use of `ref` in React?
+### 6. <ins>What is the use of `ref` in React?</ins>
 
 - The `ref` attribute is used to reference a particular instance of a React component or DOM element created in the render method. It provides a way to access and interact with the underlying DOM nodes or React components directly.
 - Here are some common use cases for `refs` in React:
@@ -78,7 +78,7 @@ function TextInputWithFocusButton() {
 export default TextInputWithFocusButton;
 ```
 
-### 7. What is a `key` in React?
+### 7. <ins>What is a `key` in React?</ins>
 
 - The `key` attribute is a special keyword you need to include when creating arrays of elements, typically when rendering lists of items. The main purpose of keys is to help React identify which items have changed, are added, or are removed from a list.
 - Here are a few key points about keys in React:
@@ -102,7 +102,7 @@ function MyList() {
 }
 ```
 
-### 8. What is `one-way data binding` in React?
+### 8. <ins>What is `one-way data binding` in React?</ins>
 
 - One-way data binding in React refers to the flow of data from a parent component to a child component.
 - In this model, data flows down the component hierarchy, meaning that changes to the data in the parent component will be passed down to the child components, but changes in the child components won't affect the parent or other siblings directly.
@@ -147,7 +147,7 @@ function ChildComponent({ count, onIncrement }) {
 export default ChildComponent;
 ```
 
-### 9. What are `hooks` in React?
+### 9. <ins>What are `hooks` in React?</ins>
 
 - `hooks` are functions that allow you to use state and other React features in functional components. They were introduced in React 16.8 as a way to use stateful logic without writing a class component.
 - Some of the most commonly used hooks are:
@@ -161,7 +161,7 @@ export default ChildComponent;
   - `useRef`: Allows functional components to create mutable references.
   - `useImperativeHandle`: Customizes the instance value that is exposed by a ref.
 
-### 10. What is useEffect's `dependencies` argument in React?
+### 10. <ins>What is useEffect's `dependencies` argument in React?</ins>
 
 - `dependencies` is an array of values that the effect depends on.
 - If one of these values changes between renders, React will re-run the effect. If the values have not changed, React will skip the effect.
@@ -192,7 +192,7 @@ function ExampleComponent() {
 }
 ```
 
-### 11. What is `Fragment` in React?
+### 11. <ins>What is `Fragment` in React?</ins>
 
 - `Fragment` is a built-in component that allows you to group multiple children without adding extra nodes to the DOM.
 - It's useful when you need to return multiple elements from a component's render method but don't want to add an additional wrapping element to the DOM.
@@ -224,7 +224,7 @@ function MyComponent() {
 }
 ```
 
-### 12. What is `Higher-Order Component` in React?
+### 12. <ins>What is `Higher-Order Component` in React?</ins>
 
 - A Higher-Order Component (HOC) in React is a pattern used for reusing component logic.
 - It's a function that takes a component and returns a new component with some enhanced functionality.

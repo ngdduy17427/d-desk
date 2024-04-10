@@ -1,10 +1,10 @@
-### 1. What is CSS?
+### 1. <ins>What is `CSS`?</ins>
 
 - CSS stands for Cascading Style Sheet.
 - It’s a style sheet language that determines how the elements/contents in the page are looked/shown.
 - CSS is used to develop a consistent look and feel for all the pages.
 
-### 2. Why do we use CSS?
+### 2. <ins>Why do we use `CSS`?</ins>
 
 - We use CSS because of the following reasons:
 
@@ -14,7 +14,7 @@
   - **Superior styles to HTML**: CSS has a much wider array of attributes than HTML, so you can give a far better look to your HTML page in comparison to HTML attributes.
   - **Offline Browsing**: CSS can store web applications locally with the help of an offline cache. Using of this we can view offline websites.
 
-### 3. What are the key differences between CSS and CSS3?
+### 3. <ins>What are the key differences between `CSS` and `CSS3`?</ins>
 
 - CSS3 is faster than CSS.
 - CSS3 can be breakdown into modules.
@@ -22,7 +22,7 @@
 - CSS3 is capable of making the web page more attractive and takes less time to create.
 - CSS3 can performs all kinds of animation and transformations as it supports animation and 3D transformations.
 
-### 4. What is the syntax for CSS?
+### 4. <ins>What is the `syntax` for CSS?</ins>
 
 - A CSS style rule consists of a selector, property, and its value.
 - The selector points to the HTML element where CSS style is to be applied. The CSS property is separated by semicolons.
@@ -33,7 +33,7 @@ selector {
 }
 ```
 
-### 5. What are CSS Selectors?
+### 5. <ins>What are `CSS Selectors`?</ins>
 
 - CSS Selectors are used to selecting HTML elements based on their element name, id, attributes, etc. It can select one or more elements simultaneously.
 
@@ -61,7 +61,7 @@ element_name {
 }
 ```
 
-### 6. What is CSS Box Model?
+### 6. <ins>What is `CSS Box Model`?</ins>
 
 - The CSS box model is a container that contains multiple properties including borders, margin, padding, and the content itself.
 - It is used to create the design and layout of web pages. It can be used as a toolkit for customizing the layout of different elements.
@@ -73,7 +73,7 @@ element_name {
   - **Border Area**: It is the area between the box’s padding and margin. Its dimensions are given by the width and height of the border.
   - **Margin Area**: This area consists of space between border and margin. The dimensions of the Margin area are the margin-box width and the margin-box height. It is useful to separate the element from its neighbors.
 
-### 7. How can we hide an element in CSS?
+### 7. <ins>How can we `hide` an element in CSS?</ins>
 
 - The style `display` property is used to hide and show the content of HTML DOM by accessing the DOM element using JavaScript/jQuery. To hide an element, set the style display property to `none`.
 
@@ -89,7 +89,7 @@ visibility: "hidden";
 /* The hidden element still takes up space */
 ```
 
-### 8. What are the various positioning properties in CSS?
+### 8. <ins>What are the `various positioning` properties in CSS?</ins>
 
 - The `position` property in CSS tells about the method of positioning for an element or an HTML entity. There are five different types of position properties available in CSS:
 
@@ -99,7 +99,7 @@ visibility: "hidden";
   - `absolute`: An element with `position: absolute` will be positioned with respect to its parent. The positioning of this element does not depend upon its siblings or the elements which are at the same level.
   - `sticky`: Element with `position: sticky` and `top: 0` played a role between `fixed` & `relative` based on the position where it is placed. If the element is placed in the middle of the document then when the user scrolls the document, the sticky element starts scrolling until it touches the top.
 
-### 9. Can we overlap elements in CSS?
+### 9. <ins>Can we `overlap` elements in CSS?</ins>
 
 - The `z-index` property is used to displace elements on the z-axis i.e in or out of the screen. It is used to define the order of elements if they overlap with each other.
 
@@ -107,7 +107,7 @@ visibility: "hidden";
 z-index: auto | number | initial | inherit;
 ```
 
-### 10. What is CSS overflow?
+### 10. <ins>What is CSS `overflow`?</ins>
 
 - The CSS `overflow` controls the big content. It tells whether to clip content or to add scroll bars. The overflow contains the following property:
 
@@ -117,7 +117,7 @@ z-index: auto | number | initial | inherit;
   - `auto`: It automatically adds a scrollbar whenever it is required.
   - `overflow-x` and `overflow-y`: This property specifies how to change the overflow of elements. x deals with horizontal edges and y deals with vertical edges.
 
-### 11. What are pseudo-elements in CSS?
+### 11. <ins>What are `pseudo-elements` in CSS?</ins>
 
 - **Pseudo-element** in CSS is used to add style to specified parts of an element. Example: Using style before or after an element. Below is some examples to describe the use of pseudo-element:
 
@@ -126,7 +126,7 @@ z-index: auto | number | initial | inherit;
   - `::first-letter`: It is used to make changes to the first letter of an element.
   - `::first-line`: It is used to make changes to the first line of an element.
 
-### 12. What are pseudo-classes in CSS?
+### 12. <ins>What are `pseudo-classes` in CSS?</ins>
 
 - **Pseudo-classes** in CSS is used to define the special state of an element. It can be combined with a CSS selector to add an effect to existing elements based on their states. For Example, changing the style of an element when the user hovers over it, or when a link is visited. All of these can be done using Pseudo Classes in CSS.
 

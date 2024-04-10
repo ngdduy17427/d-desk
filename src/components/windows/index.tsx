@@ -11,6 +11,7 @@ import "./css.scss";
 import BtnClose from "./ui/btn_close";
 import BtnMaximize from "./ui/btn_maximize";
 import BtnMinimize from "./ui/btn_minimize";
+import WindowsBody from "./ui/windows_body";
 
 export enum IWindowsSize {
   NORMAL,
@@ -83,7 +84,7 @@ const Windows = ({
       right: windowsApp.position?.right,
       bottom: windowsApp.position?.bottom,
       left: windowsApp.position?.left,
-      zIndex: processIndex?.length - processIndex?.indexOf(windowsApp.id as string),
+      zIndex: processIndex?.length - processIndex?.indexOf(String(windowsApp.id)),
     };
 
     if (windowsApp.isCenter)
@@ -120,8 +121,7 @@ const Windows = ({
           right: containerSize.offsetWidth - minWidth,
           bottom: containerSize.offsetBottom,
           left:
-            (containerSize.offsetLeft + minWidth) *
-            processMinimize?.indexOf(windowsApp.id as string),
+            (containerSize.offsetLeft + minWidth) * processMinimize?.indexOf(String(windowsApp.id)),
           zIndex: 0,
         };
         break;
@@ -154,8 +154,6 @@ const Windows = ({
     processIndex,
   ]);
 
-  const WindowsComponent = windowsApp.component;
-
   return (
     <windows
       ref={dragRef}
@@ -172,12 +170,12 @@ const Windows = ({
         <h1 className="windows-name">{windowsApp.name}</h1>
         <div className="windows-nav">
           <BtnMinimize
-            windowsId={windowsApp.id as string}
+            windowsId={String(windowsApp.id)}
             windowsSize={windowsSize}
             setWindowsSize={(size) => startTransition(() => setWindowsSize(size))}
           />
           <BtnMaximize
-            windowsId={windowsApp.id as string}
+            windowsId={String(windowsApp.id)}
             windowsSize={windowsSize}
             setWindowsSize={(size) => startTransition(() => setWindowsSize(size))}
           />
@@ -190,9 +188,7 @@ const Windows = ({
           />
         </div>
       </div>
-      <div className="windows-body">
-        <WindowsComponent windowsApp={windowsApp} />
-      </div>
+      <WindowsBody windowsApp={windowsApp} />
     </windows>
   );
 };

@@ -15,7 +15,7 @@ const AppInit = withContext(({ appDispatch }: { appDispatch: TAppDispatch }) => 
   const loadLocalSettings = useCallback(() => {
     if (localStorageHelper.get("appSettings")) {
       const localStorageSettings: IAppSettings = JSON.parse(
-        localStorageHelper.get("appSettings") as string
+        String(localStorageHelper.get("appSettings"))
       );
 
       if (
@@ -26,7 +26,7 @@ const AppInit = withContext(({ appDispatch }: { appDispatch: TAppDispatch }) => 
         appDispatch(AppActionType.INITIAL_APP_SETTINGS);
       else
         appDispatch(AppActionType.UPDATE_APP_SETTINGS, {
-          appSettings: JSON.parse(localStorageHelper.get("appSettings") as string),
+          appSettings: JSON.parse(String(localStorageHelper.get("appSettings"))),
         });
     } else appDispatch(AppActionType.INITIAL_APP_SETTINGS);
   }, [appDispatch]);

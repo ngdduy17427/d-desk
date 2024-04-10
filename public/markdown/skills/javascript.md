@@ -1,25 +1,25 @@
-### 1. What is JavaScript?
+### 1. <ins>What is `JavaScript`?</ins>
 
 - JavaScript (JS) is the most popular lightweight scripting and compiled programming language.
 - It was developed by Brendan Eich in 1995.
 - It is well-known as a scripting language for web pages, mobile apps, web servers, and many more.
 
-### 2. What is the `this` keyword in JavaScript?
+### 2. <ins>What is the `this` keyword in JavaScript?</ins>
 
 - Functions in JavaScript are essential objects. Like objects, it can be assign to variables, pass to other functions, and return from functions. And much like objects, they have their own properties.
 - `this` stores the current execution context of the JavaScript program. Thus, when it use inside a function, the value of `this` will change depending on how the function is defined, how it is invoked, and the default execution context.
 
-### 3. What are the keywords used to declare a variable in JavaScript?
+### 3. <ins>What are the keywords used to `declare a variable` in JavaScript?</ins>
 
 - In JavaScript, variables are declared using the keywords `var`, `let`, `const`.
 - `var` is the original way to declare variables, while `let` and `const` were introduced in ES6.
 
-### 4. What is ES6?
+### 4. <ins>What is `ES6`?</ins>
 
 - ES6 (ECMAScript 6) is a version of JavaScript introduced in 2015.
 - It has many new features such as fat arrow functions, constant declarations with a single keyword, modules, classes, spread operators, new methods with different types of literals, and primitive data types.
 
-### 5. What are JavaScript Data Types?
+### 5. <ins>What are `JavaScript Data Types`?</ins>
 
 - There are three major Data types in JavaScript.
 
@@ -41,7 +41,7 @@
     - Functions
     - Arrays
 
-### 6. What are the differences between `null` and `undefined`?
+### 6. <ins>What are the differences between `null` and `undefined`?</ins>
 
 | Null                                                          | Undefined                                                                     |
 | ------------------------------------------------------------- | ----------------------------------------------------------------------------- |
@@ -51,12 +51,12 @@
 | `typeof` operator returns `object`.                           | `typeof` operator returns `undefined`.                                        |
 | During arithmetic operations, null is converted to `Zero(0)`. | While performing arithmetic operations, `undefined` is converted to `NaN`.    |
 
-### 7. What is the difference between ViewState and SessionState?
+### 7. <ins>What is the difference between `ViewState` and `SessionState`?</ins>
 
 - **ViewState**: It is specific to a single page in a session.
 - **SessionState**: It is user specific that can access all the data on the web pages.
 
-### 8. What is JavaScript Engine?
+### 8. <ins>What is `JavaScript Engine`?</ins>
 
 - **JavaScript Engine** is simply a computer program that executes JavaScript code.
 - It's responsible for translating human-readable JavaScript code into machine-readable instructions that the computer's hardware can execute.
@@ -87,7 +87,7 @@ sum(1, 2);
 
 - [Source from Lydia Hallie](https://dev.to/lydiahallie/javascript-visualized-the-javascript-engine-4cdf)
 
-### 9. What is JavaScript Event Loop?
+### 9. <ins>What is `JavaScript Event Loop`?</ins>
 
 - **JavaScript Event Loop** is a fundamental mechanism that enables the asynchronous execution of code.
 - It’s an essential part of the JavaScript runtime environment, allowing the language to handle non-blocking operations efficiently.
@@ -119,7 +119,7 @@ baz();
 
 - [Source from Lydia Hallie](https://dev.to/lydiahallie/javascript-visualized-event-loop-3dif)
 
-### 10. What is JavaScript Promises & Async/Await?
+### 10. <ins>What is `JavaScript Promises` & `Async/Await`?</ins>
 
 - **Promise** is an object representing intermediate state of operation which is guaranteed to complete its execution at some point in future.
 
@@ -175,7 +175,7 @@ getImage(file)
 
 - [Source from Lydia Hallie](https://dev.to/lydiahallie/javascript-visualized-promises-async-await-5gke)
 
-### 11. How many ways an HTML element can be accessed in JavaScript code?
+### 11. <ins>How many ways an `HTML element` can be `accessed` in JavaScript code?</ins>
 
 - There are four possible ways to access HTML elements in JavaScript which are:
 
@@ -184,7 +184,7 @@ getImage(file)
   - `getElementsByTagName()`: It is used to get all the elements that have the given tag name.
   - `querySelector()`: This function takes CSS style selector and returns the first selected element.
 
-### 12. What is the ‘Strict’ mode in JavaScript and how can it be enabled?
+### 12. <ins>What is the `Strict Mode` in JavaScript and how can it be enabled?</ins>
 
 - Strict Mode is a new feature in ECMAScript 5 that allows you to place a program or a function in a `strict` operating context.
 - This `strict` context prevents certain actions from being taken and throws more exceptions.

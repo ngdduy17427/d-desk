@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import Markdown from "components/markdown/markdown";
 import { IProgramFile, createProgramFile } from "program_files";
 import { startTransition, useCallback, useEffect, useState } from "react";
 import { IoLogoCss3, IoLogoElectron, IoLogoHtml5, IoLogoNodejs } from "react-icons/io5";
@@ -12,9 +13,6 @@ import {
   SiTypescript,
 } from "react-icons/si";
 import { TbBrandNextjs } from "react-icons/tb";
-import Markdown from "react-markdown";
-import rehypeHighlight from "rehype-highlight";
-import remarkGfm from "remark-gfm";
 import { uuidv4 } from "utils/utils_helper";
 import "./css.scss";
 import SkillNav from "./ui/skill_nav";
@@ -39,72 +37,72 @@ const skills = [
   createSkill({
     name: "HTML5",
     icon: <IoLogoHtml5 color="#e44d26" />,
-    markdown: "markdown/html5.md",
+    markdown: "markdown/skills/html5.md",
   }),
   createSkill({
     name: "CSS3",
     icon: <IoLogoCss3 color="#379ad6" />,
-    markdown: "markdown/css3.md",
+    markdown: "markdown/skills/css3.md",
   }),
   createSkill({
     name: "JavaScript",
     icon: <SiJavascript color="#f2de48" />,
-    markdown: "markdown/javascript.md",
+    markdown: "markdown/skills/javascript.md",
   }),
   createSkill({
     name: "TypeScript",
     icon: <SiTypescript color="#2f74c0" />,
-    markdown: "markdown/typescript.md",
+    markdown: "markdown/skills/typescript.md",
   }),
   createSkill({
     name: "React",
     icon: <SiReact color="#61dafb" />,
-    markdown: "markdown/react.md",
+    markdown: "markdown/skills/react.md",
   }),
   createSkill({
     name: "Next.js",
     icon: <TbBrandNextjs color="#000" />,
-    markdown: "markdown/nextjs.md",
+    markdown: "markdown/skills/nextjs.md",
   }),
   createSkill({
     name: "Electron",
     icon: <IoLogoElectron color="#61dafb" />,
-    markdown: "markdown/electron.md",
+    markdown: "markdown/skills/electron.md",
   }),
   createSkill({
     name: "Node.js",
     icon: <IoLogoNodejs color="#90c53f" />,
-    markdown: "markdown/nodejs.md",
+    markdown: "markdown/skills/nodejs.md",
   }),
   createSkill({
     name: "Express.js",
     icon: <SiExpress color="#000" />,
-    markdown: "markdown/expressjs.md",
+    markdown: "markdown/skills/expressjs.md",
   }),
   createSkill({
     name: "MySQL",
     icon: <SiMysql color="#136494" />,
-    markdown: "markdown/mysql.md",
+    markdown: "markdown/skills/mysql.md",
   }),
   createSkill({
     name: "MongoDB",
     icon: <SiMongodb color="#4faa41" />,
-    markdown: "markdown/mongodb.md",
+    markdown: "markdown/skills/mongodb.md",
   }),
   createSkill({
     name: "WebSocket",
     icon: <SiSocketdotio color="#000" />,
-    markdown: "markdown/websocket.md",
+    markdown: "markdown/skills/websocket.md",
   }),
 ];
 
 const UI = ({ windowsApp }: { windowsApp: IProgramFile }) => {
   const [selectedSkill, setSelectedSkill] = useState<ISkill | undefined>(undefined);
-  const [skillMarkdown, setSkillMarkdown] = useState<string | undefined>(undefined);
+  const [skillMarkdown, setSkillMarkdown] = useState<string>("");
 
   const updateWindowsTitle = useCallback(
     (title: string | undefined) => {
-      const windows = document.getElementById(windowsApp.id as string);
+      const windows = document.getElementById(String(windowsApp.id));
       const windowsTitle = (windows as HTMLElement).getElementsByClassName("windows-name")[0];
 
       if (title) windowsTitle.innerHTML = `${windowsTitle.innerHTML} - ${selectedSkill?.name}`;
@@ -117,7 +115,7 @@ const UI = ({ windowsApp }: { windowsApp: IProgramFile }) => {
     startTransition(() => {
       updateWindowsTitle(undefined);
       setSelectedSkill(undefined);
-      setSkillMarkdown(undefined);
+      setSkillMarkdown("");
     });
 
   useEffect(() => {
@@ -125,7 +123,7 @@ const UI = ({ windowsApp }: { windowsApp: IProgramFile }) => {
 
     updateWindowsTitle(selectedSkill?.name);
 
-    fetch(selectedSkill?.markdown as string, { cache: "force-cache" })
+    fetch(String(selectedSkill?.markdown), { cache: "force-cache" })
       .then((response) => response.text())
       .then((response) => setSkillMarkdown(response));
   }, [updateWindowsTitle, selectedSkill]);
@@ -146,15 +144,9 @@ const UI = ({ windowsApp }: { windowsApp: IProgramFile }) => {
         })}
       </container>
       <div id="skillsComponent" className={classNames("skills-component", { show: selectedSkill })}>
-        <container className="skill-content">
+        <container className="skill-content-container">
           <SkillNav handleGoBack={handleGoBack} />
-          <Markdown
-            className="markdown-body"
-            remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeHighlight]}
-          >
-            {skillMarkdown}
-          </Markdown>
+          <Markdown className="markdown-body">{String(skillMarkdown)}</Markdown>
         </container>
       </div>
     </section>

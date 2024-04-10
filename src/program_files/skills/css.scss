@@ -39,7 +39,7 @@
     &.show {
       transform: translateX(0);
     }
-    .skill-content {
+    .skill-content-container {
       padding: 0 2rem 2rem 2rem;
       position: relative;
       .skill-nav {
@@ -62,8 +62,6 @@
         }
       }
       .markdown-body {
-        width: 100%;
-        max-width: 100%;
         padding-top: 1rem;
       }
     }

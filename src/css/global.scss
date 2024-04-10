@@ -80,6 +80,12 @@ container {
   display: block;
 }
 
+markdown {
+  width: 100%;
+  max-width: 100%;
+  display: block;
+}
+
 @media screen and (max-width: 768px) {
   body {
     font-size: 14px;

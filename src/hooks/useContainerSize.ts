@@ -10,16 +10,16 @@ const useContainerSize = (containerRef: RefObject<any>) => {
   const containerSize = useMemo(
     () => ({
       offsetWidth: !isUndefined(containerRef?.current?.offsetWidth)
-        ? (containerRef?.current?.offsetWidth as number)
+        ? Number(containerRef?.current?.offsetWidth)
         : windowWidth,
       offsetHeight: !isUndefined(containerRef?.current?.offsetHeight)
-        ? (containerRef?.current?.offsetHeight as number)
+        ? Number(containerRef?.current?.offsetHeight)
         : windowHeight,
       offsetTop: !isUndefined(containerRef?.current?.offsetTop)
-        ? (containerRef?.current?.offsetTop as number)
+        ? Number(containerRef?.current?.offsetTop)
         : 0,
       offsetLeft: !isUndefined(containerRef?.current?.offsetLeft)
-        ? (containerRef?.current?.offsetLeft as number)
+        ? Number(containerRef?.current?.offsetLeft)
         : 0,
       offsetBottom:
         !isUndefined(containerRef?.current?.offsetTop) &&

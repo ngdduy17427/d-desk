@@ -32,7 +32,7 @@ const Taskbar = ({
   appContext: IAppContext;
   appDispatch: TAppDispatch;
 }) => {
-  const { isTablet, isDesktop } = useScreenDetector();
+  const { isMobile, isTablet, isDesktop } = useScreenDetector();
   const { ref: mobileShortcutRef, secondRef: mobileMenuRef } = useOnClickOutside(() => {
     if (document.getElementById("mobileShortcut")?.classList.contains("show")) {
       removeClassFromElement("mobileShortcut", "show");
@@ -72,7 +72,7 @@ const Taskbar = ({
             ))}
           </ul>
         )}
-        {isTablet && (
+        {(isMobile || isTablet) && (
           <button
             ref={mobileMenuRef}
             type="button"
@@ -83,7 +83,7 @@ const Taskbar = ({
           </button>
         )}
       </taskbar>
-      {isTablet && (
+      {(isMobile || isTablet) && (
         <ul ref={mobileShortcutRef} id="mobileShortcut" className="mobile-shortcut">
           {programFiles.map((programFile) => (
             <li

@@ -1,9 +1,9 @@
-### 1. What is TypeScript?
+### 1. <ins>What is `TypeScript`?</ins>
 
 - TypeScript is a `superset` of JavaScript that compiles to plain JavaScript.
 - TypeScript is an `object-oriented` and `statically` typed language.
 
-### 2. What are the advantages of using TypeScript?
+### 2. <ins>What are the `advantages` of using TypeScript?</ins>
 
 - There are a lot of advantages of using TypeScript, some of them are listed below:
 
@@ -13,7 +13,7 @@
   - It supports namespace concept with the help of modules.
   - TypeScript throw errors at the compilation time during development unlike of JavaScript that shows errors at the runtime.
 
-### 3. List some disadvantages of using TypeScript.
+### 3. <ins>List some `disadvantages` of using TypeScript.</ins>
 
 - There also exist some disadvantages of using TypeScript as listed below:
 
@@ -23,7 +23,7 @@
   - A definition file needs to be added for using any external or third party library. All the external libraries not have the definition file.
   - The quality of all the definition files need to be correct.
 
-### 4. How you can declare a explicit variables in Typescript?
+### 4. <ins>How you can `declare a explicit variables` in Typescript?</ins>
 
 - You can declare static variables using the colons `:` followed by the `data type` of the explicit type. You can not assign a value of some other `data type` to a static variable. The values of the same `data type` can be assigned.
 
@@ -43,7 +43,7 @@ console.log(myName);
 // Throws an error: Type '28' is not assignable to type 'string'.
 ```
 
-### 5. Explain the data types available in TypeScript.
+### 5. <ins>Explain the `data types` available in TypeScript.</ins>
 
 - There are mainly two types of data types available in TypeScript:
 
@@ -65,7 +65,7 @@ console.log(myName);
   - `classes`: Used to store different data type values in the form of key-value pairs.
   - `interface`: These represent the basic syntax and blueprint that an entity must adhere to.
 
-### 6. What is `never` type and its uses in TypeScript?
+### 6. <ins>What is `never` type and its uses in TypeScript?</ins>
 
 - A `never` type in typescript is indicate the values that may never be occured. It is mainly used with the function that return nothing and always thrown an exception or error.
 - A `never` type is different from `void` type. Because, a function that returns nothing implicitly returns undefined and these functions are inferred using the `void` keyword. But a function that declared using the `never` keyword will never return a undefined it only returns `never` type.
@@ -80,7 +80,7 @@ function neverFunc(): never {
 }
 ```
 
-### 7. Explain the working of `enums` in TypeScript?
+### 7. <ins>Explain the working of `enums` in TypeScript?</ins>
 
 - An `enum` in typescript is used to create a collection of constants.
 - It is basically a class that allow us to create multiple constants of `numeric` as well as `string` type.
@@ -99,7 +99,7 @@ console.log(btr);
 // Prints: 3
 ```
 
-### 8. What are `Type aliases` in TypeScript?
+### 8. <ins>What are `Type aliases` in TypeScript?</ins>
 
 - **Type aliases** in TypeScript mean `a name for any type`. They provide a way of creating new names for existing types.
 - **Type aliases** don’t define new types, instead, they provide an alternative name for an existing type.
@@ -114,7 +114,7 @@ type User = {
 };
 ```
 
-### 9. What are `Interfaces` in TypeScript?
+### 9. <ins>What are `Interfaces` in TypeScript?</ins>
 
 - **Interfaces** are defined using the `interface` keyword.
 - An `interface` defines a contract that an object must adhere to. For example:
@@ -126,7 +126,7 @@ interface Client {
 }
 ```
 
-### 10. What are the differences between `Types` and `Interfaces`?
+### 10. <ins>What are the differences between `Types` and `Interfaces`?</ins>
 
 - `interface` Object / Functions syntax
 
@@ -276,12 +276,12 @@ const point: Point = { x: 1, y: 2 };
 
 - _Always prefer `interface` over `type`_.
 
-### 11. What are the differences between `Classes` and `Interfaces` in TypeScript?
+### 11. <ins>What are the differences between `Classes` and `Interfaces` in TypeScript?</ins>
 
 - **Classes** is defined using the `class` keyword. The classes can contain the methods, properties and variables. Methods of a class are defined when the class is implemented. A class instance will allow us to access the properties and methods defined inside the class.
 - **Interfaces** are defined using the `interface` keyword. It contains only the declarations of the properties and methods which are implemented by the derived class.
 
-### 12. Is TypeScript strictly statically typed language?
+### 12. <ins>Is TypeScript `strictly statically` typed language?</ins>
 
 - No, TypeScript is not a strictly statically typed language it is an optional statically typed language that means it is in our hands that a particular variable has to be statically typed or not.
 - We can use the `any` type and allow a variable to accept the value of any kind of data type.

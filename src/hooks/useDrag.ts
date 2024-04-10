@@ -121,11 +121,11 @@ const useDrag = <T extends HTMLElement>({
   );
 
   const onMouseMoveEnd = useCallback((event: any) => {
-    overrideEventDefaults(event);
-
     if (dragStateRef.current.isPressing) dragStateRef.current.isPressing = false;
 
     if (!dragRef.current || !dragStateRef.current.isDragging) return;
+    overrideEventDefaults(event);
+
     dragStateRef.current.isDragging = false;
     dragRef.current.style.boxSizing = "";
     dragRef.current.style.position = "";
