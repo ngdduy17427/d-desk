@@ -1,13 +1,14 @@
-import { promises as fs } from "fs";
-import { NextRequest, NextResponse } from "next/server";
+import fs from "fs";
+import { NextRequest } from "next/server";
+import path from "path";
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-
-  const image = await fs.readFile(process.cwd() + `/src/assets/images${searchParams.get("image")}`);
-
-  const response = new NextResponse(image);
-  response.headers.set("content-type", "image/png");
-
-  return response;
+  return new Response(
+    fs.readFileSync(
+      path.join(
+        process.cwd(),
+        `/src/assets/images${new URL(request.url).searchParams.get("image")}`
+      )
+    )
+  );
 }
