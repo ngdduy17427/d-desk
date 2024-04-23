@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     url: process.env.NEXT_PUBLIC_BASE_URL,
     siteName: process.env.NEXT_PUBLIC_APP_TITLE,
     locale: process.env.NEXT_PUBLIC_APP_LOCALE,
-    images: `${process.env.NEXT_PUBLIC_BASE_URL}/api/getImage?image=/thumb/d_desk_thumb.png`,
+    images: `${process.env.NEXT_PUBLIC_BASE_URL}/images/thumb/d_desk_thumb.png`,
     emails: process.env.NEXT_PUBLIC_APP_EMAIL,
     type: "website",
   },

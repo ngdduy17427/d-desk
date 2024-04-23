@@ -10,8 +10,8 @@ const UI = (): JSX.Element => {
   const [aboutMeMarkdown, setSkillAboutMeMarkdown] = useState("");
 
   useEffect((): void => {
-    getMarkdown("/about_me/about_me.md").then((response) =>
-      setSkillAboutMeMarkdown(String(response.markdown))
+    getMarkdown(`${process.env.NEXT_PUBLIC_BASE_URL}/markdown/about_me/about_me.md`).then(
+      (response) => setSkillAboutMeMarkdown(String(response))
     );
   }, []);
 

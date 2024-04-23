@@ -6,7 +6,7 @@ const Intro = (): JSX.Element => {
   return (
     <div className="intro">
       <DImage
-        src={`${process.env.NEXT_PUBLIC_BASE_URL}/api/getImage?image=/thumb/my_thumb.png`}
+        src={`${process.env.NEXT_PUBLIC_BASE_URL}/images/thumb/my_thumb.png`}
         alt="My Thumb"
         className="my-thumb"
       />

@@ -1,9 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { headers } from "next/headers";
+import { NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
-  const clientIP = String(request.headers["x-forwarded-for"]).split(",").shift();
-
-  console.log(request.headers["x-forwarded-for"]);
+export async function GET() {
+  const clientIP = headers().get("x-forwarded-for");
 
   return NextResponse.json({ clientIP }, { status: 200 });
 }

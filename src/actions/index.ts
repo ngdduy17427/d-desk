@@ -1,9 +1,9 @@
 "use server";
 
-export const getMarkdown = async (markdown: string) => {
-  return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getMarkdown?markdown=${markdown}`, {
+export const getMarkdown = async (url: string) => {
+  return fetch(url, {
     method: "GET",
-  }).then((response) => response.json());
+  }).then((response) => response.text());
 };
 export const getClientIP = async () => {
   return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getClientIP`, {

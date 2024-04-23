@@ -131,7 +131,7 @@ const UI = withContext(({ windowApp }: ISkillsUIProps): JSX.Element => {
 
     getMarkdown(selectedSkill?.markdown).then((response) => {
       updateWindowTitle(selectedSkill?.name);
-      setSkillMarkdown(response.markdown);
+      setSkillMarkdown(response);
     });
   }, [updateWindowTitle, selectedSkill]);
 

@@ -71,14 +71,14 @@ const projectList: IProject[] = [
     description:
       "A customizable workspace, which allows to organize digital tasks, notes, and projects in a way that suits their individual preferences and workflow.",
     techs: [techList[0].id, techList[1].id],
-    thumnnail: `${process.env.NEXT_PUBLIC_BASE_URL}/api/getImage?image=/thumb/d_desk_thumb.png`,
+    thumnnail: `${process.env.NEXT_PUBLIC_BASE_URL}/images/thumb/d_desk_thumb.png`,
   }),
   createProject({
     name: "D-Store",
     description:
       "An online shopping destination that offers a diverse range of products to cater to various consumer needs.",
     techs: [techList[0].id, techList[1].id, techList[2].id],
-    thumnnail: `${process.env.NEXT_PUBLIC_BASE_URL}/api/getImage?image=/thumb/d_store_thumb.png`,
+    thumnnail: `${process.env.NEXT_PUBLIC_BASE_URL}/images/thumb/d_store_thumb.png`,
     link: "https://d-store-ssr.vercel.app/",
     linkGit: "https://github.com/ngdduy17427/d-store-ssr",
   }),
@@ -86,7 +86,7 @@ const projectList: IProject[] = [
     name: "D-POS",
     description: "A POS Software can be used as Restaurant Table App, Restaurant Online Order.",
     techs: [techList[0].id, techList[1].id, techList[3].id],
-    thumnnail: `${process.env.NEXT_PUBLIC_BASE_URL}/api/getImage?image=/thumb/d_pos_thumb.png`,
+    thumnnail: `${process.env.NEXT_PUBLIC_BASE_URL}/images/thumb/d_pos_thumb.png`,
     link: "https://drive.google.com/file/d/1-W5bB_AtaYibcxPTPmjZCnyteZjkc2IO/view?usp=sharing",
     linkGit: "https://github.com/ngdduy17427/d-pos",
   }),
