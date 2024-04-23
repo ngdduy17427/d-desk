@@ -2,16 +2,19 @@
   "compilerOptions": {
     /* Language and Environment */
     "target": "ESNext",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "jsx": "react-jsx",
+    "lib": ["DOM", "DOM.Iterable", "ESNext", "WebWorker"],
+    "jsx": "preserve",
     /* Modules */
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "allowImportingTsExtensions": true,
     "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     /* Type Checking */
-    "strict": true,
+    "strict": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
@@ -19,14 +22,22 @@
     "noEmit": true,
     /* JavaScript Support */
     "allowJs": true,
+    /* Editor Support */
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     /* Interop Constraints */
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
+    /* Projects */
+    "incremental": true,
     /* Completeness */
     "skipLibCheck": true
   },
-  "include": ["react-app-env.d.ts", "react-global.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "build"]
+  "include": ["**/*.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

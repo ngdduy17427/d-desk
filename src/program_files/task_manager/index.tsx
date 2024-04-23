@@ -1,28 +1,39 @@
 import { IAppContext } from "@type";
+import { getClientIP } from "actions";
+import DContainer from "components/d_container";
 import { withContext } from "context/context";
 import { IProgramFile, createProgramFile } from "program_files";
-import "./css.scss";
+import { useEffect, useState } from "react";
+import "./css.css";
 import AppTask from "./ui/app_task";
 
-const UI = withContext(({ appContext }: { appContext: IAppContext }) => {
-  const { appProcesses } = appContext;
+interface ITaskManagerUIProps {
+  appContext: IAppContext;
+}
+
+const UI = withContext(({ appContext: { appProcesses } }: ITaskManagerUIProps): JSX.Element => {
+  const [clientIP, setClientIP] = useState<string>("");
+
+  useEffect((): void => {
+    getClientIP().then((response) => setClientIP(response.clientIP));
+  }, []);
 
   return (
-    <section className="task-manager-ui">
-      <container className="task-manager-container">
-        {appProcesses?.map((appInProcess: IProgramFile) => (
-          <AppTask key={appInProcess.id} appInProcess={appInProcess} />
-        ))}
-      </container>
-    </section>
+    <DContainer className="task-manager-container">
+      {Array.from(appProcesses.values()).map((appInProcess: IProgramFile) => (
+        <AppTask key={appInProcess.id} appInProcess={appInProcess} clientIP={clientIP} />
+      ))}
+    </DContainer>
   );
 });
 
 const TaskManagerProgram = createProgramFile({
-  component: UI,
   name: "Task Manager",
-  width: 350,
-  height: 500,
+  component: UI,
+  windowState: {
+    width: 400,
+    height: 500,
+  },
 });
 
 export default TaskManagerProgram;

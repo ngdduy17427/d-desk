@@ -1,5 +1,9 @@
+import { getMarkdown } from "actions";
 import classNames from "classnames";
-import Markdown from "components/markdown/markdown";
+import DContainer from "components/d_container";
+import DIcon from "components/d_icon";
+import Markdown from "components/d_markdown";
+import { withContext } from "context/context";
 import { IProgramFile, createProgramFile } from "program_files";
 import { startTransition, useCallback, useEffect, useState } from "react";
 import { IoLogoCss3, IoLogoElectron, IoLogoHtml5, IoLogoNodejs } from "react-icons/io5";
@@ -14,10 +18,14 @@ import {
 } from "react-icons/si";
 import { TbBrandNextjs } from "react-icons/tb";
 import { uuidv4 } from "utils/utils_helper";
-import "./css.scss";
+import "./css.css";
 import SkillNav from "./ui/skill_nav";
 
 const programFileName = "Skills";
+
+interface ISkillsUIProps {
+  windowApp: IProgramFile;
+}
 
 interface ISkill {
   id?: string;
@@ -26,138 +34,133 @@ interface ISkill {
   markdown: string;
 }
 
-const createSkill = (config: ISkill) => ({
+const createSkill = (config: ISkill): ISkill => ({
   id: uuidv4(),
   name: config.name,
   icon: config.icon,
   markdown: config.markdown,
 });
 
-const skills = [
+const skillList: ISkill[] = [
   createSkill({
     name: "HTML5",
     icon: <IoLogoHtml5 color="#e44d26" />,
-    markdown: "markdown/skills/html5.md",
+    markdown: "/skills/html5.md",
   }),
   createSkill({
     name: "CSS3",
     icon: <IoLogoCss3 color="#379ad6" />,
-    markdown: "markdown/skills/css3.md",
+    markdown: "/skills/css3.md",
   }),
   createSkill({
     name: "JavaScript",
     icon: <SiJavascript color="#f2de48" />,
-    markdown: "markdown/skills/javascript.md",
+    markdown: "/skills/javascript.md",
   }),
   createSkill({
     name: "TypeScript",
     icon: <SiTypescript color="#2f74c0" />,
-    markdown: "markdown/skills/typescript.md",
+    markdown: "/skills/typescript.md",
   }),
   createSkill({
     name: "React",
     icon: <SiReact color="#61dafb" />,
-    markdown: "markdown/skills/react.md",
+    markdown: "/skills/react.md",
   }),
   createSkill({
     name: "Next.js",
     icon: <TbBrandNextjs color="#000" />,
-    markdown: "markdown/skills/nextjs.md",
+    markdown: "/skills/nextjs.md",
   }),
   createSkill({
     name: "Electron",
     icon: <IoLogoElectron color="#61dafb" />,
-    markdown: "markdown/skills/electron.md",
+    markdown: "/skills/electron.md",
   }),
   createSkill({
     name: "Node.js",
     icon: <IoLogoNodejs color="#90c53f" />,
-    markdown: "markdown/skills/nodejs.md",
+    markdown: "/skills/nodejs.md",
   }),
   createSkill({
     name: "Express.js",
     icon: <SiExpress color="#000" />,
-    markdown: "markdown/skills/expressjs.md",
+    markdown: "/skills/expressjs.md",
   }),
   createSkill({
     name: "MySQL",
     icon: <SiMysql color="#136494" />,
-    markdown: "markdown/skills/mysql.md",
+    markdown: "/skills/mysql.md",
   }),
   createSkill({
     name: "MongoDB",
     icon: <SiMongodb color="#4faa41" />,
-    markdown: "markdown/skills/mongodb.md",
+    markdown: "/skills/mongodb.md",
   }),
   createSkill({
     name: "WebSocket",
     icon: <SiSocketdotio color="#000" />,
-    markdown: "markdown/skills/websocket.md",
+    markdown: "/skills/websocket.md",
   }),
 ];
 
-const UI = ({ windowsApp }: { windowsApp: IProgramFile }) => {
+const UI = withContext(({ windowApp }: ISkillsUIProps): JSX.Element => {
   const [selectedSkill, setSelectedSkill] = useState<ISkill | undefined>(undefined);
   const [skillMarkdown, setSkillMarkdown] = useState<string>("");
 
-  const updateWindowsTitle = useCallback(
-    (title: string | undefined) => {
-      const windows = document.getElementById(String(windowsApp.id));
-      const windowsTitle = (windows as HTMLElement).getElementsByClassName("windows-name")[0];
+  const updateWindowTitle = useCallback(
+    (title: string | undefined): void => {
+      const window = document.getElementById(String(windowApp.id));
+      const windowTitle = (window as HTMLElement).getElementsByClassName("window-name")[0];
 
-      if (title) windowsTitle.innerHTML = `${windowsTitle.innerHTML} - ${selectedSkill?.name}`;
-      else windowsTitle.innerHTML = programFileName;
+      if (title) windowTitle.innerHTML = `${windowTitle.innerHTML} - ${selectedSkill?.name}`;
+      else windowTitle.innerHTML = programFileName;
     },
-    [windowsApp.id, selectedSkill?.name]
+    [windowApp.id, selectedSkill?.name]
   );
 
-  const handleGoBack = () =>
-    startTransition(() => {
-      updateWindowsTitle(undefined);
+  const handleGoBack = (): void =>
+    startTransition((): void => {
+      updateWindowTitle(undefined);
       setSelectedSkill(undefined);
       setSkillMarkdown("");
     });
 
-  useEffect(() => {
+  useEffect((): void => {
     if (!selectedSkill) return;
 
-    updateWindowsTitle(selectedSkill?.name);
-
-    fetch(String(selectedSkill?.markdown), { cache: "force-cache" })
-      .then((response) => response.text())
-      .then((response) => setSkillMarkdown(response));
-  }, [updateWindowsTitle, selectedSkill]);
+    getMarkdown(selectedSkill?.markdown).then((response) => {
+      updateWindowTitle(selectedSkill?.name);
+      setSkillMarkdown(response.markdown);
+    });
+  }, [updateWindowTitle, selectedSkill]);
 
   return (
-    <section className="skills-ui">
-      <container className="skills-container">
-        {skills.map(({ id, name, icon, markdown }) => {
-          return (
-            <span
-              key={id}
-              className="skill-icon"
-              onClick={() => setSelectedSkill({ id, name, icon, markdown })}
-            >
-              {icon}
-            </span>
-          );
-        })}
-      </container>
-      <div id="skillsComponent" className={classNames("skills-component", { show: selectedSkill })}>
-        <container className="skill-content-container">
+    <DContainer className="skills-container">
+      <DContainer className="icons-container">
+        {skillList.map(({ id, icon }) => (
+          <DIcon key={id} className="icon" windowSizing={windowApp.windowState.sizing}>
+            {icon}
+          </DIcon>
+        ))}
+      </DContainer>
+      <aside id="skillsAside" className={classNames("skills-aside", { show: selectedSkill })}>
+        <DContainer className="skill-aside-container">
           <SkillNav handleGoBack={handleGoBack} />
-          <Markdown className="markdown-body">{String(skillMarkdown)}</Markdown>
-        </container>
-      </div>
-    </section>
+          <Markdown>{String(skillMarkdown)}</Markdown>
+        </DContainer>
+      </aside>
+    </DContainer>
   );
-};
+});
 
 const SkillsProgram = createProgramFile({
-  component: UI,
   name: programFileName,
-  width: 800,
-  height: 600,
+  component: UI,
+  windowState: {
+    width: 800,
+    height: 600,
+  },
 });
 
 export default SkillsProgram;

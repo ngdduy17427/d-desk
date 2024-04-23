@@ -1,12 +1,17 @@
+import DImage from "components/d_image";
 import { FaGithub, FaNpm } from "react-icons/fa";
 import { MdOpenInNew } from "react-icons/md";
 import { IProject, techList } from "..";
 
-const ProjectCard = ({ project }: { project: IProject }) => (
+interface IProjectCardProps {
+  project: IProject;
+}
+
+const ProjectCard = ({ project }: IProjectCardProps): JSX.Element => (
   <article className="project-card">
-    <img src={project.thumnnail} alt="Project thumbnail" className="project-thumb" />
+    <DImage src={project.thumnnail} alt="Project thumbnail" className="project-thumb" />
     <h1 className="project-name">
-      <strong>{project.title}</strong>
+      <strong>{project.name}</strong>
     </h1>
     <p className="project-description">{project.description}</p>
     <div className="project-techs">

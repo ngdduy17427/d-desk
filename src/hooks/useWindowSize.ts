@@ -1,25 +1,32 @@
-import { startTransition, useEffect, useState } from "react";
+import React from "react";
 
-const useWindowSize = () => {
-  const [windowSize, setWindowSize] = useState({
-    windowWidth: window.innerWidth,
-    windowHeight: window.innerHeight,
+export interface IWindowSize {
+  windowWidth: number | undefined;
+  windowHeight: number | undefined;
+}
+
+const useWindowSize = (): IWindowSize => {
+  const [windowSize, setWindowSize] = React.useState<IWindowSize>({
+    windowWidth: undefined,
+    windowHeight: undefined,
   });
 
-  const updateWindowSize = () =>
-    startTransition(() =>
+  const updateWindowSize = (): void =>
+    React.startTransition((): void =>
       setWindowSize({
         windowWidth: window.innerWidth,
         windowHeight: window.innerHeight,
       })
     );
 
-  useEffect(() => {
+  React.useEffect(() => {
+    updateWindowSize();
+
     window.addEventListener("resize", updateWindowSize);
     return () => window.removeEventListener("resize", updateWindowSize);
   }, []);
 
-  return { windowSize };
+  return windowSize;
 };
 
 export default useWindowSize;

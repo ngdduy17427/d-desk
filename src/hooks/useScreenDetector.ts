@@ -1,9 +1,13 @@
 import useWindowSize from "./useWindowSize";
 
-const useScreenDetector = () => {
-  const {
-    windowSize: { windowWidth },
-  } = useWindowSize();
+interface IScreenDetector {
+  isMobile: boolean;
+  isTablet: boolean;
+  isDesktop: boolean;
+}
+
+const useScreenDetector = (): IScreenDetector => {
+  const { windowWidth } = useWindowSize();
 
   return {
     isMobile: windowWidth < 481,

@@ -1,0 +1,93 @@
+d-window {
+  min-width: 10rem;
+  max-width: 100%;
+  max-height: 100%;
+  box-shadow: var(--glb-box-shadow);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  pointer-events: auto;
+  transition: all 0.25s ease-in-out;
+  transition-property: width, height, top, right, bottom, left;
+  animation: slide-in-fwd-center 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  &.minimize {
+    border: 1px solid var(--glb-border-color);
+    box-shadow: none;
+  }
+  &.fullscreen {
+    width: auto !important;
+    height: auto !important;
+    inset: 0 !important;
+  }
+  d-window-header {
+    min-height: var(--glb-taskbar-height);
+    color: var(--glb-color-text);
+    background-color: var(--glb-bg-header);
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    .window-name {
+      color: var(--glb-color-title);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      user-select: none;
+    }
+    .window-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      user-select: none;
+      .window-nav-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        svg {
+          width: 1.25rem;
+          height: 1.25rem;
+          &:hover {
+            color: var(--glb-color-title);
+          }
+        }
+      }
+    }
+  }
+  d-window-body {
+    height: 100%;
+    background-color: #ddd;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+@keyframes slide-in-fwd-center {
+  0% {
+    transform: translateZ(-1400px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateZ(0);
+    opacity: 1;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  d-window {
+    flex: 1;
+    width: 100% !important;
+    height: calc(100% - var(--glb-taskbar-height)) !important;
+    border-radius: 0;
+    box-shadow: unset;
+    inset: unset !important;
+    d-window-header {
+      .window-nav {
+        .window-nav-item:not(:last-child) {
+          display: none;
+        }
+      }
+    }
+  }
+}

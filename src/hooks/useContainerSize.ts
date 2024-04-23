@@ -1,41 +1,48 @@
-import { RefObject, useMemo } from "react";
+import React from "react";
 import { isUndefined } from "utils/utils_helper";
 import useWindowSize from "./useWindowSize";
 
-const useContainerSize = (containerRef: RefObject<any>) => {
-  const {
-    windowSize: { windowWidth, windowHeight },
-  } = useWindowSize();
+export interface IContainerSize {
+  offsetWidth: number;
+  offsetHeight: number;
+  offsetTop: number;
+  offsetLeft: number;
+  offsetBottom: number;
+  offsetRight: number;
+}
 
-  const containerSize = useMemo(
-    () => ({
-      offsetWidth: !isUndefined(containerRef?.current?.offsetWidth)
-        ? Number(containerRef?.current?.offsetWidth)
-        : windowWidth,
-      offsetHeight: !isUndefined(containerRef?.current?.offsetHeight)
-        ? Number(containerRef?.current?.offsetHeight)
-        : windowHeight,
-      offsetTop: !isUndefined(containerRef?.current?.offsetTop)
-        ? Number(containerRef?.current?.offsetTop)
+const useContainerSize = <ElementType extends HTMLElement>(
+  containerElement?: ElementType
+): IContainerSize => {
+  const windowSize = useWindowSize();
+
+  const containerSize = React.useMemo(
+    (): IContainerSize => ({
+      offsetWidth: !isUndefined(containerElement?.offsetWidth)
+        ? Number(containerElement?.offsetWidth)
+        : windowSize.windowWidth,
+      offsetHeight: !isUndefined(containerElement?.offsetHeight)
+        ? Number(containerElement?.offsetHeight)
+        : windowSize.windowHeight,
+      offsetTop: !isUndefined(containerElement?.offsetTop)
+        ? Number(containerElement?.offsetTop)
         : 0,
-      offsetLeft: !isUndefined(containerRef?.current?.offsetLeft)
-        ? Number(containerRef?.current?.offsetLeft)
+      offsetLeft: !isUndefined(containerElement?.offsetLeft)
+        ? Number(containerElement?.offsetLeft)
         : 0,
       offsetBottom:
-        !isUndefined(containerRef?.current?.offsetTop) &&
-        !isUndefined(containerRef?.current?.offsetHeight)
-          ? windowHeight - containerRef?.current?.offsetTop - containerRef?.current?.offsetHeight
+        !isUndefined(containerElement?.offsetTop) && !isUndefined(containerElement?.offsetHeight)
+          ? windowSize.windowHeight - containerElement?.offsetTop - containerElement?.offsetHeight
           : 0,
       offsetRight:
-        !isUndefined(containerRef?.current?.offsetLeft) &&
-        !isUndefined(containerRef?.current?.offsetWidth)
-          ? windowWidth - containerRef?.current?.offsetLeft - containerRef?.current?.offsetWidth
+        !isUndefined(containerElement?.offsetLeft) && !isUndefined(containerElement?.offsetWidth)
+          ? windowSize.windowWidth - containerElement?.offsetLeft - containerElement?.offsetWidth
           : 0,
     }),
-    [containerRef, windowWidth, windowHeight]
+    [containerElement, windowSize.windowWidth, windowSize.windowHeight]
   );
 
-  return { containerSize };
+  return containerSize;
 };
 
 export default useContainerSize;

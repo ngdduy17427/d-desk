@@ -1,5 +1,5 @@
-import axios from "axios";
-import Cookies from "./cookie_helper";
+import axios, { AxiosRequestConfig } from "axios";
+import cookieHelper from "./cookie_helper";
 
 export enum AxiosMethods {
   HEAD = "head",
@@ -11,39 +11,27 @@ export enum AxiosMethods {
   DELETE = "delete",
 }
 
-const request = async ({
-  method,
-  url,
-  body = null,
-  headers = null,
-}: {
-  method: AxiosMethods;
-  url: string;
-  body?: any;
-  headers?: any;
-}) => {
-  const accessToken = Cookies.getCookie("accessToken");
+type TRequestURL = string;
+type TRequestBody = any;
+type TRequestHeaders = AxiosRequestConfig;
+
+const requestHelper = (
+  method: AxiosMethods,
+  url: TRequestURL,
+  body: TRequestBody = null,
+  headers: TRequestHeaders = null
+) => {
+  const accessToken = cookieHelper.getCookie("accessToken");
   const authorization = accessToken ? "Bearer " + accessToken : "";
 
   return axios[method](
     url,
     {
-      Accept: "application/json",
-      Authorization: authorization,
       ...headers,
+      Authorization: authorization,
     },
     JSON.parse(body)
-  )
-    .then(async (response: any) => {
-      const result = await response?.json();
-
-      if (!response.ok) throw new Error(result.error.message);
-
-      return result.success;
-    })
-    .catch(() => {
-      throw new Error("Please contact with the owner!");
-    });
+  );
 };
 
-export default request;
+export default requestHelper;

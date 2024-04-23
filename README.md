@@ -1,3 +1,1 @@
-# D-Desk
-
-This is my portfolio
+# Duy Nguyen's Portfolio

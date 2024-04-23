@@ -1,4 +1,4 @@
-import { IAppBackground, IAppCursor, IAppTheme } from "@type";
+import { IAppBackgroundOption, IAppCursorOption, IAppThemeOption } from "@type";
 import {
   bubbleCursor,
   characterCursor,
@@ -13,7 +13,7 @@ import {
   trailingCursor,
 } from "cursor-effects";
 
-export const AppTheme: IAppTheme[] = [
+export const AppThemeOptions: IAppThemeOption[] = [
   { value: "normal", label: "Normal", theme: "normal" },
   { value: "theme-1", label: "Theme 1", theme: "theme-1" },
   { value: "theme-2", label: "Theme 2", theme: "theme-2" },
@@ -21,14 +21,24 @@ export const AppTheme: IAppTheme[] = [
   { value: "theme-4", label: "Theme 4", theme: "theme-4" },
   { value: "theme-5", label: "Theme 5", theme: "theme-5" },
 ];
-
-export const AppBackgrounds: IAppBackground[] = [
-  { value: "bg-1", label: "Background 1", image: "images/background/app-bg-1.png" },
-  { value: "bg-2", label: "Background 2", image: "images/background/app-bg-2.png" },
-  { value: "bg-3", label: "Background 3", image: "images/background/app-bg-3.png" },
+export const AppBackgroundOptions: IAppBackgroundOption[] = [
+  {
+    value: "bg-1",
+    label: "Forest 1",
+    image: `${process.env.NEXT_PUBLIC_BASE_URL}/api/getImage?image=/background/app_bg_1.png`,
+  },
+  {
+    value: "bg-2",
+    label: "Forest 2",
+    image: `${process.env.NEXT_PUBLIC_BASE_URL}/api/getImage?image=/background/app_bg_2.png`,
+  },
+  {
+    value: "bg-3",
+    label: "Forest 3",
+    image: `${process.env.NEXT_PUBLIC_BASE_URL}/api/getImage?image=/background/app_bg_3.png`,
+  },
 ];
-
-export const AppCursors: IAppCursor[] = [
+export const AppCursorOptions: IAppCursorOption[] = [
   { value: "normal", label: "Normal" },
   { value: "cursor-1", label: "Bubble cursor", cursorEffect: bubbleCursor },
   { value: "cursor-2", label: "Character cursor", cursorEffect: characterCursor },

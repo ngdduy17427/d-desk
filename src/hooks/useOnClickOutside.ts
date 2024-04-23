@@ -1,20 +1,18 @@
-import { useEffect, useRef } from "react";
+import React from "react";
 
-export const useOnClickOutside = (handler: (event: MouseEvent | TouchEvent) => void) => {
-  const ref = useRef<any>(null);
-  const secondRef = useRef<any>(null);
-
-  useEffect(() => {
+export const useOnClickOutside = <T extends HTMLElement>(
+  refs: T[],
+  handler: (event: MouseEvent | TouchEvent) => void
+): void => {
+  React.useLayoutEffect((): (() => void) => {
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
-      if (
-        !ref ||
-        !secondRef ||
-        ref.current?.contains(event.target as Node) ||
-        secondRef.current?.contains(event.target as Node)
-      )
-        return;
+      let isContain = false;
+      const listSize = refs.length;
 
-      handler(event);
+      for (let i = 0; i < listSize; i++)
+        if ((refs[i] as T)?.contains(event.target as Node)) isContain = true;
+
+      if (!isContain) handler(event);
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -23,7 +21,5 @@ export const useOnClickOutside = (handler: (event: MouseEvent | TouchEvent) => v
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("touchstart", handleClickOutside);
     };
-  }, [ref, handler]);
-
-  return { ref, secondRef };
+  }, [refs, handler]);
 };

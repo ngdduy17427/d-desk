@@ -1,47 +1,69 @@
 import { TAppDispatch } from "@type";
+import { EDWindowSizing } from "components/d_window";
 import { AppActionType } from "context/actions";
 import { withContext } from "context/context";
-import moment from "moment";
 import { IProgramFile } from "program_files";
-import { startTransition, useEffect, useState } from "react";
+import { startTransition, useLayoutEffect, useState } from "react";
 import { MdArrowRight } from "react-icons/md";
 
-const AppTask = ({
-  appInProcess,
-  appDispatch,
-}: {
+interface IAppTaskProps {
   appInProcess: IProgramFile;
   appDispatch: TAppDispatch;
-}) => {
-  const [newRuntime, setNewRuntime] = useState(moment().diff(appInProcess.runtime));
+  clientIP: string;
+}
 
-  useEffect(() => {
+const AppTask = ({ appInProcess, appDispatch, clientIP }: IAppTaskProps): JSX.Element => {
+  const { windowState } = appInProcess;
+  const [appRuntime, setAppRuntime] = useState<string>("00:00:00");
+
+  useLayoutEffect((): (() => void) => {
+    const formatHMS = (value: number): number | string =>
+      value < 10 ? "0".concat(String(value)) : value;
+
     const runtimer = setInterval(
-      () => startTransition(() => setNewRuntime(moment().diff(appInProcess.runtime))),
+      (): void =>
+        startTransition((): void => {
+          const currentRuntime = new Date().getTime();
+          const distance = currentRuntime - (windowState.runtime as Date).getTime();
+
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          setAppRuntime(`${formatHMS(hours)}:${formatHMS(minutes)}:${formatHMS(seconds)}`);
+        }),
       1000
     );
 
     return () => clearInterval(runtimer);
-  }, [appInProcess.runtime]);
+  }, [windowState.runtime]);
 
   return (
     <div className="app-task">
       <div className="app-task-summary">
         <MdArrowRight className="text-[1.5rem]" />
         <h1 className="app-name">{appInProcess.name}</h1>
-        <p className="runtime">{moment(newRuntime).format("mm:ss")}</p>
+        <p className="runtime">{appRuntime}</p>
         <button
           type="button"
           className="btn-end-task"
           onClick={() =>
-            appDispatch(AppActionType.CLOSE_WINDOWS, { programFileId: appInProcess.id })
+            appDispatch(AppActionType.CLOSE_WINDOW, { programFileId: appInProcess.id })
           }
         >
           End task
         </button>
       </div>
       <div className="app-task-detail">
-        <p>ID: {appInProcess.id}</p>
+        <span>
+          ID: <p>{appInProcess.id}</p>
+        </span>
+        <span>
+          Sizing: <p>{EDWindowSizing[windowState.sizing]}</p>
+        </span>
+        <span>
+          User: <p>{clientIP}</p>
+        </span>
       </div>
     </div>
   );

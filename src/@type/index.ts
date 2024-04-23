@@ -2,30 +2,35 @@ import { AppActionType } from "context/actions";
 import { CursorEffectResult, DefaultOptions } from "cursor-effects";
 import { IProgramFile } from "program_files";
 
-export interface IAppSettingOption {
+type TAppProcesses = Map<string, IProgramFile>;
+type TProcessIndex = Array<string>;
+type TProcessMinimize = Array<string>;
+
+export type TAppDispatch = (type: AppActionType, payload?: any) => void;
+
+interface IAppSettingOption {
   value: string;
   label: string;
 }
-export interface IAppTheme extends IAppSettingOption {
+export interface IAppThemeOption extends IAppSettingOption {
   theme: string;
 }
-export interface IAppBackground extends IAppSettingOption {
+export interface IAppBackgroundOption extends IAppSettingOption {
   image: string;
 }
-export interface IAppCursor extends IAppSettingOption {
+export interface IAppCursorOption extends IAppSettingOption {
   cursorEffect?: (options?: DefaultOptions) => CursorEffectResult;
 }
 export interface IAppSettings {
-  appTheme?: IAppTheme;
-  appBackground?: IAppBackground;
-  appCursor?: IAppCursor;
+  appTheme?: IAppThemeOption;
+  appBackground?: IAppBackgroundOption;
+  appCursor?: IAppCursorOption;
   appCursorEffectResult?: CursorEffectResult;
 }
 
-export type TAppDispatch = (type: AppActionType, payload?: any) => void;
 export interface IAppContext {
   appSettings: IAppSettings;
-  appProcesses: IProgramFile[];
-  processIndex: string[];
-  processMinimize: string[];
+  appProcesses: TAppProcesses;
+  processIndex: TProcessIndex;
+  processMinimize: TProcessMinimize;
 }

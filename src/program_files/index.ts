@@ -1,36 +1,29 @@
-import { Moment } from "moment";
+import { EDWindowSizing, IDWindowState } from "components/d_window";
 import { uuidv4 } from "utils/utils_helper";
 
 export interface IProgramFile {
   id?: string;
-  component: (...args: any) => React.ReactNode;
   name: string;
-  width: number;
-  height: number;
-  position?: {
-    top?: number;
-    right?: number;
-    bottom?: number;
-    left?: number;
-  };
-  isCenter?: boolean;
-  isDraggable?: boolean;
-  runtime?: Moment;
+  component: (...args: any) => React.ReactNode;
+  windowState?: IDWindowState;
 }
 
-export const createProgramFile = (config: IProgramFile) => ({
+export const createProgramFile = (config: IProgramFile): IProgramFile => ({
   id: config.id ?? uuidv4(),
-  component: config.component,
   name: config.name,
-  width: config.width,
-  height: config.height,
-  position: {
-    top: config.position?.top,
-    right: config.position?.right,
-    bottom: config.position?.bottom,
-    left: config.position?.left,
+  component: config.component,
+  windowState: {
+    width: config.windowState?.width,
+    height: config.windowState?.height,
+    sizing: config.windowState?.sizing ?? EDWindowSizing.NORMAL,
+    position: {
+      top: config.windowState?.position?.top,
+      right: config.windowState?.position?.right,
+      bottom: config.windowState?.position?.bottom,
+      left: config.windowState?.position?.left,
+    },
+    isCenter: config.windowState?.isCenter ?? true,
+    isDraggable: config.windowState?.isDraggable ?? true,
+    runtime: config.windowState?.runtime ?? undefined,
   },
-  isCenter: config.isCenter ?? true,
-  isDraggable: config.isDraggable ?? true,
-  runtime: config.runtime ?? undefined,
 });

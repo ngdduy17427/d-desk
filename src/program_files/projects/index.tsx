@@ -1,11 +1,12 @@
+import DContainer from "components/d_container";
 import { createProgramFile } from "program_files";
 import { uuidv4 } from "utils/utils_helper";
-import "./css.scss";
+import "./css.css";
 import ProjectCard from "./ui/project_card";
 
 export interface IProject {
-  id: string;
-  title: string;
+  id?: string;
+  name: string;
   description: string;
   techs: string[];
   thumnnail: string;
@@ -14,97 +15,98 @@ export interface IProject {
   linkNPM?: string;
 }
 
-export const techList: {
-  id: string;
+interface ITech {
+  id?: string;
   name: string;
   link: string;
-}[] = [
-  {
-    id: uuidv4(),
+}
+
+const createTech = ({ name, link }: ITech): ITech => ({
+  id: uuidv4(),
+  name,
+  link,
+});
+
+const createProject = ({
+  name,
+  description,
+  techs,
+  thumnnail,
+  link,
+  linkGit,
+  linkNPM,
+}: IProject): IProject => ({
+  id: uuidv4(),
+  name,
+  description,
+  techs,
+  thumnnail,
+  link,
+  linkGit,
+  linkNPM,
+});
+
+export const techList: ITech[] = [
+  createTech({
     name: "React",
     link: "https://react.dev/",
-  },
-  {
-    id: uuidv4(),
+  }),
+  createTech({
     name: "TypeScript",
     link: "https://www.typescriptlang.org/",
-  },
-  {
-    id: uuidv4(),
+  }),
+  createTech({
     name: "Next.js",
     link: "https://nextjs.org/",
-  },
-  {
-    id: uuidv4(),
+  }),
+  createTech({
     name: "Electron",
     link: "https://www.electronjs.org/",
-  },
+  }),
 ];
 
 const projectList: IProject[] = [
-  {
-    id: uuidv4(),
-    title: "D-Desk",
+  createProject({
+    name: "D-Desk",
     description:
       "A customizable workspace, which allows to organize digital tasks, notes, and projects in a way that suits their individual preferences and workflow.",
     techs: [techList[0].id, techList[1].id],
-    thumnnail: "/images/thumb/d-desk-thumb.png",
-  },
-  {
-    id: uuidv4(),
-    title: "D-Store",
+    thumnnail: `${process.env.NEXT_PUBLIC_BASE_URL}/api/getImage?image=/thumb/d_desk_thumb.png`,
+  }),
+  createProject({
+    name: "D-Store",
     description:
       "An online shopping destination that offers a diverse range of products to cater to various consumer needs.",
     techs: [techList[0].id, techList[1].id, techList[2].id],
-    thumnnail: "/images/thumb/d-store-thumb.png",
+    thumnnail: `${process.env.NEXT_PUBLIC_BASE_URL}/api/getImage?image=/thumb/d_store_thumb.png`,
     link: "https://d-store-ssr.vercel.app/",
     linkGit: "https://github.com/ngdduy17427/d-store-ssr",
-  },
-  {
-    id: uuidv4(),
-    title: "D-POS",
-    description:
-      "A POS System Software can be used as Restaurant Table App, Restaurant Online Order.",
+  }),
+  createProject({
+    name: "D-POS",
+    description: "A POS Software can be used as Restaurant Table App, Restaurant Online Order.",
     techs: [techList[0].id, techList[1].id, techList[3].id],
-    thumnnail: "/images/thumb/d-pos-thumb.png",
+    thumnnail: `${process.env.NEXT_PUBLIC_BASE_URL}/api/getImage?image=/thumb/d_pos_thumb.png`,
     link: "https://drive.google.com/file/d/1-W5bB_AtaYibcxPTPmjZCnyteZjkc2IO/view?usp=sharing",
     linkGit: "https://github.com/ngdduy17427/d-pos",
-  },
-  {
-    id: uuidv4(),
-    title: "cra-template-retypewind",
-    description: "Based Typescript template for React application.",
-    techs: [techList[0].id, techList[1].id],
-    thumnnail: "/images/thumb/retypewind-thumb.png",
-    linkNPM: "https://www.npmjs.com/package/cra-template-retypewind",
-    linkGit: "https://github.com/ngdduy17427/cra-template-retypewind",
-  },
-  {
-    id: uuidv4(),
-    title: "cra-template-retypetron",
-    description: "Based Typescript template for React Electron application.",
-    techs: [techList[0].id, techList[1].id, techList[3].id],
-    thumnnail: "/images/thumb/retypetron-thumb.png",
-    linkNPM: "https://www.npmjs.com/package/cra-template-retypetron",
-    linkGit: "https://github.com/ngdduy17427/cra-template-retypetron",
-  },
+  }),
 ];
 
-const UI = () => {
+const UI = (): JSX.Element => {
   return (
-    <section className="projects-ui">
-      <container className="projects-container">
-        {projectList?.map((project) => <ProjectCard key={project.id} project={project} />)}
-      </container>
-    </section>
+    <DContainer className="projects-container">
+      {projectList?.map((project) => <ProjectCard key={project.id} project={project} />)}
+    </DContainer>
   );
 };
 
 const ProjectsProgram = createProgramFile({
-  component: UI,
   name: "Projects",
-  width: 1000,
-  height: 600,
+  component: UI,
+  windowState: {
+    width: 1000,
+    height: 600,
+  },
 });
 
 export default ProjectsProgram;

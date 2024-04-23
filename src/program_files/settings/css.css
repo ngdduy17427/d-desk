@@ -1,0 +1,23 @@
+.settings-container {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  .select-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+.opt-bg {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  .opt-bg-img {
+    width: 60px;
+    height: 60px;
+    img {
+      object-fit: cover;
+    }
+  }
+}

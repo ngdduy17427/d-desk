@@ -1,0 +1,67 @@
+.task-manager-container {
+  padding: 1rem 1rem 1rem 0.5rem;
+  .app-task {
+    position: relative;
+    .app-task-summary {
+      display: flex;
+      align-items: center;
+      .runtime {
+        margin-left: auto;
+      }
+      .btn-end-task {
+        margin-left: 1rem;
+        &:hover {
+          color: var(--glb-color-title);
+        }
+      }
+    }
+    .app-task-detail {
+      span {
+        padding-left: 1rem;
+        margin-left: 1.5rem;
+        display: flex;
+        gap: 0.5rem;
+        position: relative;
+        &::before {
+          content: "";
+          width: 1px;
+          height: 100%;
+          background-color: #000;
+          display: inline-block;
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+        &::after {
+          content: "";
+          width: 1px;
+          height: 0.5rem;
+          background-color: #000;
+          border-radius: 1rem;
+          display: inline-block;
+          position: absolute;
+          top: 12px;
+          left: 4px;
+          transform: rotate(90deg);
+        }
+        &:not(:first-child) {
+          &::before {
+            height: 100%;
+          }
+        }
+        &:last-child {
+          &::before {
+            height: calc(16.5px);
+            border-bottom-right-radius: 1rem;
+            border-bottom-left-radius: 1rem;
+          }
+        }
+        p {
+          font-size: 0.85rem;
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+  }
+}

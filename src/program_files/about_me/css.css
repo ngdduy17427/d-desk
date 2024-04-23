@@ -1,0 +1,42 @@
+.about-me-container {
+  padding: 1rem;
+  .intro {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    .my-thumb {
+      flex: 1 0 150px;
+      height: 150px;
+      user-select: none;
+    }
+    .greeting {
+      width: 100%;
+      p {
+        color: #fff;
+        background-color: var(--glb-color-text);
+        padding: 1rem;
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+        display: inline-block;
+      }
+    }
+  }
+  d-markdown {
+    margin-top: 1rem;
+    a:-webkit-any-link {
+      color: -webkit-link;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    p {
+      clear: both;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .about-me-container {
+    overflow: auto;
+  }
+}

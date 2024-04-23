@@ -1,38 +1,48 @@
-import { RefObject, useCallback, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { clamp } from "utils/utils_helper";
 import useContainerSize from "./useContainerSize";
 
-interface IUseDragOption {
-  containerRef?: RefObject<any>;
+interface IUseDragProps<T> {
+  dragRef: T;
+  dragLayerRef: T[];
   isDraggable?: boolean;
   onDragStart?: () => void;
+  container?: HTMLElement;
 }
 
-interface IDragStateRef {
+interface IDragPosition {
+  top: number | undefined;
+  left: number | undefined;
+  bottom: number | undefined;
+  right: number | undefined;
+}
+
+interface IDragState {
   isPressing: boolean;
   isDragging: boolean;
   relCursor: {
     relY: number;
     relX: number;
   };
-  position: {
-    top: number | undefined;
-    left: number | undefined;
-    bottom: number | undefined;
-    right: number | undefined;
+  position: IDragPosition;
+}
+
+export interface IDrag {
+  dragState: {
+    isDragging: boolean;
+    position: IDragPosition;
   };
 }
 
 const useDrag = <T extends HTMLElement>({
-  containerRef,
+  dragRef,
+  dragLayerRef,
   isDraggable = true,
   onDragStart,
-}: IUseDragOption) => {
-  const { containerSize } = useContainerSize(containerRef as RefObject<any>);
-
-  const dragRef = useRef<T>(null);
-  const dragLayerRef = useRef<T>(null);
-  const dragStateRef = useRef<IDragStateRef>({
+  container,
+}: IUseDragProps<T>): IDrag => {
+  const containerSize = useContainerSize(container);
+  const [dragState, setDragState] = useState<IDragState>({
     isPressing: false,
     isDragging: false,
     relCursor: {
@@ -47,120 +57,143 @@ const useDrag = <T extends HTMLElement>({
     },
   });
 
-  const overrideEventDefaults = (event: any) => {
+  const overrideEventDefaults = (event: any): void => {
     event.preventDefault();
     event.stopPropagation();
   };
 
-  const onMouseMoveStart = useCallback(
-    (event: any) => {
+  const onMouseMoveStart = React.useCallback(
+    (event: MouseEvent): void => {
       onDragStart?.();
 
-      if (!dragRef.current || !isDraggable || event.button === 1 || event.button === 2) return;
+      if (!dragRef || !isDraggable || event.button === 1 || event.button === 2) return;
       overrideEventDefaults(event);
 
-      dragStateRef.current.isPressing = true;
-      dragStateRef.current.relCursor = {
-        relY: Math.floor(event.pageY - dragRef.current.getBoundingClientRect().top),
-        relX: Math.floor(event.pageX - dragRef.current.getBoundingClientRect().left),
-      };
+      window.requestAnimationFrame(() => {
+        setDragState((prevState) => ({
+          ...prevState,
+          isPressing: true,
+          relCursor: {
+            relY: Math.floor(event.pageY - dragRef.getBoundingClientRect().top),
+            relX: Math.floor(event.pageX - dragRef.getBoundingClientRect().left),
+          },
+        }));
+      });
     },
-    [onDragStart, isDraggable, dragRef]
+    [dragRef, isDraggable, onDragStart]
   );
 
-  const onMouseMove = useCallback(
-    (event: any) => {
-      if (!dragRef.current || !isDraggable || !dragStateRef.current.isPressing) return;
+  const onMouseMove = React.useCallback(
+    (event: MouseEvent): void => {
+      if (!dragRef || !isDraggable || !dragState.isPressing) return;
       overrideEventDefaults(event);
 
-      dragStateRef.current.isDragging = true;
+      window.requestAnimationFrame(() => {
+        setDragState((prevState) => ({
+          ...prevState,
+          isDragging: true,
+        }));
 
-      let posTop: any = event.pageY - dragStateRef.current.relCursor.relY;
-      let posLeft: any = event.pageX - dragStateRef.current.relCursor.relX;
-      let posBottom: any = containerSize.offsetHeight - dragRef.current?.offsetHeight - posTop;
-      let posRight: any = containerSize.offsetWidth - dragRef.current?.offsetWidth - posLeft;
+        let posTop: any = event.pageY - dragState.relCursor.relY;
+        let posLeft: any = event.pageX - dragState.relCursor.relX;
+        let posBottom: any =
+          containerSize.offsetHeight - dragRef.offsetHeight - posTop + containerSize.offsetTop;
+        let posRight: any =
+          containerSize.offsetWidth - dragRef.offsetWidth - posLeft + containerSize.offsetLeft;
 
-      posTop = clamp(
-        posTop,
-        containerSize.offsetTop,
-        containerSize.offsetHeight - dragRef.current?.offsetHeight + containerSize.offsetTop
-      );
-      posLeft = clamp(
-        posLeft,
-        containerSize.offsetLeft,
-        containerSize.offsetWidth - dragRef.current?.offsetWidth + containerSize.offsetLeft
-      );
-      posBottom = clamp(
-        posBottom,
-        containerSize.offsetBottom,
-        containerSize.offsetHeight - dragRef.current?.offsetHeight
-      );
-      posRight = clamp(
-        posRight,
-        containerSize.offsetRight,
-        containerSize.offsetWidth - dragRef.current?.offsetWidth
-      );
+        posTop = clamp(
+          posTop,
+          containerSize.offsetTop,
+          containerSize.offsetHeight - dragRef.offsetHeight + containerSize.offsetTop
+        );
+        posLeft = clamp(
+          posLeft,
+          containerSize.offsetLeft,
+          containerSize.offsetWidth - dragRef.offsetWidth + containerSize.offsetLeft
+        );
+        posBottom = clamp(
+          posBottom,
+          containerSize.offsetBottom,
+          containerSize.offsetHeight - dragRef.offsetHeight
+        );
+        posRight = clamp(
+          posRight,
+          containerSize.offsetRight,
+          containerSize.offsetWidth - dragRef.offsetWidth
+        );
 
-      dragRef.current.style.boxSizing = "border-box";
-      dragRef.current.style.position = "fixed";
-      dragRef.current.style.transition = "none";
-      dragRef.current.style.pointerEvents = "none";
-      dragRef.current.style.top = `${Math.floor(posTop)}px`;
-      dragRef.current.style.left = `${Math.floor(posLeft)}px`;
-      dragRef.current.style.bottom = `${Math.floor(posBottom)}px`;
-      dragRef.current.style.right = `${Math.floor(posRight)}px`;
+        dragRef.style.boxSizing = "border-box";
+        dragRef.style.position = "fixed";
+        dragRef.style.transition = "none";
+        dragRef.style.pointerEvents = "none";
+        dragRef.style.top = `${Math.floor(posTop)}px`;
+        dragRef.style.left = `${Math.floor(posLeft)}px`;
+        dragRef.style.bottom = `${Math.floor(posBottom)}px`;
+        dragRef.style.right = `${Math.floor(posRight)}px`;
 
-      dragStateRef.current.position = {
-        top: posTop,
-        left: posLeft,
-        bottom: posBottom,
-        right: posRight,
-      };
+        setDragState((prevState) => ({
+          ...prevState,
+          position: {
+            top: posTop,
+            left: posLeft,
+            bottom: posBottom,
+            right: posRight,
+          },
+        }));
+      });
     },
-    [dragRef, isDraggable, containerSize]
+    [
+      dragRef,
+      isDraggable,
+      dragState.isPressing,
+      dragState.relCursor.relX,
+      dragState.relCursor.relY,
+      containerSize,
+    ]
   );
 
-  const onMouseMoveEnd = useCallback((event: any) => {
-    if (dragStateRef.current.isPressing) dragStateRef.current.isPressing = false;
+  const onMouseMoveEnd = React.useCallback(
+    (event: MouseEvent): void => {
+      if (dragState.isPressing)
+        setDragState((prevState) => ({
+          ...prevState,
+          isPressing: false,
+        }));
 
-    if (!dragRef.current || !dragStateRef.current.isDragging) return;
-    overrideEventDefaults(event);
+      if (!dragRef || !dragState.isDragging) return;
+      overrideEventDefaults(event);
 
-    dragStateRef.current.isDragging = false;
-    dragRef.current.style.boxSizing = "";
-    dragRef.current.style.position = "";
-    dragRef.current.style.transition = "";
-    dragRef.current.style.pointerEvents = "";
-  }, []);
+      window.requestAnimationFrame(() => {
+        dragRef.style.boxSizing = "";
+        dragRef.style.position = "";
+        dragRef.style.transition = "";
+        dragRef.style.pointerEvents = "";
 
-  useEffect(() => {
+        setDragState((prevState) => ({
+          ...prevState,
+          isDragging: false,
+        }));
+      });
+    },
+    [dragRef, dragState.isPressing, dragState.isDragging]
+  );
+
+  React.useLayoutEffect((): (() => void) => {
+    if (dragLayerRef.length > 0) {
+      dragLayerRef.forEach((element) => {
+        if (element) element.onmousedown = onMouseMoveStart;
+      });
+    } else if (dragRef) dragRef.onmousedown = onMouseMoveStart;
+
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseMoveEnd);
-
-    if (dragLayerRef.current) {
-      dragLayerRef.current.onmousedown = onMouseMoveStart;
-      dragLayerRef.current.onmousemove = onMouseMove;
-      dragLayerRef.current.onmouseup = onMouseMoveEnd;
-    } else if (dragRef.current) {
-      dragRef.current.onmousedown = onMouseMoveStart;
-      dragRef.current.onmousemove = onMouseMove;
-      dragRef.current.onmouseup = onMouseMoveEnd;
-    }
-
     return () => {
       document.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseup", onMouseMoveEnd);
     };
-  }, [onMouseMoveStart, onMouseMove, onMouseMoveEnd]);
+  }, [dragRef, dragLayerRef, onMouseMoveStart, onMouseMove, onMouseMoveEnd]);
 
-  return {
-    dragRef,
-    dragLayerRef,
-    dragState: {
-      isDragging: dragStateRef.current.isDragging,
-      position: dragStateRef.current.position,
-    },
-  };
+  return { dragState };
 };
 
 export default useDrag;

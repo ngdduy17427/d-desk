@@ -1,0 +1,70 @@
+d-taskbar {
+  height: var(--glb-taskbar-height);
+  background-color: var(--glb-bg-header);
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--glb-border-color);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  z-index: 100;
+  user-select: none;
+  .title-name {
+    font-size: 1.25rem;
+    color: var(--glb-color-title);
+    cursor: pointer;
+  }
+  .desktop-shortcut {
+    height: 100%;
+    display: flex;
+    gap: 1rem;
+    li {
+      height: 100%;
+      color: var(--glb-color-text);
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      &:hover {
+        color: var(--glb-color-title);
+      }
+    }
+  }
+  .btn-mobile-menu {
+    font-size: 1.5rem;
+    color: var(--glb-color-text);
+    margin-left: auto;
+    &:hover {
+      color: var(--glb-color-title);
+    }
+  }
+  .mobile-shortcut {
+    background-color: var(--glb-bg-header);
+    border: 1px solid var(--glb-border-color);
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: var(--glb-taskbar-height);
+    right: 1rem;
+    transition: all 0.25s ease-in-out;
+    transform: translateX(calc(100% + 1rem));
+    &.show {
+      transform: translateX(0%);
+    }
+    li {
+      color: var(--glb-color-text);
+      padding: 1rem;
+      cursor: pointer;
+      &:hover {
+        color: var(--glb-color-title);
+      }
+    }
+  }
+  .btn-fullscreen {
+    font-size: 1.5rem;
+    color: var(--glb-color-text);
+    margin-left: auto;
+    &:hover {
+      color: var(--glb-color-title);
+    }
+  }
+}

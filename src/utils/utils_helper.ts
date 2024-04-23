@@ -1,4 +1,4 @@
-export function uuidv4() {
+export function uuidv4(): string {
   return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c: any) =>
     (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16)
   );
@@ -8,27 +8,27 @@ export function copyToClipboard(text: string) {
   return navigator.clipboard.writeText(text);
 }
 
-export function isUndefined(object: unknown) {
+export function isUndefined(object: unknown): boolean {
   return typeof object === "undefined";
 }
 
-export function isNull(object: unknown) {
+export function isNull(object: unknown): boolean {
   return object === null;
 }
 
-export function hasUpperCase(str: string) {
+export function hasUpperCase(str: string): boolean {
   return str !== str.toLowerCase();
 }
 
-export function hasSpecialChar(str: string) {
+export function hasSpecialChar(str: string): boolean {
   return new RegExp(/[ `!@#$%^&*()+\-=\\[\]{};':"\\|,.<>\\/?~]/).test(str);
 }
 
-export function regexEmail(str: string) {
+export function regexEmail(str: string): boolean {
   return new RegExp(/^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/).test(str);
 }
 
-export function clamp(value: number, min: number, max: number) {
+export function clamp(value: number, min: number, max: number): number {
   return value >= min ? (value <= max ? value : max) : min;
 }
 
@@ -46,22 +46,28 @@ export function convertURLSearchParams(
   return new URLSearchParams(values).toString();
 }
 
-export function reObjByUndefined(obj: any) {
-  if (!obj) return;
-
-  Object.keys(obj).forEach(function (key) {
-    if (obj[key] === "") {
-      obj[key] = undefined;
-    }
-  });
-
-  return obj;
-}
-
 export function addClassToElement(elementId: string, ...classNames: string[]) {
   document.getElementById(elementId)?.classList.add(...classNames);
 }
 
 export function removeClassFromElement(elementId: string, ...classNames: string[]) {
   document.getElementById(elementId)?.classList.remove(...classNames);
+}
+
+export function deepCopy<T>(object: T): T {
+  if (typeof object !== "object" || object === null) return object as T;
+
+  if (object instanceof Date) return new Date(object.getTime()) as T;
+
+  if (object instanceof Array)
+    return object.reduce((arr, item, i) => {
+      arr[i] = deepCopy(item);
+      return arr;
+    }, []) as T;
+
+  if (object instanceof Object)
+    return Object.keys(object).reduce((newObj, key) => {
+      newObj[key] = deepCopy(object[key]);
+      return newObj;
+    }, {}) as T;
 }
