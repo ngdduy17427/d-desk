@@ -56,7 +56,7 @@ const DDesktop = ({
     localLocalSettings();
 
     window.addEventListener("storage", localLocalSettings);
-    return () => window.removeEventListener("storage", localLocalSettings);
+    return (): void => window.removeEventListener("storage", localLocalSettings);
   }, [localLocalSettings]);
 
   return (
@@ -66,9 +66,15 @@ const DDesktop = ({
         backgroundImage: `url(${appSettings.appBackground?.image})`,
       }}
     >
-      {Array.from(appProcesses.values()).map((appInProcess: IProgramFile) => (
-        <DWindow key={appInProcess.id} windowApp={appInProcess} container={containerRef.current} />
-      ))}
+      {Array.from(appProcesses.values()).map(
+        (appInProcess: IProgramFile): JSX.Element => (
+          <DWindow
+            key={appInProcess.id}
+            windowApp={appInProcess}
+            container={containerRef.current}
+          />
+        )
+      )}
     </WCDDesktop>
   );
 };

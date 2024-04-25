@@ -1,4 +1,5 @@
 import DImage from "components/d_image";
+import DText from "components/d_text";
 import { FaGithub, FaNpm } from "react-icons/fa";
 import { MdOpenInNew } from "react-icons/md";
 import { IProject, techList } from "..";
@@ -13,10 +14,10 @@ const ProjectCard = ({ project }: IProjectCardProps): JSX.Element => (
     <h1 className="project-name">
       <strong>{project.name}</strong>
     </h1>
-    <p className="project-description">{project.description}</p>
+    <DText texts={project.description} className="project-description" />
     <div className="project-techs">
-      {project.techs?.map((techId: string) => {
-        const tech = techList?.filter((tech) => tech.id === techId)[0];
+      {project.techs?.map((techId: string): JSX.Element => {
+        const tech = techList?.filter((tech): boolean => tech.id === techId)[0];
 
         return (
           <a key={tech.id} href={tech.link} target="_blank" rel="noreferrer">

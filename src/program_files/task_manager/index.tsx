@@ -12,17 +12,19 @@ interface ITaskManagerUIProps {
 }
 
 const UI = withContext(({ appContext: { appProcesses } }: ITaskManagerUIProps): JSX.Element => {
-  const [clientIP, setClientIP] = useState<string>("");
+  const [clientIP, setClientIP] = useState<string | undefined>(undefined);
 
   useEffect((): void => {
-    getClientIP().then((response) => setClientIP(response.clientIP));
+    getClientIP().then((response): void => setClientIP(response.clientIP));
   }, []);
 
   return (
     <DContainer className="task-manager-container">
-      {Array.from(appProcesses.values()).map((appInProcess: IProgramFile) => (
-        <AppTask key={appInProcess.id} appInProcess={appInProcess} clientIP={clientIP} />
-      ))}
+      {Array.from(appProcesses.values()).map(
+        (appInProcess: IProgramFile): JSX.Element => (
+          <AppTask key={appInProcess.id} appInProcess={appInProcess} clientIP={clientIP} />
+        )
+      )}
     </DContainer>
   );
 });

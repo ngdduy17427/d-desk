@@ -16,8 +16,5 @@
   .opt-bg-img {
     width: 60px;
     height: 60px;
-    img {
-      object-fit: cover;
-    }
   }
 }

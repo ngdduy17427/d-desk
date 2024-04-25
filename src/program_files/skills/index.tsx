@@ -5,7 +5,7 @@ import DIcon from "components/d_icon";
 import Markdown from "components/d_markdown";
 import { withContext } from "context/context";
 import { IProgramFile, createProgramFile } from "program_files";
-import { startTransition, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { IoLogoCss3, IoLogoElectron, IoLogoHtml5, IoLogoNodejs } from "react-icons/io5";
 import {
   SiExpress,
@@ -119,30 +119,31 @@ const UI = withContext(({ windowApp }: ISkillsUIProps): JSX.Element => {
     [windowApp.id, selectedSkill?.name]
   );
 
-  const handleGoBack = (): void =>
-    startTransition((): void => {
-      updateWindowTitle(undefined);
-      setSelectedSkill(undefined);
-      setSkillMarkdown("");
-    });
+  const handleGoBack = (): void => {
+    updateWindowTitle(undefined);
+    setSelectedSkill(undefined);
+    setSkillMarkdown("");
+  };
 
   useEffect((): void => {
     if (!selectedSkill) return;
 
-    getMarkdown(selectedSkill?.markdown).then((response) => {
+    getMarkdown(selectedSkill?.markdown).then((response): void => {
       updateWindowTitle(selectedSkill?.name);
-      setSkillMarkdown(response);
+      setSkillMarkdown(String(response));
     });
   }, [updateWindowTitle, selectedSkill]);
 
   return (
     <DContainer className="skills-container">
       <DContainer className="icons-container">
-        {skillList.map(({ id, icon }) => (
-          <DIcon key={id} className="icon" windowSizing={windowApp.windowState.sizing}>
-            {icon}
-          </DIcon>
-        ))}
+        {skillList.map(
+          ({ id, icon }): JSX.Element => (
+            <DIcon key={id} className="icon" windowSizing={windowApp.windowState.sizing}>
+              {icon}
+            </DIcon>
+          )
+        )}
       </DContainer>
       <aside id="skillsAside" className={classNames("skills-aside", { show: selectedSkill })}>
         <DContainer className="skill-aside-container">

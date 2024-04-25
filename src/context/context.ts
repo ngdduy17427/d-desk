@@ -23,9 +23,7 @@ const AppProvider = ({ children, initialValue }: IAppProviderProps): JSX.Element
 
   const appDispatchCallback = React.useCallback(
     (type: AppActionType, payload?: any): void =>
-      React.startTransition((): void =>
-        setAppContext((prevState): IAppContext => appAction(prevState, { type, payload }))
-      ),
+      setAppContext((prevState): IAppContext => appAction(prevState, { type, payload })),
     []
   );
 

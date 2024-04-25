@@ -5,6 +5,7 @@
 @import "./font.css";
 @import "./markdown.css";
 @import "./highlight.css";
+@import "./animation.css";
 
 :root {
   --glb-taskbar-height: 2.5rem;

@@ -1,5 +1,5 @@
 export function uuidv4(): string {
-  return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c: any) =>
+  return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c: any): string =>
     (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16)
   );
 }
@@ -60,13 +60,13 @@ export function deepCopy<T>(object: T): T {
   if (object instanceof Date) return new Date(object.getTime()) as T;
 
   if (object instanceof Array)
-    return object.reduce((arr, item, i) => {
+    return object.reduce((arr, item, i): Array<T> => {
       arr[i] = deepCopy(item);
       return arr;
     }, []) as T;
 
   if (object instanceof Object)
-    return Object.keys(object).reduce((newObj, key) => {
+    return Object.keys(object).reduce((newObj, key): object => {
       newObj[key] = deepCopy(object[key]);
       return newObj;
     }, {}) as T;

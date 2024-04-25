@@ -21,7 +21,7 @@ const UI = withContext(
           label="Theme:"
           options={AppThemeOptions}
           value={appSettings.appTheme}
-          onChange={(option) =>
+          onChange={(option): void =>
             appDispatch(AppActionType.UPDATE_APP_SETTINGS, {
               appSettings: { ...appSettings, appTheme: option },
             })
@@ -31,7 +31,7 @@ const UI = withContext(
           label="Cursor:"
           options={AppCursorOptions}
           value={appSettings.appCursor}
-          onChange={(option) =>
+          onChange={(option): void =>
             appDispatch(AppActionType.UPDATE_APP_SETTINGS, {
               appSettings: { ...appSettings, appCursor: option },
             })
@@ -41,12 +41,12 @@ const UI = withContext(
           label="Background:"
           options={AppBackgroundOptions}
           value={appSettings.appBackground}
-          onChange={(option) =>
+          onChange={(option): void =>
             appDispatch(AppActionType.UPDATE_APP_SETTINGS, {
               appSettings: { ...appSettings, appBackground: option },
             })
           }
-          formatOptionLabel={(option) => (
+          formatOptionLabel={(option): JSX.Element => (
             <div className="opt-bg">
               <DImage
                 src={(option as IAppBackgroundOption).image}

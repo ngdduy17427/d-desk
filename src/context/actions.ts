@@ -1,6 +1,6 @@
-import { IAppContext } from "@type";
+import { IAppContext, IAppSettings } from "@type";
 import { EDWindowSizing } from "components/d_window";
-import { AppCursorOptions } from "config";
+import { AppBackgroundOptions, AppCursorOptions, AppThemeOptions } from "config";
 import { IProgramFile } from "program_files";
 import localStorageHelper from "utils/local_storage_helper";
 import { deepCopy } from "utils/utils_helper";
@@ -44,10 +44,12 @@ export const appAction = (state: IAppContext, action: AppActionProps): IAppConte
         appProcesses: state.appProcesses.set(action.payload.programFileId, programFileModified),
         processIndex: [
           action.payload.programFileId,
-          ...state.processIndex.filter((id: string) => id !== action.payload.programFileId),
+          ...state.processIndex.filter(
+            (id: string): boolean => id !== action.payload.programFileId
+          ),
         ],
         processMinimize: state.processMinimize?.filter(
-          (id: string) => id !== action.payload.programFileId
+          (id: string): boolean => id !== action.payload.programFileId
         ),
       };
     }
@@ -56,7 +58,9 @@ export const appAction = (state: IAppContext, action: AppActionProps): IAppConte
         ...state,
         processIndex: [
           action.payload.programFileId,
-          ...state.processIndex.filter((id: string) => id !== action.payload.programFileId),
+          ...state.processIndex.filter(
+            (id: string): boolean => id !== action.payload.programFileId
+          ),
         ],
       };
     }
@@ -87,7 +91,7 @@ export const appAction = (state: IAppContext, action: AppActionProps): IAppConte
         ...state,
         appProcesses: state.appProcesses.set(action.payload.programFileId, programFileModified),
         processMinimize: state.processMinimize?.filter(
-          (id: string) => id !== action.payload.programFileId
+          (id: string): boolean => id !== action.payload.programFileId
         ),
       };
     }
@@ -97,27 +101,43 @@ export const appAction = (state: IAppContext, action: AppActionProps): IAppConte
       return {
         ...state,
         processIndex: state.processIndex?.filter(
-          (id: string) => id !== action.payload.programFileId
+          (id: string): boolean => id !== action.payload.programFileId
         ),
         processMinimize: state.processMinimize?.filter(
-          (id: string) => id !== action.payload.programFileId
+          (id: string): boolean => id !== action.payload.programFileId
         ),
       };
     }
     case AppActionType.UPDATE_APP_SETTINGS: {
+      state.appSettings.appCursorEffectResult?.destroy();
       delete action.payload.appSettings.appCursorEffectResult;
 
-      state.appSettings.appCursorEffectResult?.destroy();
-      localStorageHelper.update("appSettings", action.payload.appSettings);
-      document.body.setAttribute("data-theme", action.payload.appSettings?.appTheme?.theme);
+      let appSettingsModified: IAppSettings = deepCopy(action.payload.appSettings);
+
+      const isAppTheme = AppThemeOptions.filter(
+        (appTheme) => appTheme.theme === appSettingsModified.appTheme.theme
+      )[0];
+      const isAppBackground = AppBackgroundOptions.filter(
+        (appBackground) => appBackground.image === appSettingsModified.appBackground.image
+      )[0];
+      const isAppCursor = AppCursorOptions.filter(
+        (appCursor) => appCursor.value === appSettingsModified.appCursor.value
+      )[0];
+
+      appSettingsModified = {
+        appTheme: isAppTheme ? isAppTheme : AppThemeOptions[0],
+        appBackground: isAppBackground ? isAppBackground : AppBackgroundOptions[0],
+        appCursor: isAppCursor ? isAppCursor : AppCursorOptions[0],
+      };
+
+      localStorageHelper.update("appSettings", appSettingsModified);
+      document.body.setAttribute("data-theme", appSettingsModified.appTheme.theme);
 
       return {
         ...state,
         appSettings: {
-          ...action.payload.appSettings,
-          appCursorEffectResult: AppCursorOptions.filter(
-            (cursor) => cursor.value === action.payload.appSettings.appCursor.value
-          )[0].cursorEffect?.(),
+          ...appSettingsModified,
+          appCursorEffectResult: appSettingsModified.appCursor.cursorEffect?.(),
         },
       };
     }

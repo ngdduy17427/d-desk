@@ -67,7 +67,8 @@ const DWindow = ({
     dragRef: windowRef.current,
     dragLayerRef: [windowHeaderRef.current],
     isDraggable: windowState.isDraggable && windowState.sizing === EDWindowSizing.NORMAL,
-    onDragStart: () => appDispatch(AppActionType.CLICK_WINDOW, { programFileId: windowApp.id }),
+    onDragStart: (): void =>
+      appDispatch(AppActionType.CLICK_WINDOW, { programFileId: windowApp.id }),
     container: container,
   });
 
@@ -198,7 +199,7 @@ const DWindow = ({
         { minimize: windowState.sizing === EDWindowSizing.MINIMIZE },
         { maximize: windowState.sizing === EDWindowSizing.MAXIMIZE }
       )}
-      onClick={() => appDispatch(AppActionType.CLICK_WINDOW, { programFileId: windowApp.id })}
+      onClick={(): void => appDispatch(AppActionType.CLICK_WINDOW, { programFileId: windowApp.id })}
     >
       <DWindowHeader ref={windowHeaderRef} windowApp={windowApp} />
       <DWindowBody windowApp={windowApp} />

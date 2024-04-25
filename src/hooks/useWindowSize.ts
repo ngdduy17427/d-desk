@@ -12,18 +12,16 @@ const useWindowSize = (): IWindowSize => {
   });
 
   const updateWindowSize = (): void =>
-    React.startTransition((): void =>
-      setWindowSize({
-        windowWidth: window.innerWidth,
-        windowHeight: window.innerHeight,
-      })
-    );
+    setWindowSize({
+      windowWidth: window.innerWidth,
+      windowHeight: window.innerHeight,
+    });
 
-  React.useEffect(() => {
+  React.useEffect((): (() => void) => {
     updateWindowSize();
 
     window.addEventListener("resize", updateWindowSize);
-    return () => window.removeEventListener("resize", updateWindowSize);
+    return (): void => window.removeEventListener("resize", updateWindowSize);
   }, []);
 
   return windowSize;

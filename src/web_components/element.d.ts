@@ -10,6 +10,7 @@ declare namespace JSX {
     "d-container": IWebComponent;
     "d-markdown": IWebComponent;
     "d-image": IWebComponent;
+    "d-text": IWebComponent;
     "d-icon": IWebComponent;
   }
 }

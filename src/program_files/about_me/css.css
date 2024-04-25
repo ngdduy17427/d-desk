@@ -1,25 +1,43 @@
 .about-me-container {
+  height: 100%;
   padding: 1rem;
+  position: relative;
+  overflow: auto;
   .intro {
+    width: 50%;
     display: flex;
     align-items: center;
     gap: 1rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.75s ease-in-out;
+    transition-property: width padding position top left transform;
+    &.finish {
+      width: 100%;
+      position: relative;
+      top: 0;
+      left: 0;
+      transform: none;
+    }
     .my-thumb {
       flex: 1 0 150px;
+      max-width: 150px;
       height: 150px;
       user-select: none;
+      img {
+        border-radius: 150px;
+      }
     }
     .greeting {
-      width: 100%;
-      p {
-        color: #fff;
-        background-color: var(--glb-color-text);
-        padding: 1rem;
-        border-top-left-radius: 1rem;
-        border-top-right-radius: 1rem;
-        border-bottom-right-radius: 1rem;
-        display: inline-block;
-      }
+      color: #fff;
+      background-color: var(--glb-color-text);
+      padding: 1rem;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      border-bottom-right-radius: 1rem;
+      display: inline-block;
     }
   }
   d-markdown {
@@ -29,14 +47,17 @@
       text-decoration: underline;
       cursor: pointer;
     }
-    p {
-      clear: both;
-    }
   }
 }
 
 @media screen and (max-width: 768px) {
   .about-me-container {
-    overflow: auto;
+    .intro {
+      width: 100%;
+      padding: 0 1rem;
+      &.finish {
+        padding: 0;
+      }
+    }
   }
 }

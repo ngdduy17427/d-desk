@@ -1,6 +1,7 @@
 import { EDWindowSizing } from "components/d_window";
 import { memo, useCallback, useLayoutEffect, useMemo, useRef } from "react";
 import { WCDIcon } from "web_components";
+import "./css.css";
 
 interface IDIconProps {
   children: React.ReactNode;
@@ -21,12 +22,13 @@ const DIcon = ({ children, className, windowSizing }: IDIconProps): JSX.Element 
       if (isDisabled) return;
 
       window.requestAnimationFrame((): void => {
-        const box = (iconRef.current as HTMLElement)?.getBoundingClientRect();
-        const calcY = (event.pageX - box?.x - box.width / 2) / 15;
-        const calcX = -(event.pageY - box?.y - box.height / 2) / 15;
+        if (!iconRef.current) return;
 
-        (iconRef.current as HTMLElement).style.transform =
-          `perspective(${iconRef.current?.offsetWidth}px) rotateX(${calcX}deg) rotateY(${calcY}deg)`;
+        const box = iconRef.current.getBoundingClientRect();
+        const calcY = (event.pageX - box?.x - box?.width / 2) / 15;
+        const calcX = -(event.pageY - box?.y - box?.height / 2) / 15;
+
+        iconRef.current.style.transform = `perspective(${iconRef.current.offsetWidth}px) rotateX(${calcX}deg) rotateY(${calcY}deg)`;
       });
     },
     [isDisabled]
@@ -34,7 +36,7 @@ const DIcon = ({ children, className, windowSizing }: IDIconProps): JSX.Element 
 
   useLayoutEffect((): (() => void) => {
     document.addEventListener("mousemove", onMouseMove);
-    return () => document.removeEventListener("mousemove", onMouseMove);
+    return (): void => document.removeEventListener("mousemove", onMouseMove);
   }, [onMouseMove]);
 
   return (

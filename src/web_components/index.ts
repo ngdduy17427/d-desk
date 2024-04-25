@@ -44,4 +44,5 @@ export const WCDWindowBody = createWebComponent("WCDWindow", "d-window-body");
 export const WCDContainer = createWebComponent("WCDContainer", "d-container");
 export const WCDMarkdown = createWebComponent("WCDMarkdown", "d-markdown");
 export const WCDImage = createWebComponent("WCDImage", "d-image");
+export const WCDText = createWebComponent("WCDImage", "d-text");
 export const WCDIcon = createWebComponent("WCDImage", "d-icon");

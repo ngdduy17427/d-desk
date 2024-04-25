@@ -3,7 +3,7 @@ import { EDWindowSizing } from "components/d_window";
 import { AppActionType } from "context/actions";
 import { withContext } from "context/context";
 import { IProgramFile } from "program_files";
-import { startTransition, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { MdArrowRight } from "react-icons/md";
 
 interface IAppTaskProps {
@@ -20,22 +20,18 @@ const AppTask = ({ appInProcess, appDispatch, clientIP }: IAppTaskProps): JSX.El
     const formatHMS = (value: number): number | string =>
       value < 10 ? "0".concat(String(value)) : value;
 
-    const runtimer = setInterval(
-      (): void =>
-        startTransition((): void => {
-          const currentRuntime = new Date().getTime();
-          const distance = currentRuntime - (windowState.runtime as Date).getTime();
+    const runtimer = setInterval((): void => {
+      const currentRuntime = new Date().getTime();
+      const distance = currentRuntime - (windowState.runtime as Date).getTime();
 
-          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-          setAppRuntime(`${formatHMS(hours)}:${formatHMS(minutes)}:${formatHMS(seconds)}`);
-        }),
-      1000
-    );
+      setAppRuntime(`${formatHMS(hours)}:${formatHMS(minutes)}:${formatHMS(seconds)}`);
+    }, 1000);
 
-    return () => clearInterval(runtimer);
+    return (): void => clearInterval(runtimer);
   }, [windowState.runtime]);
 
   return (
@@ -47,7 +43,7 @@ const AppTask = ({ appInProcess, appDispatch, clientIP }: IAppTaskProps): JSX.El
         <button
           type="button"
           className="btn-end-task"
-          onClick={() =>
+          onClick={(): void =>
             appDispatch(AppActionType.CLOSE_WINDOW, { programFileId: appInProcess.id })
           }
         >

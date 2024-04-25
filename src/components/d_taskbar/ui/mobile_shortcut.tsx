@@ -16,11 +16,13 @@ const MobileShortcut = forwardRef(
 
     return isMobile || isTablet ? (
       <ul ref={ref} className="mobile-shortcut">
-        {programFiles.map((programFile) => (
-          <li key={programFile.id} onClick={() => handleOpenWindow(programFile)}>
-            {programFile.name}
-          </li>
-        ))}
+        {programFiles.map(
+          (programFile): JSX.Element => (
+            <li key={programFile.id} onClick={(): void => handleOpenWindow(programFile)}>
+              {programFile.name}
+            </li>
+          )
+        )}
       </ul>
     ) : null;
   }

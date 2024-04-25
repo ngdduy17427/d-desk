@@ -1,5 +1,5 @@
 import { memo } from "react";
-import Select, { Props } from "react-select";
+import Select, { CSSObjectWithLabel, Props } from "react-select";
 
 interface ISelectFieldProps extends Props {
   label: string;
@@ -11,7 +11,7 @@ const SelectField = ({ label, ...props }: ISelectFieldProps): JSX.Element => (
     <Select
       menuPortalTarget={document.body}
       styles={{
-        menuPortal: (base: any) => ({ ...base, zIndex: 99 }),
+        menuPortal: (base: any): CSSObjectWithLabel => ({ ...base, zIndex: 99 }),
       }}
       {...props}
     />

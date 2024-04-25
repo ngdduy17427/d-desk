@@ -12,11 +12,13 @@ const DesktopShortcut = ({ handleOpenWindow }: IDesktopShortcutProps): JSX.Eleme
 
   return isDesktop ? (
     <ul className="desktop-shortcut">
-      {programFiles.map((programFile) => (
-        <li key={programFile.id} onClick={() => handleOpenWindow(programFile)}>
-          {programFile.name}
-        </li>
-      ))}
+      {programFiles.map(
+        (programFile): JSX.Element => (
+          <li key={programFile.id} onClick={(): void => handleOpenWindow(programFile)}>
+            {programFile.name}
+          </li>
+        )
+      )}
     </ul>
   ) : null;
 };

@@ -16,7 +16,7 @@ const DWindowHeader = forwardRef(
   ): JSX.Element => {
     return (
       <WCDWindowHeader ref={ref}>
-        <h1 className="window-name">{windowApp.name}</h1>
+        <h2 className="window-name">{windowApp.name}</h2>
         <div className="window-nav">
           <BtnMinimize windowApp={windowApp} />
           <BtnMaximize windowApp={windowApp} />

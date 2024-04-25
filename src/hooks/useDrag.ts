@@ -69,15 +69,17 @@ const useDrag = <T extends HTMLElement>({
       if (!dragRef || !isDraggable || event.button === 1 || event.button === 2) return;
       overrideEventDefaults(event);
 
-      window.requestAnimationFrame(() => {
-        setDragState((prevState) => ({
-          ...prevState,
-          isPressing: true,
-          relCursor: {
-            relY: Math.floor(event.pageY - dragRef.getBoundingClientRect().top),
-            relX: Math.floor(event.pageX - dragRef.getBoundingClientRect().left),
-          },
-        }));
+      window.requestAnimationFrame((): void => {
+        setDragState(
+          (prevState): IDragState => ({
+            ...prevState,
+            isPressing: true,
+            relCursor: {
+              relY: Math.floor(event.pageY - dragRef.getBoundingClientRect().top),
+              relX: Math.floor(event.pageX - dragRef.getBoundingClientRect().left),
+            },
+          })
+        );
       });
     },
     [dragRef, isDraggable, onDragStart]
@@ -88,11 +90,13 @@ const useDrag = <T extends HTMLElement>({
       if (!dragRef || !isDraggable || !dragState.isPressing) return;
       overrideEventDefaults(event);
 
-      window.requestAnimationFrame(() => {
-        setDragState((prevState) => ({
-          ...prevState,
-          isDragging: true,
-        }));
+      window.requestAnimationFrame((): void => {
+        setDragState(
+          (prevState): IDragState => ({
+            ...prevState,
+            isDragging: true,
+          })
+        );
 
         let posTop: any = event.pageY - dragState.relCursor.relY;
         let posLeft: any = event.pageX - dragState.relCursor.relX;
@@ -131,15 +135,17 @@ const useDrag = <T extends HTMLElement>({
         dragRef.style.bottom = `${Math.floor(posBottom)}px`;
         dragRef.style.right = `${Math.floor(posRight)}px`;
 
-        setDragState((prevState) => ({
-          ...prevState,
-          position: {
-            top: posTop,
-            left: posLeft,
-            bottom: posBottom,
-            right: posRight,
-          },
-        }));
+        setDragState(
+          (prevState): IDragState => ({
+            ...prevState,
+            position: {
+              top: posTop,
+              left: posLeft,
+              bottom: posBottom,
+              right: posRight,
+            },
+          })
+        );
       });
     },
     [
@@ -155,24 +161,28 @@ const useDrag = <T extends HTMLElement>({
   const onMouseMoveEnd = React.useCallback(
     (event: MouseEvent): void => {
       if (dragState.isPressing)
-        setDragState((prevState) => ({
-          ...prevState,
-          isPressing: false,
-        }));
+        setDragState(
+          (prevState): IDragState => ({
+            ...prevState,
+            isPressing: false,
+          })
+        );
 
       if (!dragRef || !dragState.isDragging) return;
       overrideEventDefaults(event);
 
-      window.requestAnimationFrame(() => {
+      window.requestAnimationFrame((): void => {
         dragRef.style.boxSizing = "";
         dragRef.style.position = "";
         dragRef.style.transition = "";
         dragRef.style.pointerEvents = "";
 
-        setDragState((prevState) => ({
-          ...prevState,
-          isDragging: false,
-        }));
+        setDragState(
+          (prevState): IDragState => ({
+            ...prevState,
+            isDragging: false,
+          })
+        );
       });
     },
     [dragRef, dragState.isPressing, dragState.isDragging]
@@ -180,14 +190,14 @@ const useDrag = <T extends HTMLElement>({
 
   React.useLayoutEffect((): (() => void) => {
     if (dragLayerRef.length > 0) {
-      dragLayerRef.forEach((element) => {
+      dragLayerRef.forEach((element): void => {
         if (element) element.onmousedown = onMouseMoveStart;
       });
     } else if (dragRef) dragRef.onmousedown = onMouseMoveStart;
 
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseMoveEnd);
-    return () => {
+    return (): void => {
       document.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseup", onMouseMoveEnd);
     };

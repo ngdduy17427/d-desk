@@ -4,6 +4,6 @@ d-image {
   display: block;
   position: relative;
   img {
-    object-fit: contain;
+    object-fit: cover;
   }
 }
