@@ -10,6 +10,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  icons: `/images/thumb/my_thumb.png`,
   title: process.env.NEXT_PUBLIC_APP_TITLE,
   description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
   authors: [
