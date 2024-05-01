@@ -50,8 +50,8 @@ const DDesktop = ({
   useLayoutEffect((): (() => void) => {
     localLocalSettings();
 
-    window.addEventListener("storage", localLocalSettings);
-    return (): void => window.removeEventListener("storage", localLocalSettings);
+    addEventListener("storage", localLocalSettings);
+    return (): void => removeEventListener("storage", localLocalSettings);
   }, [localLocalSettings]);
 
   useLayoutEffect(

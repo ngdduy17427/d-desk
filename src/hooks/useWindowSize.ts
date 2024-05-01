@@ -20,8 +20,8 @@ const useWindowSize = (): IWindowSize => {
   React.useEffect((): (() => void) => {
     updateWindowSize();
 
-    window.addEventListener("resize", updateWindowSize);
-    return (): void => window.removeEventListener("resize", updateWindowSize);
+    addEventListener("resize", updateWindowSize);
+    return (): void => removeEventListener("resize", updateWindowSize);
   }, []);
 
   return windowSize;

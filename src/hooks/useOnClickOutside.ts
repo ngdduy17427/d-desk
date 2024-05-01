@@ -4,7 +4,7 @@ export const useOnClickOutside = <T extends HTMLElement>(
   refs: T[],
   handler: (event: MouseEvent | TouchEvent) => void
 ): void => {
-  React.useLayoutEffect((): (() => void) => {
+  React.useEffect((): (() => void) => {
     const handleClickOutside = (event: MouseEvent | TouchEvent): void => {
       let isContain = false;
       const listSize = refs.length;
@@ -15,11 +15,11 @@ export const useOnClickOutside = <T extends HTMLElement>(
       if (!isContain) handler(event);
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
+    addEventListener("mousedown", handleClickOutside);
+    addEventListener("touchstart", handleClickOutside);
     return (): void => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
+      removeEventListener("mousedown", handleClickOutside);
+      removeEventListener("touchstart", handleClickOutside);
     };
   }, [refs, handler]);
 };

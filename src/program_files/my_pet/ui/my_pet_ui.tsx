@@ -43,8 +43,8 @@ const MyPetUI = (): JSX.Element => {
   }, []);
 
   useEffect((): (() => void) => {
-    document.addEventListener("mousedown", onAddFood);
-    return (): void => document.removeEventListener("mousedown", onAddFood);
+    addEventListener("mousedown", onAddFood);
+    return (): void => removeEventListener("mousedown", onAddFood);
   }, [onAddFood]);
 
   useEffect((): (() => void) => {

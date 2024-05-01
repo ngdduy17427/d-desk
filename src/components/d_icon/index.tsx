@@ -35,8 +35,8 @@ const DIcon = ({ children, className, windowSizing }: IDIconProps): JSX.Element 
   );
 
   useLayoutEffect((): (() => void) => {
-    document.addEventListener("mousemove", onMouseMove);
-    return (): void => document.removeEventListener("mousemove", onMouseMove);
+    addEventListener("mousemove", onMouseMove);
+    return (): void => removeEventListener("mousemove", onMouseMove);
   }, [onMouseMove]);
 
   return (

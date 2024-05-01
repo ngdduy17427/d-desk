@@ -14,7 +14,7 @@ export function createCanvas(): HTMLCanvasElement {
 
   document.body.appendChild(canvas);
 
-  window.addEventListener("resize", (): void => {
+  addEventListener("resize", (): void => {
     canvas.width = document.body.offsetWidth;
     canvas.height = document.body.offsetHeight;
   });

@@ -74,15 +74,15 @@ const useFullscreen = (): IFullScreen => {
   }, []);
 
   React.useLayoutEffect((): (() => void) => {
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
-    document.addEventListener("mozfullscreenchange", handleFullscreenChange);
-    document.addEventListener("MSFullscreenChange", handleFullscreenChange);
+    addEventListener("fullscreenchange", handleFullscreenChange);
+    addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    addEventListener("mozfullscreenchange", handleFullscreenChange);
+    addEventListener("MSFullscreenChange", handleFullscreenChange);
     return (): void => {
-      document.removeEventListener("fullscreenchange", handleFullscreenChange);
-      document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
-      document.removeEventListener("mozfullscreenchange", handleFullscreenChange);
-      document.removeEventListener("MSFullscreenChange", handleFullscreenChange);
+      removeEventListener("fullscreenchange", handleFullscreenChange);
+      removeEventListener("webkitfullscreenchange", handleFullscreenChange);
+      removeEventListener("mozfullscreenchange", handleFullscreenChange);
+      removeEventListener("MSFullscreenChange", handleFullscreenChange);
     };
   }, [handleFullscreenChange]);
 

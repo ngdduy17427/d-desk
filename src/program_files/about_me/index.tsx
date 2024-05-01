@@ -32,7 +32,7 @@ const UI = (): JSX.Element => {
         />
         {isThumbLoaded && (
           <DText
-            texts="Hello there! Welcome to my portfolio."
+            texts="Hello there! Welcome to my desktop."
             className="greeting"
             onFinish={(isFinish): void => {
               setIsFinishIntro(isFinish);
