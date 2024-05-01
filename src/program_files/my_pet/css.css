@@ -1,0 +1,7 @@
+.my-pet-container {
+  height: 100%;
+  .my-pet-gui {
+    width: 100%;
+    height: 100%;
+  }
+}

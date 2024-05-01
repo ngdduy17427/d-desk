@@ -10,7 +10,7 @@ export const useOnClickOutside = <T extends HTMLElement>(
       const listSize = refs.length;
 
       for (let i = 0; i < listSize; i++)
-        if ((refs[i] as T)?.contains(event.target as Node)) isContain = true;
+        if ((<T>refs[i])?.contains(<Node>event.target)) isContain = true;
 
       if (!isContain) handler(event);
     };

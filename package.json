@@ -1,6 +1,6 @@
 {
   "name": "d-desk",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "private": true,
   "author": "ngdduy17427",
   "scripts": {
@@ -27,7 +27,7 @@
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-tailwindcss": "^3.15.1",
-    "next": "^14.2.2",
+    "next": "^14.2.3",
     "postcss": "^8.4.38",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.14",

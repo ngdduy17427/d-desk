@@ -21,7 +21,7 @@ const DIcon = ({ children, className, windowSizing }: IDIconProps): JSX.Element 
     (event: MouseEvent): void => {
       if (isDisabled) return;
 
-      window.requestAnimationFrame((): void => {
+      requestAnimationFrame((): void => {
         if (!iconRef.current) return;
 
         const box = iconRef.current.getBoundingClientRect();

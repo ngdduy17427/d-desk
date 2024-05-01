@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 
 declare global {
   interface Document {
@@ -26,10 +26,10 @@ interface IFullScreen {
 }
 
 const useFullscreen = (): IFullScreen => {
-  const isFullScreenRef = useRef<boolean>(false);
+  const [isFullscreen, setIsFullScreen] = React.useState<boolean>(false);
 
   const handleFullscreen = (): void => {
-    if (isFullScreenRef.current) return;
+    if (isFullscreen) return;
 
     if (document.documentElement.requestFullscreen) {
       document.documentElement.requestFullscreen();
@@ -41,11 +41,11 @@ const useFullscreen = (): IFullScreen => {
       document.documentElement.msRequestFullscreen();
     }
 
-    isFullScreenRef.current = true;
+    setIsFullScreen(true);
   };
 
   const handleExitFullscreen = React.useCallback((): void => {
-    if (!isFullScreenRef.current) return;
+    if (!isFullscreen) return;
 
     if (document.exitFullscreen) {
       document.exitFullscreen();
@@ -57,8 +57,8 @@ const useFullscreen = (): IFullScreen => {
       document.msExitFullscreen();
     }
 
-    isFullScreenRef.current = false;
-  }, []);
+    setIsFullScreen(false);
+  }, [isFullscreen]);
 
   const handleFullscreenChange = React.useCallback((): void => {
     if (
@@ -67,9 +67,9 @@ const useFullscreen = (): IFullScreen => {
       !document.mozFullScreen &&
       !document.msFullscreenElement
     ) {
-      isFullScreenRef.current = false;
+      setIsFullScreen(false);
     } else {
-      isFullScreenRef.current = true;
+      setIsFullScreen(true);
     }
   }, []);
 
@@ -86,7 +86,7 @@ const useFullscreen = (): IFullScreen => {
     };
   }, [handleFullscreenChange]);
 
-  return { isFullscreen: isFullScreenRef.current, handleFullscreen, handleExitFullscreen };
+  return { isFullscreen, handleFullscreen, handleExitFullscreen };
 };
 
 export default useFullscreen;

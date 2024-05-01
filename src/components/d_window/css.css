@@ -9,7 +9,7 @@ d-window {
   pointer-events: auto;
   transition: all 0.25s ease-in-out;
   transition-property: width, height, top, right, bottom, left;
-  animation: slide-in-fwd-center 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: slide-in-fwd-center 0.25s ease-in-out;
   &.minimize {
     border: 1px solid var(--glb-border-color);
     box-shadow: none;

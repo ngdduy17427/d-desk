@@ -22,7 +22,7 @@ const AppTask = ({ appInProcess, appDispatch, clientIP }: IAppTaskProps): JSX.El
 
     const runtimer = setInterval((): void => {
       const currentRuntime = new Date().getTime();
-      const distance = currentRuntime - (windowState.runtime as Date).getTime();
+      const distance = currentRuntime - windowState.runtime.getTime();
 
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));

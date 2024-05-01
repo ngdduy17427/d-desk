@@ -22,11 +22,6 @@ const DDesktop = ({
 }: IDDesktopProps): JSX.Element => {
   const containerRef = useRef<HTMLElement>(null);
 
-  useLayoutEffect(
-    (): void => appDispatch(AppActionType.OPEN_NEW_WINDOW, { programFile: AboutMeProgram }),
-    [appDispatch]
-  );
-
   const localLocalSettings = useCallback((): void => {
     const localStorageSettingsStr: string = localStorageHelper.get("appSettings");
     const initAppSettings: IAppSettings = {
@@ -58,6 +53,11 @@ const DDesktop = ({
     window.addEventListener("storage", localLocalSettings);
     return (): void => window.removeEventListener("storage", localLocalSettings);
   }, [localLocalSettings]);
+
+  useLayoutEffect(
+    (): void => appDispatch(AppActionType.OPEN_NEW_WINDOW, { programFile: AboutMeProgram }),
+    [appDispatch]
+  );
 
   return (
     <WCDDesktop

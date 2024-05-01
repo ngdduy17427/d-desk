@@ -69,7 +69,7 @@ const useDrag = <T extends HTMLElement>({
       if (!dragRef || !isDraggable || event.button === 1 || event.button === 2) return;
       overrideEventDefaults(event);
 
-      window.requestAnimationFrame((): void => {
+      requestAnimationFrame((): void => {
         setDragState(
           (prevState): IDragState => ({
             ...prevState,
@@ -90,7 +90,7 @@ const useDrag = <T extends HTMLElement>({
       if (!dragRef || !isDraggable || !dragState.isPressing) return;
       overrideEventDefaults(event);
 
-      window.requestAnimationFrame((): void => {
+      requestAnimationFrame((): void => {
         setDragState(
           (prevState): IDragState => ({
             ...prevState,
@@ -171,7 +171,7 @@ const useDrag = <T extends HTMLElement>({
       if (!dragRef || !dragState.isDragging) return;
       overrideEventDefaults(event);
 
-      window.requestAnimationFrame((): void => {
+      requestAnimationFrame((): void => {
         dragRef.style.boxSizing = "";
         dragRef.style.position = "";
         dragRef.style.transition = "";

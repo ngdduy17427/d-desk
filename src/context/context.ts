@@ -42,7 +42,7 @@ const AppProvider = ({ children, initialValue }: IAppProviderProps): JSX.Element
 const withContext = <P>(Component: React.JSXElementConstructor<P>) => {
   const WrappedComponent = (props: Omit<P, keyof IContextProps>): React.JSX.Element =>
     React.createElement(Component, {
-      ...(props as P),
+      ...(<P>props),
       ...React.use<IContextProps>(AppContext),
     });
 

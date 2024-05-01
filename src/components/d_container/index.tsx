@@ -3,12 +3,17 @@ import { WCDContainer } from "web_components";
 import "./css.css";
 
 interface IDContainerProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
+  id?: string;
   className: string;
 }
 
-const DContainer = ({ children, className }: IDContainerProps): JSX.Element => {
-  return <WCDContainer className={className}>{children}</WCDContainer>;
+const DContainer = ({ children, id, className }: IDContainerProps): JSX.Element => {
+  return (
+    <WCDContainer id={id} className={className}>
+      {children}
+    </WCDContainer>
+  );
 };
 
 export default memo(DContainer);

@@ -111,7 +111,7 @@ const UI = withContext(({ windowApp }: ISkillsUIProps): JSX.Element => {
   const updateWindowTitle = useCallback(
     (title: string | undefined): void => {
       const window = document.getElementById(String(windowApp.id));
-      const windowTitle = (window as HTMLElement).getElementsByClassName("window-name")[0];
+      const windowTitle = window.getElementsByClassName("window-name")[0];
 
       if (title) windowTitle.innerHTML = `${windowTitle.innerHTML} - ${selectedSkill?.name}`;
       else windowTitle.innerHTML = programFileName;
