@@ -16,7 +16,7 @@ export class GameService {
 
   destroy(): void {
     this.gameLoop.cancel();
-    this.game.destroy();
     this.gameGUI.destroy();
+    this.game.destroy();
   }
 }

@@ -97,7 +97,7 @@ export class GameEntity {
     this.drawEntity(context);
   }
 
-  drawEntity(context: CanvasRenderingContext2D): void {
+  private drawEntity(context: CanvasRenderingContext2D): void {
     context.drawImage(
       this.entity.avatar,
       this.entity.frameX,

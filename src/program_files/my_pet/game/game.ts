@@ -3,24 +3,30 @@ import { GameEntity } from "./game_entity";
 
 export class Game {
   canvas: HTMLCanvasElement;
-  context: CanvasRenderingContext2D;
+
+  private context: CanvasRenderingContext2D;
+  private contextImageData: ImageData;
 
   entityList: Map<string, GameEntity> = new Map();
 
   constructor() {
     this.canvas = createCanvas();
-    this.context = this.canvas.getContext("2d");
+    this.context = this.canvas.getContext("2d", { willReadFrequently: true });
   }
 
   update(delta: number): void {
     this.entityList.forEach((entity): void => entity.update(delta));
   }
   draw(): void {
-    this.context.clearRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.context.restore();
+    this.context.shadowColor = "#000";
+    this.context.shadowBlur = 1;
     this.entityList.forEach((entity): void => entity.draw(this.context));
-    this.context.save();
+
+    this.contextImageData = this.context.getImageData(0, 0, this.canvas.width, this.canvas.height);
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.putImageData(this.contextImageData, 0, 0);
   }
   destroy(): void {
     if (document.body.contains(this.canvas)) {

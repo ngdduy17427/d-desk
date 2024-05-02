@@ -12,12 +12,12 @@ export function createCanvas(): HTMLCanvasElement {
   canvas.style.inset = `${0}px`;
   canvas.style.pointerEvents = `none`;
 
-  document.body.appendChild(canvas);
-
   addEventListener("resize", (): void => {
-    canvas.width = document.body.offsetWidth;
-    canvas.height = document.body.offsetHeight;
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
   });
+
+  document.body.appendChild(canvas);
 
   return canvas;
 }

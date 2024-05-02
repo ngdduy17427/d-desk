@@ -24,6 +24,8 @@ interface PetDestination {
 }
 
 export class PetSprite extends GameEntity {
+  petName: string;
+
   idleTime: number = 0;
   idleTimeMin: number = 0;
   idleTimeMax: number = 4;
@@ -33,6 +35,7 @@ export class PetSprite extends GameEntity {
   destination: PetDestination | undefined;
 
   constructor(
+    petName: string,
     sw: number,
     sh: number,
     dw: number,
@@ -54,6 +57,8 @@ export class PetSprite extends GameEntity {
       spriteImageSrc,
       spriteSheet
     );
+
+    this.petName = petName;
   }
 
   update(delta: number): void {
@@ -63,8 +68,25 @@ export class PetSprite extends GameEntity {
   }
   draw(context: CanvasRenderingContext2D): void {
     super.draw(context);
+    this.drawName(context);
   }
 
+  private drawName(context: CanvasRenderingContext2D): void {
+    context.font = "bold 12px Source Code Pro";
+    context.textAlign = "center";
+    context.strokeStyle = "#000";
+    context.strokeText(
+      this.petName,
+      this.entity.position.x,
+      this.entity.position.y + this.entity.dh / 2 + 5
+    );
+    context.fillStyle = "#fff";
+    context.fillText(
+      this.petName,
+      this.entity.position.x,
+      this.entity.position.y + this.entity.dh / 2 + 5
+    );
+  }
   private entityIdle(): void {
     if (this.entityState === EntityState.HUNTING) return;
 

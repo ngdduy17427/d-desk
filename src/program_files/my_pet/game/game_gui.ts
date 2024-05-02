@@ -20,12 +20,14 @@ export class GameGUI {
     this.gameGUIContext = this.gameGUI.getContext("2d");
   }
   draw(): void {
+    if (!this.gameGUI) return;
+
     this.gameGUI.width = this.gameGUI.offsetWidth;
     this.gameGUI.height = this.gameGUI.offsetHeight;
 
     this.petSprite = this.game.entityList.get(PetSpriteType);
 
-    this.gameGUIContext.clearRect(0, 0, this.gameGUI.offsetWidth, this.gameGUI.offsetHeight);
+    this.gameGUIContext.clearRect(0, 0, this.gameGUI.width, this.gameGUI.height);
     this.gameGUIContext.restore();
 
     this.gameGUIContext.font = "16px Source Code Pro";

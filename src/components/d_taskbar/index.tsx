@@ -18,8 +18,8 @@ import DesktopShortcut from "./ui/desktop_shortcut";
 import MobileShortcut from "./ui/mobile_shortcut";
 
 export const programFiles = [
-  AboutMeProgram,
   MyPetProgram,
+  AboutMeProgram,
   ProjectsProgram,
   SkillsProgram,
   ContactProgram,
