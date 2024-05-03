@@ -22,7 +22,7 @@ const AppTask = ({ appInProcess, appDispatch, clientIP }: IAppTaskProps): JSX.El
 
     const runtimer = setInterval((): void => {
       const currentRuntime = new Date().getTime();
-      const distance = currentRuntime - windowState.runtime.getTime();
+      const distance = currentRuntime - Number(windowState?.runtime?.getTime());
 
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -32,7 +32,7 @@ const AppTask = ({ appInProcess, appDispatch, clientIP }: IAppTaskProps): JSX.El
     }, 1000);
 
     return (): void => clearInterval(runtimer);
-  }, [windowState.runtime]);
+  }, [windowState?.runtime]);
 
   return (
     <div className="app-task">
@@ -55,7 +55,7 @@ const AppTask = ({ appInProcess, appDispatch, clientIP }: IAppTaskProps): JSX.El
           ID: <p>{appInProcess.id}</p>
         </span>
         <span>
-          Sizing: <p>{EDWindowSizing[windowState.sizing]}</p>
+          Sizing: <p>{EDWindowSizing[windowState?.sizing as EDWindowSizing]}</p>
         </span>
         <span>
           User: <p>{clientIP}</p>

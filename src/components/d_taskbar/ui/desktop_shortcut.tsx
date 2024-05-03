@@ -20,7 +20,9 @@ const DesktopShortcut = ({ handleOpenWindow }: IDesktopShortcutProps): JSX.Eleme
         )
       )}
     </ul>
-  ) : null;
+  ) : (
+    <></>
+  );
 };
 
 export default memo(DesktopShortcut);

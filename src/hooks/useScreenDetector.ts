@@ -10,9 +10,9 @@ const useScreenDetector = (): IScreenDetector => {
   const { windowWidth } = useWindowSize();
 
   return {
-    isMobile: windowWidth < 481,
-    isTablet: windowWidth >= 481 && windowWidth <= 768,
-    isDesktop: windowWidth > 769,
+    isMobile: Number(windowWidth) < 481,
+    isTablet: Number(windowWidth) >= 481 && Number(windowWidth) <= 768,
+    isDesktop: Number(windowWidth) > 769,
   };
 };
 

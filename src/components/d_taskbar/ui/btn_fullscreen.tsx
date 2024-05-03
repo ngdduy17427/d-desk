@@ -17,7 +17,9 @@ const BtnFullscreen = (): JSX.Element => {
         <MdFullscreen />
       </button>
     )
-  ) : null;
+  ) : (
+    <></>
+  );
 };
 
 export default memo(BtnFullscreen);

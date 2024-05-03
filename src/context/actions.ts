@@ -1,5 +1,5 @@
 import { IAppContext, IAppSettings } from "@type";
-import { EDWindowSizing } from "components/d_window";
+import { EDWindowSizing, IDWindowState } from "components/d_window";
 import { AppBackgroundOptions, AppCursorOptions, AppThemeOptions } from "config";
 import { IProgramFile } from "program_files";
 import localStorageHelper from "utils/local_storage_helper";
@@ -24,19 +24,21 @@ interface AppActionProps {
 export const appAction = (state: IAppContext, action: AppActionProps): IAppContext => {
   switch (action.type) {
     case AppActionType.OPEN_NEW_WINDOW: {
-      const newProgramFile = deepCopy<IProgramFile>(action.payload.programFile);
-      newProgramFile.windowState.runtime = new Date();
+      const newProgramFile = <IProgramFile>deepCopy<IProgramFile>(action.payload.programFile);
+      (<IDWindowState>newProgramFile.windowState).runtime = new Date();
 
       return {
         ...state,
-        appProcesses: state.appProcesses.set(newProgramFile.id, newProgramFile),
-        processIndex: [newProgramFile.id, ...state.processIndex],
+        appProcesses: state.appProcesses.set(String(newProgramFile?.id), newProgramFile),
+        processIndex: [String(newProgramFile.id), ...state.processIndex],
       };
     }
     case AppActionType.OPEN_WINDOW_FROM_MINIMIZE: {
-      const programFileModified = state.appProcesses.get(action.payload.programFileId);
+      const programFileModified = <IProgramFile>(
+        state.appProcesses.get(action.payload.programFileId)
+      );
 
-      if (programFileModified.windowState.sizing === EDWindowSizing.MINIMIZE)
+      if (programFileModified?.windowState?.sizing === EDWindowSizing.MINIMIZE)
         programFileModified.windowState.sizing = EDWindowSizing.NORMAL;
 
       return {
@@ -65,8 +67,10 @@ export const appAction = (state: IAppContext, action: AppActionProps): IAppConte
       };
     }
     case AppActionType.SIZING_WINDOW: {
-      const programFileModified = state.appProcesses.get(action.payload.programFileId);
-      programFileModified.windowState.sizing = action.payload.sizing;
+      const programFileModified = <IProgramFile>(
+        state.appProcesses.get(action.payload.programFileId)
+      );
+      (<IDWindowState>programFileModified.windowState).sizing = action.payload.sizing;
 
       return {
         ...state,
@@ -74,8 +78,10 @@ export const appAction = (state: IAppContext, action: AppActionProps): IAppConte
       };
     }
     case AppActionType.MINIMIZE_WINDOW: {
-      const programFileModified = state.appProcesses.get(action.payload.programFileId);
-      programFileModified.windowState.sizing = EDWindowSizing.MINIMIZE;
+      const programFileModified = <IProgramFile>(
+        state.appProcesses.get(action.payload.programFileId)
+      );
+      (<IDWindowState>programFileModified.windowState).sizing = EDWindowSizing.MINIMIZE;
 
       return {
         ...state,
@@ -84,8 +90,10 @@ export const appAction = (state: IAppContext, action: AppActionProps): IAppConte
       };
     }
     case AppActionType.MAXIMIZE_WINDOW: {
-      const programFileModified = state.appProcesses.get(action.payload.programFileId);
-      programFileModified.windowState.sizing = EDWindowSizing.MAXIMIZE;
+      const programFileModified = <IProgramFile>(
+        state.appProcesses.get(action.payload.programFileId)
+      );
+      (<IDWindowState>programFileModified.windowState).sizing = EDWindowSizing.MAXIMIZE;
 
       return {
         ...state,
@@ -115,13 +123,13 @@ export const appAction = (state: IAppContext, action: AppActionProps): IAppConte
       let appSettingsModified: IAppSettings = deepCopy(action.payload.appSettings);
 
       const isAppTheme = AppThemeOptions.filter(
-        (appTheme) => appTheme.theme === appSettingsModified.appTheme.theme
+        (appTheme) => appTheme.theme === appSettingsModified.appTheme?.theme
       )[0];
       const isAppBackground = AppBackgroundOptions.filter(
-        (appBackground) => appBackground.image === appSettingsModified.appBackground.image
+        (appBackground) => appBackground.image === appSettingsModified.appBackground?.image
       )[0];
       const isAppCursor = AppCursorOptions.filter(
-        (appCursor) => appCursor.value === appSettingsModified.appCursor.value
+        (appCursor) => appCursor.value === appSettingsModified.appCursor?.value
       )[0];
 
       appSettingsModified = {
@@ -131,13 +139,13 @@ export const appAction = (state: IAppContext, action: AppActionProps): IAppConte
       };
 
       localStorageHelper.update("appSettings", appSettingsModified);
-      document.body.setAttribute("data-theme", appSettingsModified.appTheme.theme);
+      document.body.setAttribute("data-theme", String(appSettingsModified.appTheme?.theme));
 
       return {
         ...state,
         appSettings: {
           ...appSettingsModified,
-          appCursorEffectResult: appSettingsModified.appCursor.cursorEffect?.(),
+          appCursorEffectResult: appSettingsModified.appCursor?.cursorEffect?.(),
         },
       };
     }

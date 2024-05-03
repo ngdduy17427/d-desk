@@ -22,7 +22,7 @@ const UI = withContext(({ appContext: { appProcesses } }: ITaskManagerUIProps): 
     <DContainer className="task-manager-container">
       {Array.from(appProcesses.values()).map(
         (appInProcess: IProgramFile): JSX.Element => (
-          <AppTask key={appInProcess.id} appInProcess={appInProcess} clientIP={clientIP} />
+          <AppTask key={appInProcess.id} appInProcess={appInProcess} clientIP={String(clientIP)} />
         )
       )}
     </DContainer>

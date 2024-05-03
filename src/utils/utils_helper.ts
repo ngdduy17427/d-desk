@@ -56,7 +56,7 @@ export function removeClassFromElement(elementId: string, ...classNames: string[
   document.getElementById(elementId)?.classList.remove(...classNames);
 }
 
-export function deepCopy<T>(object: T): T {
+export function deepCopy<T>(object: T): T | undefined {
   if (typeof object !== "object" || object === null) return object;
 
   if (object instanceof Date) return <T>new Date(object.getTime());
@@ -67,7 +67,7 @@ export function deepCopy<T>(object: T): T {
     }, []);
 
   if (object instanceof Object) return <T>Object.keys(object).reduce((newObj, key): object => {
-      newObj[key] = deepCopy(object[key]);
+      (<any>newObj)[key] = deepCopy((<any>object)[key as any]);
       return newObj;
     }, {});
 }

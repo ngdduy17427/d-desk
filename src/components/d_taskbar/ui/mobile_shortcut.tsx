@@ -24,7 +24,9 @@ const MobileShortcut = forwardRef(
           )
         )}
       </ul>
-    ) : null;
+    ) : (
+      <></>
+    );
   }
 );
 

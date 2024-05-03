@@ -13,7 +13,9 @@ const BtnMobileMenu = ({ handleToggleMobileMenu }: IBtnMobileMenuProps): JSX.Ele
     <button type="button" className="btn-mobile-menu" onClick={handleToggleMobileMenu}>
       <MdMenu />
     </button>
-  ) : null;
+  ) : (
+    <></>
+  );
 };
 
 BtnMobileMenu.displayName = "Button Mobile Menu";

@@ -1,6 +1,6 @@
 import { clamp } from "utils/utils_helper";
 import { AnimationState } from "../@type";
-import { GameEntity } from "../game/game_entity";
+import { GameEntity, GameEntityHitbox } from "../game/game_entity";
 
 export function createCanvas(): HTMLCanvasElement {
   const canvas = document.createElement("canvas");
@@ -13,8 +13,8 @@ export function createCanvas(): HTMLCanvasElement {
   canvas.style.pointerEvents = `none`;
 
   addEventListener("resize", (): void => {
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    canvas.width = document.body.offsetWidth;
+    canvas.height = document.body.offsetHeight;
   });
 
   document.body.appendChild(canvas);
@@ -43,7 +43,7 @@ export function calcAngleDegrees(x: number, y: number): number {
   return (Math.atan2(y, x) * 180) / Math.PI;
 }
 
-export function entityDirection(x: number, y: number): string {
+export function entityDirection(x: number, y: number): AnimationState {
   if (calcAngleDegrees(x, y) >= -45 && calcAngleDegrees(x, y) < 45) {
     return AnimationState.EAST;
   } else if (calcAngleDegrees(x, y) >= 45 && calcAngleDegrees(x, y) < 135) {
@@ -55,7 +55,7 @@ export function entityDirection(x: number, y: number): string {
   }
 }
 
-export function moveToScreen(gEntity: GameEntity, dx: number, dy: number, delta: number): void {
+export function moveToPoint(gEntity: GameEntity, dx: number, dy: number, delta: number): void {
   const diffX = dx - gEntity.entity.position.x;
   const diffY = dy - gEntity.entity.position.y;
   const distance = Math.hypot(diffX, diffY);
@@ -79,14 +79,18 @@ export function moveToScreen(gEntity: GameEntity, dx: number, dy: number, delta:
     window.innerHeight - gEntity.entity.dh / 2
   );
 
-  playAnimation(gEntity, gEntity.entity.avatarSheet[entityDirection(diffX, diffY)], delta);
+  playAnimation(
+    gEntity,
+    <number[][]>gEntity.entity.avatarSheet[entityDirection(diffX, diffY)],
+    delta
+  );
 }
 
-export function isCollision(sEntity: GameEntity, dEntity: GameEntity): boolean {
+export function isCollision(sHitbox: GameEntityHitbox, dHitbox: GameEntityHitbox): boolean {
   return !(
-    sEntity.entity.hitbox.top > dEntity.entity.hitbox.bottom ||
-    sEntity.entity.hitbox.right < dEntity.entity.hitbox.left ||
-    sEntity.entity.hitbox.bottom < dEntity.entity.hitbox.top ||
-    sEntity.entity.hitbox.left > dEntity.entity.hitbox.right
+    sHitbox.top > dHitbox.bottom ||
+    sHitbox.right < dHitbox.left ||
+    sHitbox.bottom < dHitbox.top ||
+    sHitbox.left > dHitbox.right
   );
 }

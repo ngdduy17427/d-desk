@@ -1,165 +1,101 @@
-import { randomNumber } from "utils/utils_helper";
-import { SpriteSheet, SpriteType } from "../@type";
-import { GameEntity, GameEntityImageSrc } from "../game/game_entity";
-import { isCollision, moveToScreen, playAnimation } from "../utils/utils_helper";
-import { FoodSpriteType } from "./food_sprite";
+import { repeat } from "utils/utils_helper";
+import { EntityMap, SpriteType } from "../@type";
+import { Game } from "../game/game";
+import { GameEntity } from "../game/game_entity";
+import { isCollision, moveToPoint, playAnimation } from "../utils/utils_helper";
 
 export const PetSpriteType: SpriteType = "PET_SPRITE";
 
-enum EntityState {
+export enum PetSpriteState {
   IDLE,
   MOVING,
-  HUNTING,
-}
-interface PetDestinationHitbox {
-  top: number;
-  right: number;
-  bottom: number;
-  left: number;
-}
-interface PetDestination {
-  dx: number;
-  dy: number;
-  hitbox: PetDestinationHitbox;
 }
 
 export class PetSprite extends GameEntity {
   petName: string;
+  entityState: PetSpriteState = PetSpriteState.IDLE;
 
-  idleTime: number = 0;
-  idleTimeMin: number = 0;
-  idleTimeMax: number = 4;
+  private dx: number | undefined;
+  private dy: number | undefined;
 
-  entityState: EntityState = EntityState.IDLE;
-
-  destination: PetDestination | undefined;
-
-  constructor(
-    petName: string,
-    sw: number,
-    sh: number,
-    dw: number,
-    dh: number,
-    spriteImageSrc: GameEntityImageSrc,
-    spriteSheet: SpriteSheet
-  ) {
+  constructor(id: string, petName: string, x: number, y: number) {
     super(
+      id,
       PetSpriteType,
-      sw,
-      sh,
-      dw,
-      dh,
+      32,
+      32,
+      64,
+      64,
       160,
+      { x, y },
+      `${process.env.NEXT_PUBLIC_BASE_URL}/images/my_pet/cat.png`,
       {
-        x: document.body.offsetWidth / 2,
-        y: document.body.offsetHeight / 2,
-      },
-      spriteImageSrc,
-      spriteSheet
+        IDLE: [...repeat(2, [5, 4], [4, 4], [5, 4], [6, 4])],
+        NORTH: [...repeat(2, [5, 1], [4, 1], [5, 1], [6, 1])],
+        EAST: [...repeat(2, [5, 0], [4, 0], [5, 0], [6, 0])],
+        SOUTH: [...repeat(2, [5, 2], [4, 2], [5, 2], [6, 2])],
+        WEST: [...repeat(2, [5, 3], [4, 3], [5, 3], [6, 3])],
+      }
     );
-
     this.petName = petName;
   }
 
-  update(delta: number): void {
-    this.entityIdle();
-    this.entityChecking();
+  init(game: Game): void {
+    super.init(game);
+
+    this.game?.socket?.on(this.entity.id, (entityMap: EntityMap): void => {
+      this.entityState = PetSpriteState.MOVING;
+      this.dx = entityMap.x;
+      this.dy = entityMap.y;
+    });
+  }
+  update(delta: number) {
     this.entityAction(delta);
   }
-  draw(context: CanvasRenderingContext2D): void {
-    super.draw(context);
-    this.drawName(context);
+  draw(): void {
+    super.draw();
+    this.drawName();
   }
 
-  private drawName(context: CanvasRenderingContext2D): void {
-    context.font = "bold 12px Source Code Pro";
-    context.textAlign = "center";
-    context.strokeStyle = "#000";
-    context.strokeText(
-      this.petName,
-      this.entity.position.x,
-      this.entity.position.y + this.entity.dh / 2 + 5
-    );
-    context.fillStyle = "#fff";
-    context.fillText(
-      this.petName,
-      this.entity.position.x,
-      this.entity.position.y + this.entity.dh / 2 + 5
-    );
-  }
-  private entityIdle(): void {
-    if (this.entityState === EntityState.HUNTING) return;
-
-    if (Math.floor(this.idleTime) === this.idleTimeMin) {
-      this.entityState = EntityState.IDLE;
-    }
-    if (Math.floor(this.idleTime) > 0 && Math.floor(this.idleTime) % this.idleTimeMax === 0) {
-      this.entityState = EntityState.MOVING;
-
-      const randomX = randomNumber(0, this.game.canvas.offsetWidth);
-      const randomY = randomNumber(0, this.game.canvas.offsetHeight);
-      this.destination = {
-        dx: randomX,
-        dy: randomY,
-        hitbox: {
-          top: randomY - 5,
-          right: randomX + 5,
-          bottom: randomY + 5,
-          left: randomX - 5,
-        },
-      };
-    }
-  }
-  private entityChecking(): void {
-    const foodSprite = this.game.entityList.get(FoodSpriteType);
-
-    if (!foodSprite) return;
-
-    this.idleTime = 0;
-    this.entityState = EntityState.HUNTING;
-    this.destination = {
-      dx: foodSprite.entity.position.x,
-      dy: foodSprite.entity.position.y,
-      hitbox: {
-        top: foodSprite.entity.position.y - foodSprite.entity.dh / 2,
-        right: foodSprite.entity.position.x + foodSprite.entity.dw / 2,
-        bottom: foodSprite.entity.position.y + foodSprite.entity.dh / 2,
-        left: foodSprite.entity.position.x - foodSprite.entity.dw / 2,
-      },
-    };
-  }
-  private entityAction(delta: number): void {
+  entityAction(delta: number): void {
     switch (this.entityState) {
-      case EntityState.IDLE: {
-        this.idleTime += delta;
-
+      case PetSpriteState.IDLE: {
         return playAnimation(this, this.entity.avatarSheet.IDLE, delta);
       }
-      case EntityState.MOVING: {
-        this.idleTime -= delta;
-
-        if (isCollision(this, <GameEntity>{ entity: { hitbox: this.destination.hitbox } })) {
-          this.entityState = EntityState.IDLE;
-          this.destination = undefined;
+      case PetSpriteState.MOVING: {
+        if (
+          isCollision(this.entity.hitbox, {
+            top: Number(this.dy),
+            right: Number(this.dx),
+            bottom: Number(this.dy),
+            left: Number(this.dx),
+          })
+        ) {
+          this.entityState = PetSpriteState.IDLE;
           return;
         }
-
-        return moveToScreen(this, this.destination.dx, this.destination.dy, delta);
-      }
-      case EntityState.HUNTING: {
-        if (!this.game.entityList.get(FoodSpriteType)) return;
-
-        if (isCollision(this, <GameEntity>{ entity: { hitbox: this.destination.hitbox } })) {
-          this.game.entityList.delete(FoodSpriteType);
-          this.entityState = EntityState.IDLE;
-          this.destination = undefined;
-          return;
-        }
-
-        return moveToScreen(this, this.destination.dx, this.destination.dy, delta);
+        return moveToPoint(this, Number(this.dx), Number(this.dy), delta);
       }
       default:
         break;
     }
+  }
+  private drawName(): void {
+    if (!this.game) return;
+
+    this.game.context.font = "bold 12px Source Code Pro";
+    this.game.context.textAlign = "center";
+    this.game.context.strokeStyle = "#000";
+    this.game.context.strokeText(
+      this.petName,
+      this.entity.position.x,
+      this.entity.position.y + this.entity.dh / 2 + 5
+    );
+    this.game.context.fillStyle = "#fff";
+    this.game.context.fillText(
+      this.petName,
+      this.entity.position.x,
+      this.entity.position.y + this.entity.dh / 2 + 5
+    );
   }
 }

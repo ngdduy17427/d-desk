@@ -1,9 +1,20 @@
-import { uuidv4 } from "utils/utils_helper";
 import { SpriteSheet, SpriteType } from "../@type";
 import { playAnimation } from "../utils/utils_helper";
 import { Game } from "./game";
 
 export type GameEntityImageSrc = string;
+
+export interface GameEntityPosition {
+  x: number;
+  y: number;
+}
+
+export interface GameEntityHitbox {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+}
 
 interface Entity {
   id: string;
@@ -23,23 +34,12 @@ interface Entity {
   timeSinceLastFrame: number;
 }
 
-export interface GameEntityPosition {
-  x: number;
-  y: number;
-}
-
-export interface GameEntityHitbox {
-  top: number;
-  right: number;
-  bottom: number;
-  left: number;
-}
-
 export class GameEntity {
   entity: Entity;
-  game: Game;
+  game: Game | undefined;
 
   constructor(
+    id: string,
     type: SpriteType,
     sw: number,
     sh: number,
@@ -54,7 +54,7 @@ export class GameEntity {
     spriteImage.src = spriteImageSrc;
 
     this.entity = {
-      id: uuidv4(),
+      id: id,
       type: type,
 
       sw: sw,
@@ -93,12 +93,12 @@ export class GameEntity {
   update(delta: number): void {
     playAnimation(this, this.entity.avatarSheet.IDLE, delta);
   }
-  draw(context: CanvasRenderingContext2D): void {
-    this.drawEntity(context);
+  draw(): void {
+    this.drawEntity();
   }
 
-  private drawEntity(context: CanvasRenderingContext2D): void {
-    context.drawImage(
+  private drawEntity(): void {
+    this.game?.context.drawImage(
       this.entity.avatar,
       this.entity.frameX,
       this.entity.frameY,

@@ -1,15 +1,16 @@
-import { PetSpriteType } from "../sprites/pet_sprite";
 import { Game } from "./game";
-import { GameEntity } from "./game_entity";
 
 export class GameGUI {
-  fps: number;
+  fps: number = 0;
 
   private game: Game;
-  private petSprite: GameEntity;
-
   private gameGUI: HTMLCanvasElement | undefined;
   private gameGUIContext: CanvasRenderingContext2D | undefined;
+
+  private avatarBox = {
+    width: 64,
+    height: 64,
+  };
 
   constructor(game: Game) {
     this.game = game;
@@ -17,27 +18,58 @@ export class GameGUI {
 
   init(gameGUI: HTMLCanvasElement): void {
     this.gameGUI = gameGUI;
-    this.gameGUIContext = this.gameGUI.getContext("2d");
+    this.gameGUIContext = <CanvasRenderingContext2D>this.gameGUI.getContext("2d");
   }
   draw(): void {
-    if (!this.gameGUI) return;
+    if (!this.gameGUI || !this.gameGUIContext) return;
 
     this.gameGUI.width = this.gameGUI.offsetWidth;
     this.gameGUI.height = this.gameGUI.offsetHeight;
 
-    this.petSprite = this.game.entityList.get(PetSpriteType);
-
     this.gameGUIContext.clearRect(0, 0, this.gameGUI.width, this.gameGUI.height);
-    this.gameGUIContext.restore();
+
+    this.drawAvatar();
 
     this.gameGUIContext.font = "16px Source Code Pro";
-    this.gameGUIContext.fillText(`FPS: ${Math.round(this.fps)}`, 10, 16);
-    this.gameGUIContext.fillText(`X: ${this.petSprite.entity.position.x}`, 10, 32);
-    this.gameGUIContext.fillText(`Y: ${this.petSprite.entity.position.y}`, 10, 48);
-
-    this.gameGUIContext.save();
+    this.drawInfo();
+    this.drawStats();
   }
   destroy(): void {
     this.gameGUI = undefined;
+  }
+
+  private drawAvatar(): void {
+    this.gameGUIContext?.strokeRect(0, 0, this.avatarBox.width, this.avatarBox.height);
+    this.gameGUIContext?.drawImage(
+      <CanvasImageSource>this.game.player?.entity.avatar,
+      Number(this.game.player?.entity.frameX),
+      Number(this.game.player?.entity.frameY),
+      Number(this.game.player?.entity.sw),
+      Number(this.game.player?.entity.sh),
+      0,
+      0,
+      this.avatarBox.width,
+      this.avatarBox.height
+    );
+  }
+  private drawInfo(): void {
+    this.gameGUIContext?.fillText(
+      `Name: ${this.game.player?.petName}`,
+      this.avatarBox.width + 5,
+      16
+    );
+  }
+  private drawStats(): void {
+    this.gameGUIContext?.fillText(`FPS: ${Math.round(this.fps)}`, this.avatarBox.width + 5, 32);
+    this.gameGUIContext?.fillText(
+      `X: ${this.game.player?.entity.position.x}`,
+      this.avatarBox.width + 5,
+      48
+    );
+    this.gameGUIContext?.fillText(
+      `Y: ${this.game.player?.entity.position.y}`,
+      this.avatarBox.width + 5,
+      64
+    );
   }
 }

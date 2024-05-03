@@ -1,10 +1,4 @@
-import {
-  IAppBackgroundOption,
-  IAppContext,
-  IAppCursorOption,
-  IAppThemeOption,
-  TAppDispatch,
-} from "@type";
+import { IAppBackgroundOption, IAppContext, TAppDispatch } from "@type";
 import DContainer from "components/d_container";
 import DImage from "components/d_image";
 import { AppBackgroundOptions, AppCursorOptions, AppThemeOptions } from "config";
@@ -27,7 +21,7 @@ const UI = withContext(
           label="Theme:"
           options={AppThemeOptions}
           value={appSettings.appTheme}
-          onChange={(option: IAppThemeOption): void =>
+          onChange={(option): void =>
             appDispatch(AppActionType.UPDATE_APP_SETTINGS, {
               appSettings: { ...appSettings, appTheme: option },
             })
@@ -37,7 +31,7 @@ const UI = withContext(
           label="Cursor:"
           options={AppCursorOptions}
           value={appSettings.appCursor}
-          onChange={(option: IAppCursorOption): void =>
+          onChange={(option): void =>
             appDispatch(AppActionType.UPDATE_APP_SETTINGS, {
               appSettings: { ...appSettings, appCursor: option },
             })
@@ -47,15 +41,19 @@ const UI = withContext(
           label="Background:"
           options={AppBackgroundOptions}
           value={appSettings.appBackground}
-          onChange={(option: IAppBackgroundOption): void =>
+          onChange={(option): void =>
             appDispatch(AppActionType.UPDATE_APP_SETTINGS, {
               appSettings: { ...appSettings, appBackground: option },
             })
           }
-          formatOptionLabel={(option: IAppBackgroundOption): JSX.Element => (
+          formatOptionLabel={(option): JSX.Element => (
             <div className="opt-bg">
-              <DImage src={option.image} alt="App background" className="opt-bg-img" />
-              <p>{option.label}</p>
+              <DImage
+                src={(option as IAppBackgroundOption).image}
+                alt="App background"
+                className="opt-bg-img"
+              />
+              <p>{(option as IAppBackgroundOption).label}</p>
             </div>
           )}
         />

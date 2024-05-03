@@ -5,7 +5,7 @@ export class GameLoop {
   private game: Game;
   private gameGUI: GameGUI;
 
-  private handle: number;
+  private handle: number | undefined;
 
   private last: number = Math.round(performance.now());
   private lastFps: number = Math.round(performance.now());
@@ -15,8 +15,13 @@ export class GameLoop {
   constructor(game: Game, gameGUI: GameGUI) {
     this.game = game;
     this.gameGUI = gameGUI;
+  }
 
+  start(): void {
     this.handle = requestAnimationFrame(() => this.onFrame());
+  }
+  destroy(): void {
+    cancelAnimationFrame(Number(this.handle));
   }
 
   private step(now: number): void {
@@ -41,12 +46,7 @@ export class GameLoop {
     this.handle = requestAnimationFrame(() => this.onFrame());
     this.last = now;
   }
-
   private onFrame(): void {
     this.step(Math.round(performance.now()));
-  }
-
-  cancel(): void {
-    cancelAnimationFrame(this.handle);
   }
 }

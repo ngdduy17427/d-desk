@@ -13,8 +13,8 @@ export const createProgramFile = (config: IProgramFile): IProgramFile => ({
   name: config.name,
   component: config.component,
   windowState: {
-    width: config.windowState?.width,
-    height: config.windowState?.height,
+    width: Number(config.windowState?.width),
+    height: Number(config.windowState?.height),
     sizing: config.windowState?.sizing ?? EDWindowSizing.NORMAL,
     position: {
       top: config.windowState?.position?.top,

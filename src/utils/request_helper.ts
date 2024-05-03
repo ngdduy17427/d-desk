@@ -12,14 +12,14 @@ export enum AxiosMethods {
 }
 
 type TRequestURL = string;
-type TRequestBody = any;
-type TRequestHeaders = AxiosRequestConfig;
+type TRequestBody = any | undefined;
+type TRequestHeaders = AxiosRequestConfig | undefined;
 
 const requestHelper = (
   method: AxiosMethods,
   url: TRequestURL,
-  body: TRequestBody = null,
-  headers: TRequestHeaders = null
+  body: TRequestBody = undefined,
+  headers: TRequestHeaders = undefined
 ) => {
   const accessToken = cookieHelper.getCookie("accessToken");
   const authorization = accessToken ? "Bearer " + accessToken : "";

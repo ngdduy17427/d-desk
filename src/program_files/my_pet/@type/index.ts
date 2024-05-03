@@ -1,5 +1,12 @@
 export type SpriteType = string;
 
+export interface EntityMap {
+  id: string;
+  petName: string;
+  x: number;
+  y: number;
+}
+
 export interface SpriteSheet {
   IDLE: number[][];
   NORTH?: number[][];

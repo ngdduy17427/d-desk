@@ -64,9 +64,9 @@ const DWindow = ({
   const containerSize = useContainerSize(container);
 
   const { dragState } = useDrag<HTMLElement>({
-    dragRef: windowRef.current,
-    dragLayerRef: [windowHeaderRef.current],
-    isDraggable: windowState.isDraggable && windowState.sizing === EDWindowSizing.NORMAL,
+    dragRef: windowRef.current as HTMLElement,
+    dragLayerRef: [windowHeaderRef.current as HTMLElement],
+    isDraggable: windowState?.isDraggable && windowState.sizing === EDWindowSizing.NORMAL,
     onDragStart: (): void =>
       appDispatch(AppActionType.CLICK_WINDOW, { programFileId: windowApp.id }),
     container: container,
@@ -85,26 +85,28 @@ const DWindow = ({
     [containerSize.offsetHeight]
   );
   const maxWidth = useMemo(
-    (): number => clamp(windowState.width, windowState.width, containerSize.offsetWidth),
-    [windowState.width, containerSize.offsetWidth]
+    (): number =>
+      clamp(Number(windowState?.width), Number(windowState?.width), containerSize.offsetWidth),
+    [windowState?.width, containerSize.offsetWidth]
   );
   const maxHeight = useMemo(
-    (): number => clamp(windowState.height, windowState.height, containerSize.offsetHeight),
-    [windowState.height, containerSize.offsetHeight]
+    (): number =>
+      clamp(Number(windowState?.height), Number(windowState?.height), containerSize.offsetHeight),
+    [windowState?.height, containerSize.offsetHeight]
   );
 
   const windowStyle = useMemo((): IDWindowStyle => {
     let _windowStyle: IDWindowStyle = {
       width: maxWidth,
       height: maxHeight,
-      top: windowState.position?.top,
-      right: windowState.position?.right,
-      bottom: windowState.position?.bottom,
-      left: windowState.position?.left,
+      top: Number(windowState?.position?.top),
+      right: Number(windowState?.position?.right),
+      bottom: Number(windowState?.position?.bottom),
+      left: Number(windowState?.position?.left),
       zIndex: processIndex?.length - processIndex?.indexOf(String(windowApp.id)),
     };
 
-    if (windowState.isCenter)
+    if (windowState?.isCenter)
       _windowStyle = {
         ..._windowStyle,
         top: containerSize.offsetTop + containerSize.offsetHeight / 2 - maxHeight / 2,
@@ -113,7 +115,7 @@ const DWindow = ({
         left: containerSize.offsetLeft + containerSize.offsetWidth / 2 - maxWidth / 2,
       };
 
-    switch (windowState.sizing) {
+    switch (windowState?.sizing) {
       case EDWindowSizing.NORMAL: {
         if (
           !isUndefined(dragState.position.top) &&
@@ -124,22 +126,22 @@ const DWindow = ({
           _windowStyle = {
             ..._windowStyle,
             top: clamp(
-              dragState.position?.top,
+              Number(dragState.position?.top),
               containerSize.offsetTop,
               containerSize.offsetHeight - maxHeight + containerSize.offsetTop
             ),
             left: clamp(
-              dragState.position?.left,
+              Number(dragState.position?.left),
               containerSize.offsetLeft,
               containerSize.offsetWidth - maxWidth + containerSize.offsetLeft
             ),
             bottom: clamp(
-              dragState.position?.bottom,
+              Number(dragState.position?.bottom),
               containerSize.offsetBottom,
               containerSize.offsetHeight - maxHeight
             ),
             right: clamp(
-              dragState.position?.right,
+              Number(dragState.position?.right),
               containerSize.offsetRight,
               containerSize.offsetWidth - maxWidth
             ),
@@ -195,9 +197,9 @@ const DWindow = ({
       id={windowApp.id}
       style={windowStyle}
       className={classNames(
-        { center: windowState.isCenter },
-        { minimize: windowState.sizing === EDWindowSizing.MINIMIZE },
-        { maximize: windowState.sizing === EDWindowSizing.MAXIMIZE }
+        { center: windowState?.isCenter },
+        { minimize: windowState?.sizing === EDWindowSizing.MINIMIZE },
+        { maximize: windowState?.sizing === EDWindowSizing.MAXIMIZE }
       )}
       onClick={(): void => appDispatch(AppActionType.CLICK_WINDOW, { programFileId: windowApp.id })}
     >

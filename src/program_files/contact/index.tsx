@@ -63,7 +63,7 @@ const UI = withContext(({ windowApp }: IContactUIProps): JSX.Element => {
                 <DIcon
                   key={contact.id}
                   className="contact-icon"
-                  windowSizing={windowApp.windowState.sizing}
+                  windowSizing={windowApp.windowState?.sizing}
                 >
                   <a href={contact.link} target="_blank" rel="noreferrer">
                     {contact.icon}

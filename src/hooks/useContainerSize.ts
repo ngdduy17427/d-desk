@@ -18,26 +18,36 @@ const useContainerSize = <ElementType extends HTMLElement>(
 
   const containerSize = React.useMemo(
     (): IContainerSize => ({
-      offsetWidth: !isUndefined(containerElement?.offsetWidth)
-        ? Number(containerElement?.offsetWidth)
-        : windowSize.windowWidth,
-      offsetHeight: !isUndefined(containerElement?.offsetHeight)
-        ? Number(containerElement?.offsetHeight)
-        : windowSize.windowHeight,
-      offsetTop: !isUndefined(containerElement?.offsetTop)
-        ? Number(containerElement?.offsetTop)
-        : 0,
-      offsetLeft: !isUndefined(containerElement?.offsetLeft)
-        ? Number(containerElement?.offsetLeft)
-        : 0,
-      offsetBottom:
+      offsetWidth: Number(
+        !isUndefined(containerElement?.offsetWidth)
+          ? Number(containerElement?.offsetWidth)
+          : windowSize.windowWidth
+      ),
+      offsetHeight: Number(
+        !isUndefined(containerElement?.offsetHeight)
+          ? Number(containerElement?.offsetHeight)
+          : windowSize.windowHeight
+      ),
+      offsetTop: Number(
+        !isUndefined(containerElement?.offsetTop) ? Number(containerElement?.offsetTop) : 0
+      ),
+      offsetLeft: Number(
+        !isUndefined(containerElement?.offsetLeft) ? Number(containerElement?.offsetLeft) : 0
+      ),
+      offsetBottom: Number(
         !isUndefined(containerElement?.offsetTop) && !isUndefined(containerElement?.offsetHeight)
-          ? windowSize.windowHeight - containerElement?.offsetTop - containerElement?.offsetHeight
-          : 0,
-      offsetRight:
+          ? Number(windowSize.windowHeight) -
+              Number(containerElement?.offsetTop) -
+              Number(containerElement?.offsetHeight)
+          : 0
+      ),
+      offsetRight: Number(
         !isUndefined(containerElement?.offsetLeft) && !isUndefined(containerElement?.offsetWidth)
-          ? windowSize.windowWidth - containerElement?.offsetLeft - containerElement?.offsetWidth
-          : 0,
+          ? Number(windowSize.windowWidth) -
+              Number(containerElement?.offsetLeft) -
+              Number(containerElement?.offsetWidth)
+          : 0
+      ),
     }),
     [containerElement, windowSize.windowWidth, windowSize.windowHeight]
   );

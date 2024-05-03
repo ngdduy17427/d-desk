@@ -17,27 +17,42 @@ const DIcon = ({ children, className, windowSizing }: IDIconProps): JSX.Element 
     [windowSizing]
   );
 
+  const onMove = useCallback((x: number, y: number): void => {
+    requestAnimationFrame((): void => {
+      if (!iconRef.current) return;
+
+      const box = iconRef.current.getBoundingClientRect();
+      const calcY = (x - box?.x - box?.width / 2) / 15;
+      const calcX = -(y - box?.y - box?.height / 2) / 15;
+
+      iconRef.current.style.transform = `perspective(${iconRef.current.offsetWidth}px) rotateX(${calcX}deg) rotateY(${calcY}deg)`;
+    });
+  }, []);
+
   const onMouseMove = useCallback(
     (event: MouseEvent): void => {
       if (isDisabled) return;
-
-      requestAnimationFrame((): void => {
-        if (!iconRef.current) return;
-
-        const box = iconRef.current.getBoundingClientRect();
-        const calcY = (event.pageX - box?.x - box?.width / 2) / 15;
-        const calcX = -(event.pageY - box?.y - box?.height / 2) / 15;
-
-        iconRef.current.style.transform = `perspective(${iconRef.current.offsetWidth}px) rotateX(${calcX}deg) rotateY(${calcY}deg)`;
-      });
+      onMove(event.pageX, event.pageY);
     },
-    [isDisabled]
+    [isDisabled, onMove]
+  );
+
+  const onTouchMove = useCallback(
+    (event: TouchEvent): void => {
+      if (isDisabled) return;
+      onMove(event.targetTouches[0].pageX, event.targetTouches[0].pageY);
+    },
+    [isDisabled, onMove]
   );
 
   useLayoutEffect((): (() => void) => {
     addEventListener("mousemove", onMouseMove);
-    return (): void => removeEventListener("mousemove", onMouseMove);
-  }, [onMouseMove]);
+    addEventListener("touchmove", onTouchMove);
+    return (): void => {
+      removeEventListener("mousemove", onMouseMove);
+      removeEventListener("touchmove", onTouchMove);
+    };
+  }, [onMouseMove, onTouchMove]);
 
   return (
     <WCDIcon ref={iconRef} className={className}>

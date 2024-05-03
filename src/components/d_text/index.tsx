@@ -12,7 +12,7 @@ interface ITextTypingProps {
 
 const DText = ({ texts, className, speed, onFinish }: ITextTypingProps): JSX.Element => {
   const textRef = useRef<HTMLElement>(null);
-  const { isFinish } = useTypingEffect(textRef, texts, speed);
+  const { isFinish } = useTypingEffect(textRef.current as HTMLElement, texts, speed);
 
   useEffect((): void => {
     if (isFinish) onFinish?.(isFinish);

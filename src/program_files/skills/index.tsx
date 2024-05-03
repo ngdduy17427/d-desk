@@ -111,10 +111,14 @@ const UI = withContext(({ windowApp }: ISkillsUIProps): JSX.Element => {
   const updateWindowTitle = useCallback(
     (title: string | undefined): void => {
       const window = document.getElementById(String(windowApp.id));
-      const windowTitle = window.getElementsByClassName("window-name")[0];
+      const windowTitle = window?.getElementsByClassName("window-name")[0];
 
-      if (title) windowTitle.innerHTML = `${windowTitle.innerHTML} - ${selectedSkill?.name}`;
-      else windowTitle.innerHTML = programFileName;
+      if (title) {
+        (windowTitle as HTMLElement).innerHTML =
+          `${(windowTitle as HTMLElement).innerHTML} - ${selectedSkill?.name}`;
+      } else {
+        (windowTitle as HTMLElement).innerHTML = programFileName;
+      }
     },
     [windowApp.id, selectedSkill?.name]
   );
@@ -139,7 +143,7 @@ const UI = withContext(({ windowApp }: ISkillsUIProps): JSX.Element => {
       <DContainer className="icons-container">
         {skillList.map(
           ({ id, icon }): JSX.Element => (
-            <DIcon key={id} className="icon" windowSizing={windowApp.windowState.sizing}>
+            <DIcon key={id} className="icon" windowSizing={windowApp.windowState?.sizing}>
               {icon}
             </DIcon>
           )

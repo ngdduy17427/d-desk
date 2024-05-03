@@ -7,7 +7,7 @@ interface ITypingEffect {
 }
 
 const useTypingEffect = <T extends HTMLElement>(
-  element: React.MutableRefObject<T>,
+  element: T,
   texts: TTexts,
   speed: number = 50
 ): ITypingEffect => {
@@ -16,8 +16,9 @@ const useTypingEffect = <T extends HTMLElement>(
 
   const doTypeAnimation = React.useCallback(
     async (texts: string, parent: HTMLElement): Promise<void> => {
-      setIsFinishTypeAnimation(false);
+      if (!parent) return;
 
+      setIsFinishTypeAnimation(false);
       let textsLength = texts.length;
       for (const char of texts)
         await new Promise(
@@ -43,9 +44,9 @@ const useTypingEffect = <T extends HTMLElement>(
         const shallowElement = <HTMLElement>childNode.cloneNode(false);
 
         if (deepElement.nodeName === "#text") {
-          await doTypeAnimation(deepElement.nodeValue, parent);
+          await doTypeAnimation(String(deepElement.nodeValue), parent);
         } else {
-          parent.appendChild(shallowElement);
+          parent?.appendChild(shallowElement);
           await doCreateNode(deepElement.innerHTML, shallowElement);
         }
       }
@@ -55,7 +56,7 @@ const useTypingEffect = <T extends HTMLElement>(
 
   const doTypeEffect = React.useCallback(
     (texts: TTexts): void => {
-      if (typeof texts === "string") doCreateNode(texts, element.current);
+      if (typeof texts === "string") doCreateNode(texts, element);
     },
     [doCreateNode, element]
   );

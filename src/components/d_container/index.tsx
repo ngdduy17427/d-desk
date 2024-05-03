@@ -5,7 +5,7 @@ import "./css.css";
 interface IDContainerProps {
   children?: React.ReactNode;
   id?: string;
-  className: string;
+  className?: string;
 }
 
 const DContainer = ({ children, id, className }: IDContainerProps): JSX.Element => {

@@ -14,7 +14,7 @@ const BtnMaximize = ({ windowApp, appDispatch }: IBtnMaximizeProps): JSX.Element
   const { windowState } = windowApp;
 
   const handleMaximizeWindow = (): void => {
-    if (windowState.sizing === EDWindowSizing.MAXIMIZE)
+    if (windowState?.sizing === EDWindowSizing.MAXIMIZE)
       appDispatch(AppActionType.SIZING_WINDOW, {
         programFileId: windowApp.id,
         sizing: EDWindowSizing.NORMAL,
@@ -26,7 +26,7 @@ const BtnMaximize = ({ windowApp, appDispatch }: IBtnMaximizeProps): JSX.Element
 
   return (
     <button type="button" className="window-nav-item" onClick={handleMaximizeWindow}>
-      {windowState.sizing === EDWindowSizing.MAXIMIZE ? <MdWebAssetOff /> : <MdWebAsset />}
+      {windowState?.sizing === EDWindowSizing.MAXIMIZE ? <MdWebAssetOff /> : <MdWebAsset />}
     </button>
   );
 };

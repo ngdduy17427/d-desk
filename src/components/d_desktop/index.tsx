@@ -23,7 +23,7 @@ const DDesktop = ({
   const containerRef = useRef<HTMLElement>(null);
 
   const localLocalSettings = useCallback((): void => {
-    const localStorageSettingsStr: string = localStorageHelper.get("appSettings");
+    const localStorageSettingsStr: string = String(localStorageHelper.get("appSettings"));
     const initAppSettings: IAppSettings = {
       appTheme: AppThemeOptions[0],
       appBackground: AppBackgroundOptions[0],
@@ -71,7 +71,7 @@ const DDesktop = ({
           <DWindow
             key={appInProcess.id}
             windowApp={appInProcess}
-            container={containerRef.current}
+            container={containerRef.current as HTMLElement}
           />
         )
       )}
