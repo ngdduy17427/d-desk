@@ -1,4 +1,5 @@
 import { checkMyPetServer } from "actions";
+import DContainer from "components/d_container";
 import { createProgramFile } from "program_files";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import "./css.css";
@@ -6,14 +7,22 @@ import MyPetLogin from "./ui/my_pet_login";
 import MyPetUI from "./ui/my_pet_ui";
 
 const UI = (): JSX.Element => {
+  const [isCheckingServer, setIsCheckingServer] = useState<boolean>(true);
   const [isServerAlive, setIsServerAlive] = useState<boolean>(false);
   const [petName, setPetName] = useState<string>("");
   const [isHavePetName, setIsHavePetName] = useState<boolean>(false);
 
   useEffect((): void => {
     checkMyPetServer()
-      .then((): void => setIsServerAlive(true))
-      .catch((): void => setIsServerAlive(false));
+      .then((response): void => {
+        if (response?.status !== "ok") return;
+        setIsServerAlive(true);
+        setIsCheckingServer(false);
+      })
+      .catch((): void => {
+        setIsServerAlive(false);
+        setIsCheckingServer(false);
+      });
   }, []);
 
   const handleChangeName = (event: ChangeEvent<HTMLInputElement>): void =>
@@ -25,6 +34,13 @@ const UI = (): JSX.Element => {
     if (petName === "") return;
     setIsHavePetName(true);
   };
+
+  if (isCheckingServer)
+    return (
+      <DContainer className="my-pet-login-container">
+        <p>...</p>
+      </DContainer>
+    );
 
   return isHavePetName ? (
     <MyPetUI isServerAlive={isServerAlive} petName={petName} />
