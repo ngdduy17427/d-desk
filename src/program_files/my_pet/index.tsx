@@ -14,15 +14,11 @@ const UI = (): JSX.Element => {
 
   useEffect((): void => {
     checkMyPetServer()
-      .then((response): void => {
-        if (response?.status !== "ok") return;
-        setIsServerAlive(true);
-        setIsCheckingServer(false);
-      })
-      .catch((): void => {
-        setIsServerAlive(false);
-        setIsCheckingServer(false);
-      });
+      .then((response): void =>
+        response?.status === "ok" ? setIsServerAlive(true) : setIsServerAlive(false)
+      )
+      .catch((): void => setIsServerAlive(false))
+      .finally((): void => setIsCheckingServer(false));
   }, []);
 
   const handleChangeName = (event: ChangeEvent<HTMLInputElement>): void =>
