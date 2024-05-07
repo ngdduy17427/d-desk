@@ -12,7 +12,9 @@ const UI = (): JSX.Element => {
 
   useEffect((): void => {
     checkMyPetServer()
-      .then((): void => setIsServerOnline(true))
+      .then((response): void =>
+        response?.status === "ok" ? setIsServerOnline(true) : setIsServerOnline(false)
+      )
       .catch((): void => setIsServerOnline(false))
       .finally((): void => setIsCheckingServer(false));
   }, []);
