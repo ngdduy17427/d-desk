@@ -1,0 +1,16 @@
+.d-input-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  input {
+    color: #000;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    &:focus {
+      outline: none;
+      border-color: var(--glb-color-text);
+      box-shadow: 0 0 0 1px var(--glb-color-text);
+    }
+  }
+}

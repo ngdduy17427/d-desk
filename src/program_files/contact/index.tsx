@@ -25,7 +25,7 @@ const createContact = ({ icon, link }: IContact): IContact => ({
   link,
 });
 
-const contactList: IContact[] = [
+const contactList: Array<IContact> = [
   createContact({
     icon: <SiGmail color="#d5463a" />,
     link: "mailto:ngdduy17427@gmail.com",

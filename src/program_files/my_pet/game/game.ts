@@ -1,69 +1,101 @@
-import { Socket } from "socket.io-client";
-import { EntityMap } from "../@type";
+import { uuidv4 } from "utils/utils_helper";
+import { EntityMap, PetSettings } from "../@type";
 import { PetSprite } from "../sprites/pet_sprite";
 import { PlayerSprite } from "../sprites/player_sprite";
-import { createCanvas } from "../utils/utils_helper";
+import { createCanvas, createContext } from "../utils/utils_helper";
+import { GameAsset } from "./game_asset";
+import { GameEntity } from "./game_entity";
+import { GameSocket } from "./game_socket";
 
 export class Game {
-  socket: Socket | undefined;
+  gameAsset: GameAsset | undefined;
+  gameSocket: GameSocket | undefined;
 
-  canvas: HTMLCanvasElement;
-  context: CanvasRenderingContext2D;
-
+  canvas: HTMLCanvasElement | undefined;
+  context: CanvasRenderingContext2D | undefined;
   player: PlayerSprite | undefined;
-  entityList: Map<string, PetSprite> = new Map();
 
-  constructor(socket: Socket) {
-    this.socket = socket;
-    this.canvas = createCanvas();
-    this.context = <CanvasRenderingContext2D>(
-      this.canvas.getContext("2d", { willReadFrequently: true })
-    );
+  private gameEntities: Array<GameEntity> = [];
+
+  constructor(gameAsset: GameAsset, gameSocket: GameSocket) {
+    this.gameAsset = gameAsset;
+    this.gameSocket = gameSocket;
   }
 
   load(entityMap: Array<EntityMap>): void {
-    entityMap.forEach((entity): void => {
-      const petEntity = new PetSprite(entity.id, entity.petName, entity.x, entity.y);
-      this.entityList.set(entity.id, petEntity);
-    });
+    entityMap.forEach((entity): number =>
+      this.gameEntities.push(
+        new PetSprite(entity.id, entity.petName, entity.petAvatar, entity.x, entity.y)
+      )
+    );
   }
-  init(player: PlayerSprite): void {
-    this.entityList.forEach((entity): void => entity.init(this));
-    this.player = player;
-    this.player?.init(this);
+  init(playerSettings: PetSettings): void {
+    this.initCanvas();
+    this.initPlayer(playerSettings);
 
-    this.socket?.on("playerJoin", (player): void => {
-      const petEntity = new PetSprite(player.id, player.petName, player.x, player.y);
-      petEntity.init(this);
+    if (!this.player) return;
 
-      this.entityList.set(player.id, petEntity);
-    });
-    this.socket?.on("playerDisconnect", (playerId): void => {
-      this.entityList.delete(playerId);
-    });
+    this.gameEntities.push(this.player);
+    this.gameEntities.forEach((gEntity): void => gEntity.init(this));
+
+    this.initSocket();
   }
   update(delta: number): void {
-    this.entityList.forEach((entity): void => entity.update(delta));
-    this.player?.update(delta);
+    this.updateGameEntityOrder();
+    this.gameEntities.forEach((gEntity): void => gEntity.update(delta));
   }
   draw(): void {
+    if (!this.canvas || !this.context) return;
+
     this.context.clearRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
-
     this.context.shadowColor = "#000";
-    this.context.shadowBlur = 1;
+    this.context.shadowOffsetX = 1;
+    this.context.shadowOffsetY = 1;
 
-    this.drawEntity();
+    this.gameEntities.forEach((gEntity) => gEntity.draw());
   }
   destroy(): void {
-    if (!document.body.contains(this.canvas)) return;
+    if (!this.canvas || !document.body.contains(this.canvas)) return;
 
-    this.socket?.emit("playerDisconnect", this.player?.entity.id);
-
+    this.gameSocket?.emit("playerDisconnect", this.player?.entity.id);
     document.body.removeChild(this.canvas);
   }
 
-  private drawEntity(): void {
-    this.entityList.forEach((entity): void => entity.draw());
-    this.player?.draw();
+  private initCanvas(): void {
+    this.canvas = createCanvas();
+    this.context = createContext(this.canvas);
+  }
+  private initPlayer(playerSettings: PetSettings): void {
+    this.player = new PlayerSprite(
+      uuidv4(),
+      playerSettings,
+      Number(this.canvas?.width) / 2,
+      Number(this.canvas?.height) / 2
+    );
+  }
+  private initSocket(): void {
+    this.gameSocket?.on("playerJoin", (player: EntityMap): void => {
+      const petEntity = new PetSprite(
+        player.id,
+        player.petName,
+        player.petAvatar,
+        player.x,
+        player.y
+      );
+      petEntity.init(this);
+
+      this.gameEntities.push(petEntity);
+    });
+    this.gameSocket?.on("playerDisconnect", (playerId: string): void => {
+      this.gameEntities = this.gameEntities.filter((gEntity) => gEntity.entity.id !== playerId);
+    });
+  }
+  private updateGameEntityOrder(): void {
+    this.gameEntities.sort(
+      (sEntity, dEntity) =>
+        sEntity.entity.position.y +
+        sEntity.entity.dh -
+        (dEntity.entity.position.y + dEntity.entity.dh)
+    );
   }
 }

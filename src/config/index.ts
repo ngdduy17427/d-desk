@@ -13,7 +13,7 @@ import {
   trailingCursor,
 } from "cursor-effects";
 
-export const AppThemeOptions: IAppThemeOption[] = [
+export const AppThemeOptions: Array<IAppThemeOption> = [
   { value: "normal", label: "Normal", theme: "normal" },
   { value: "theme-1", label: "Theme 1", theme: "theme-1" },
   { value: "theme-2", label: "Theme 2", theme: "theme-2" },
@@ -21,7 +21,7 @@ export const AppThemeOptions: IAppThemeOption[] = [
   { value: "theme-4", label: "Theme 4", theme: "theme-4" },
   { value: "theme-5", label: "Theme 5", theme: "theme-5" },
 ];
-export const AppBackgroundOptions: IAppBackgroundOption[] = [
+export const AppBackgroundOptions: Array<IAppBackgroundOption> = [
   {
     value: "bg-1",
     label: "Forest 1",
@@ -38,7 +38,7 @@ export const AppBackgroundOptions: IAppBackgroundOption[] = [
     image: `${process.env.NEXT_PUBLIC_BASE_URL}/images/background/app_bg_3.png`,
   },
 ];
-export const AppCursorOptions: IAppCursorOption[] = [
+export const AppCursorOptions: Array<IAppCursorOption> = [
   { value: "normal", label: "Normal" },
   { value: "cursor-1", label: "Bubble cursor", cursorEffect: bubbleCursor },
   { value: "cursor-2", label: "Character cursor", cursorEffect: characterCursor },

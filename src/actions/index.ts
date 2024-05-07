@@ -12,6 +12,12 @@ export const checkMyPetServer = async (): Promise<any> => {
     cache: "no-cache",
   }).then((response): Promise<any> => response.json());
 };
+export const getMyPetServer = async (): Promise<any> => {
+  return fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/getMyPetServer`, {
+    method: "GET",
+    cache: "no-cache",
+  }).then((response): Promise<any> => response.json());
+};
 export const getClientIP = async (): Promise<any> => {
   return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getClientIP`, {
     method: "GET",

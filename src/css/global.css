@@ -6,6 +6,7 @@
 @import "./markdown.css";
 @import "./highlight.css";
 @import "./animation.css";
+@import "./skeleton.css";
 
 :root {
   --glb-taskbar-height: 2.5rem;
@@ -60,12 +61,9 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  ::-moz-selection {
-    color: var(--glb-color-title);
-    background: var(--glb-color-text);
-  }
   ::selection {
     color: var(--glb-color-title);
+    text-shadow: none;
     background: var(--glb-color-text);
   }
   > canvas {

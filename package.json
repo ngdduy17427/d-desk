@@ -1,13 +1,13 @@
 {
   "name": "d-desk",
-  "version": "2.4.2",
+  "version": "2.5.0",
   "private": true,
   "author": "ngdduy17427",
+  "license": "MIT",
   "scripts": {
     "dev": "npm run clean && next dev",
     "build": "npm run clean && next build",
     "start": "npm run build && next start",
-    "lint": "next lint",
     "clean": "rimraf .next"
   },
   "devDependencies": {

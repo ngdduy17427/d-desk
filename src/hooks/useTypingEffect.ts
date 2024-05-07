@@ -1,6 +1,6 @@
 import React from "react";
 
-export type TTexts = string | string[];
+export type TTexts = string | Array<string>;
 
 interface ITypingEffect {
   isFinish: boolean;

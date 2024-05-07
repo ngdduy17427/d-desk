@@ -1,7 +1,7 @@
 import React from "react";
 
 export const useOnClickOutside = <T extends HTMLElement>(
-  refs: T[],
+  refs: Array<T>,
   handler: (event: MouseEvent | TouchEvent) => void
 ): void => {
   React.useEffect((): (() => void) => {

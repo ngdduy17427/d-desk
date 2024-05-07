@@ -36,9 +36,9 @@ const DDesktop = ({
       const localStorageSettingsParsed: IAppSettings = JSON.parse(localStorageSettingsStr);
 
       if (
-        isUndefined(localStorageSettingsParsed.appTheme?.value) ||
-        isUndefined(localStorageSettingsParsed.appBackground?.value) ||
-        isUndefined(localStorageSettingsParsed.appCursor?.value)
+        isUndefined(localStorageSettingsParsed?.appTheme?.value) ||
+        isUndefined(localStorageSettingsParsed?.appBackground?.value) ||
+        isUndefined(localStorageSettingsParsed?.appCursor?.value)
       ) {
         appDispatch(AppActionType.UPDATE_APP_SETTINGS, { appSettings: initAppSettings });
       } else {

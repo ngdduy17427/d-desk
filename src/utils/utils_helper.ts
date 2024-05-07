@@ -43,16 +43,16 @@ export function formatCurrency(
 }
 
 export function convertURLSearchParams(
-  values: string | string[][] | Record<string, string> | URLSearchParams | undefined
+  values: string | Array<Array<string>> | Record<string, string> | URLSearchParams | undefined
 ): string {
   return new URLSearchParams(values).toString();
 }
 
-export function addClassToElement(elementId: string, ...classNames: string[]): void {
+export function addClassToElement(elementId: string, ...classNames: Array<string>): void {
   document.getElementById(elementId)?.classList.add(...classNames);
 }
 
-export function removeClassFromElement(elementId: string, ...classNames: string[]): void {
+export function removeClassFromElement(elementId: string, ...classNames: Array<string>): void {
   document.getElementById(elementId)?.classList.remove(...classNames);
 }
 
@@ -72,8 +72,8 @@ export function deepCopy<T>(object: T): T | undefined {
     }, {});
 }
 
-export function repeat<T>(count: number, ...values: T[]): T[] {
-  const result: T[] = [];
+export function repeat<T>(count: number, ...values: Array<T>): Array<T> {
+  const result: Array<T> = [];
 
   for (let i = 0; i < count; i++) result.push(...values);
 

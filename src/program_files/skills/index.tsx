@@ -41,7 +41,7 @@ const createSkill = (config: ISkill): ISkill => ({
   markdown: config.markdown,
 });
 
-const skillList: ISkill[] = [
+const skillList: Array<ISkill> = [
   createSkill({
     name: "HTML5",
     icon: <IoLogoHtml5 color="#e44d26" />,

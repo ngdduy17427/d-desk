@@ -1,81 +1,105 @@
 import { randomNumber } from "utils/utils_helper";
+import { PetSettings, SpriteSheetType } from "../@type";
 import { Game } from "../game/game";
-import { GameEntityHitbox } from "../game/game_entity";
+import { GameEntityHitbox, GameEntityState } from "../game/game_entity";
 import { isCollision, moveToPoint, playAnimation } from "../utils/utils_helper";
 import { FoodSprite } from "./food_sprite";
-import { PetSprite, PetSpriteState } from "./pet_sprite";
+import { PetSprite } from "./pet_sprite";
 
 export class PlayerSprite extends PetSprite {
   private foodSprite: FoodSprite | undefined = new FoodSprite(-100, -100);
 
-  constructor(id: string, petName: string, x: number, y: number) {
-    super(id, petName, x, y);
+  constructor(id: string, petSettings: PetSettings, x: number, y: number) {
+    super(id, petSettings.petName, petSettings.petAvatar.value, x, y);
+    addEventListener("mousedown", (event: MouseEvent): void => this.onMoveToMouse(event));
+    addEventListener("touchstart", (event: TouchEvent): void => this.onMoveToTouch(event));
   }
 
   init(game: Game): void {
-    super.init(game);
-    this.foodSprite?.init(game);
+    this.game = game;
 
-    this.game?.socket?.emit("playerJoin", {
-      id: this.entity.id,
-      petName: this.petName,
-      x: this.entity.position.x,
-      y: this.entity.position.y,
-    });
-
-    addEventListener("mousedown", (event: MouseEvent): void => this.onMoveToMouse(event));
-    addEventListener("touchstart", (event: TouchEvent): void => this.onMoveToTouch(event));
+    this.initSocket();
+    this.initFoodSprite(game);
   }
   update(delta: number): void {
     this.entityAction(delta);
   }
   draw(): void {
-    this.foodSprite?.draw();
+    this.drawFoodSprite();
     super.draw();
   }
 
+  initSocket(): void {
+    this.game?.gameSocket?.emit("playerJoin", {
+      id: this.entity.id,
+      petName: this.petName,
+      petAvatar: this.petAvatar,
+      x: this.entity.position.x,
+      y: this.entity.position.y,
+      frameX: this.entity.frameX,
+      frameY: this.entity.frameY,
+      animationState: this.entityAnimationState,
+      entityState: this.entityState,
+    });
+  }
   entityAction(delta: number): void {
     switch (this.entityState) {
-      case PetSpriteState.IDLE: {
-        return playAnimation(this, this.entity.avatarSheet.IDLE, delta);
+      case GameEntityState.IDLE: {
+        playAnimation(this, this.entity.avatarSheet.IDLE, delta);
+        break;
       }
-      case PetSpriteState.MOVING: {
+      case GameEntityState.MOVING: {
         if (isCollision(this.entity.hitbox, <GameEntityHitbox>this.foodSprite?.entity.hitbox)) {
-          this.entityState = PetSpriteState.IDLE;
           this.foodSprite?.setPosition(-100, -100);
-          return;
         }
 
-        this.game?.socket?.emit("playerUpdate", {
+        this.game?.gameSocket?.emit("playerUpdate", {
           id: this.entity.id,
           petName: this.petName,
+          petAvatar: this.petAvatar,
           x: this.entity.position.x,
           y: this.entity.position.y,
+          frameX: this.entity.frameX,
+          frameY: this.entity.frameY,
+          animationState: this.entityAnimationState,
+          entityState: this.entityState,
         });
 
-        return moveToPoint(
+        moveToPoint(this, Number(this.targetX), Number(this.targetY), delta);
+        playAnimation(
           this,
-          Number(this.foodSprite?.entity.position.x),
-          Number(this.foodSprite?.entity.position.y),
+          <SpriteSheetType>this.entity.avatarSheet[this.entityAnimationState],
           delta
         );
+        break;
       }
       default:
         break;
     }
   }
-  private onAddFood(x: number, y: number): void {
-    if (!this.foodSprite) return;
 
-    this.foodSprite.setPosition(x, y);
-    this.foodSprite.setFrame(randomNumber(0, 3), randomNumber(0, 3));
-    this.entityState = PetSpriteState.MOVING;
-  }
   private onMoveToMouse(event: MouseEvent): void {
     if (event.button !== 0) return;
     this.onAddFood(event.pageX, event.pageY);
   }
   private onMoveToTouch(event: TouchEvent): void {
     this.onAddFood(event.targetTouches[0].pageX, event.targetTouches[0].pageY);
+  }
+  private onAddFood(x: number, y: number): void {
+    if (this.entity.position.x === x && this.entity.position.y === y) return;
+
+    this.targetX = x;
+    this.targetY = y;
+
+    this.foodSprite?.setPosition(this.targetX, this.targetY);
+    this.foodSprite?.setFrame(randomNumber(0, 3), randomNumber(0, 3));
+    this.entityState = GameEntityState.MOVING;
+  }
+  private initFoodSprite(game: Game): void {
+    this.foodSprite?.init(game);
+  }
+  private drawFoodSprite(): void {
+    if (this.foodSprite?.entity.position.x !== -100 && this.foodSprite?.entity.position.y !== -100)
+      this.foodSprite?.draw();
   }
 }

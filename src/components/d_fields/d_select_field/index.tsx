@@ -1,12 +1,13 @@
 import { memo } from "react";
 import Select, { CSSObjectWithLabel, Props } from "react-select";
+import "./css.css";
 
 interface ISelectFieldProps extends Props {
   label: string;
 }
 
-const SelectField = ({ label, ...props }: ISelectFieldProps): JSX.Element => (
-  <label className="select-field">
+const DSelectField = ({ label, ...props }: ISelectFieldProps): JSX.Element => (
+  <label className="d-select-field">
     <p>{label}</p>
     <Select
       className="focus:outline-0"
@@ -34,4 +35,4 @@ const SelectField = ({ label, ...props }: ISelectFieldProps): JSX.Element => (
   </label>
 );
 
-export default memo(SelectField);
+export default memo(DSelectField);

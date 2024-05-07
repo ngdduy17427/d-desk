@@ -1,8 +1,6 @@
-import { SpriteSheet, SpriteType } from "../@type";
+import { AnimationState, SpriteSheet, SpriteSheetType, SpriteType } from "../@type";
 import { playAnimation } from "../utils/utils_helper";
 import { Game } from "./game";
-
-export type GameEntityImageSrc = string;
 
 export interface GameEntityPosition {
   x: number;
@@ -16,6 +14,11 @@ export interface GameEntityHitbox {
   left: number;
 }
 
+export enum GameEntityState {
+  IDLE,
+  MOVING,
+}
+
 interface Entity {
   id: string;
   type: SpriteType;
@@ -26,7 +29,6 @@ interface Entity {
   speed: number;
   position: GameEntityPosition;
   hitbox: GameEntityHitbox;
-  avatar: HTMLImageElement;
   avatarSheet: SpriteSheet;
   frameX: number;
   frameY: number;
@@ -36,6 +38,9 @@ interface Entity {
 
 export class GameEntity {
   entity: Entity;
+  entityAnimationState: AnimationState = AnimationState.IDLE;
+  entityState: GameEntityState = GameEntityState.IDLE;
+
   game: Game | undefined;
 
   constructor(
@@ -45,14 +50,9 @@ export class GameEntity {
     sh: number,
     dw: number,
     dh: number,
-    speed: number,
     position: GameEntityPosition,
-    spriteImageSrc: GameEntityImageSrc,
     spriteSheet: SpriteSheet
   ) {
-    const spriteImage = new Image();
-    spriteImage.src = spriteImageSrc;
-
     this.entity = {
       id: id,
       type: type,
@@ -62,7 +62,7 @@ export class GameEntity {
       dw: dw,
       dh: dh,
 
-      speed: speed,
+      speed: 0.15,
 
       position: {
         x: position.x,
@@ -76,7 +76,6 @@ export class GameEntity {
         left: position.x - dw / 2,
       },
 
-      avatar: spriteImage,
       avatarSheet: spriteSheet,
 
       frameX: 0,
@@ -91,17 +90,17 @@ export class GameEntity {
     this.game = game;
   }
   update(delta: number): void {
-    playAnimation(this, this.entity.avatarSheet.IDLE, delta);
+    playAnimation(this, <SpriteSheetType>this.entity.avatarSheet[this.entityAnimationState], delta);
   }
   draw(): void {
     this.drawEntity();
   }
 
   private drawEntity(): void {
-    this.game?.context.drawImage(
-      this.entity.avatar,
-      this.entity.frameX,
-      this.entity.frameY,
+    this.game?.context?.drawImage(
+      <HTMLImageElement>this.game.gameAsset?.get(this.entity.type),
+      this.entity.frameX * this.entity.sw,
+      this.entity.frameY * this.entity.sh,
       this.entity.sw,
       this.entity.sh,
       this.entity.position.x - this.entity.dw / 2,

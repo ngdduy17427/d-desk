@@ -2,8 +2,8 @@ import { Game } from "./game";
 import { GameGUI } from "./game_gui";
 
 export class GameLoop {
-  private game: Game;
-  private gameGUI: GameGUI;
+  private game: Game | undefined;
+  private gameGUI: GameGUI | undefined;
 
   private handle: number | undefined;
 
@@ -25,6 +25,8 @@ export class GameLoop {
   }
 
   private step(now: number): void {
+    if (!this.game || !this.game.gameAsset?.assets || !this.gameGUI) return this.destroy();
+
     this.frames++;
 
     if (now - this.lastFps > 1000) {
@@ -34,7 +36,7 @@ export class GameLoop {
     }
 
     try {
-      this.game.update((now - this.last) / 1000);
+      this.game.update(now - this.last);
       this.game.draw();
 
       this.gameGUI.fps = this.fps;

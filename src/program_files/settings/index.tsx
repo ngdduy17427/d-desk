@@ -1,12 +1,12 @@
 import { IAppBackgroundOption, IAppContext, TAppDispatch } from "@type";
 import DContainer from "components/d_container";
+import DSelectField from "components/d_fields/d_select_field";
 import DImage from "components/d_image";
 import { AppBackgroundOptions, AppCursorOptions, AppThemeOptions } from "config";
 import { AppActionType } from "context/actions";
 import { withContext } from "context/context";
 import { createProgramFile } from "program_files";
 import "./css.css";
-import SelectField from "./ui/select_field";
 
 interface ISettingsUIProps {
   appContext: IAppContext;
@@ -17,7 +17,7 @@ const UI = withContext(
   ({ appContext: { appSettings }, appDispatch }: ISettingsUIProps): JSX.Element => {
     return (
       <DContainer className="settings-container">
-        <SelectField
+        <DSelectField
           label="Theme:"
           options={AppThemeOptions}
           value={appSettings.appTheme}
@@ -27,7 +27,7 @@ const UI = withContext(
             })
           }
         />
-        <SelectField
+        <DSelectField
           label="Cursor:"
           options={AppCursorOptions}
           value={appSettings.appCursor}
@@ -37,7 +37,7 @@ const UI = withContext(
             })
           }
         />
-        <SelectField
+        <DSelectField
           label="Background:"
           options={AppBackgroundOptions}
           value={appSettings.appBackground}
@@ -50,7 +50,7 @@ const UI = withContext(
             <div className="opt-bg">
               <DImage
                 src={(option as IAppBackgroundOption).image}
-                alt="App background"
+                alt="App Background"
                 className="opt-bg-img"
               />
               <p>{(option as IAppBackgroundOption).label}</p>

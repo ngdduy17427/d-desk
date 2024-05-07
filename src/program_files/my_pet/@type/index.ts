@@ -1,22 +1,44 @@
+import { GameEntityState } from "../game/game_entity";
+
 export type SpriteType = string;
+export type SpriteAvatar = string;
+export type SpriteImageSrc = string;
+export type SpriteSheetType = Array<Array<number>>;
+
+export interface PetAvatarOption {
+  value: string;
+  label: string;
+  thumb: string;
+  avatarSheet: SpriteSheet;
+}
+
+export interface PetSettings {
+  petName: string;
+  petAvatar: PetAvatarOption;
+}
 
 export interface EntityMap {
   id: string;
   petName: string;
+  petAvatar: string;
   x: number;
   y: number;
+  frameX: number;
+  frameY: number;
+  animationState: AnimationState;
+  entityState: GameEntityState;
 }
 
 export interface SpriteSheet {
-  IDLE: number[][];
-  NORTH?: number[][];
-  EAST?: number[][];
-  SOUTH?: number[][];
-  WEST?: number[][];
-  NORTH_EAST?: number[][];
-  NORTH_WEST?: number[][];
-  SOUTH_EAST?: number[][];
-  SOUTH_WEST?: number[][];
+  IDLE: SpriteSheetType;
+  NORTH?: SpriteSheetType;
+  EAST?: SpriteSheetType;
+  SOUTH?: SpriteSheetType;
+  WEST?: SpriteSheetType;
+  NORTH_EAST?: SpriteSheetType;
+  NORTH_WEST?: SpriteSheetType;
+  SOUTH_EAST?: SpriteSheetType;
+  SOUTH_WEST?: SpriteSheetType;
 }
 
 export enum AnimationState {

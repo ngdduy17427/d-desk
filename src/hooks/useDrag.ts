@@ -4,7 +4,7 @@ import useContainerSize from "./useContainerSize";
 
 interface IUseDragProps<T> {
   dragRef: T;
-  dragLayerRef: T[];
+  dragLayerRef: Array<T>;
   isDraggable?: boolean;
   onDragStart?: () => void;
   container?: HTMLElement;

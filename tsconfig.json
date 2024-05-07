@@ -5,15 +5,16 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext", "WebWorker"],
     "jsx": "preserve",
     /* Modules */
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "resolveJsonModule": true,
     "allowImportingTsExtensions": true,
     "baseUrl": "./src",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "paths": {
       "@/*": ["./src/*"]
     },
+    "resolveJsonModule": true,
     /* Type Checking */
+    "noImplicitAny": true,
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

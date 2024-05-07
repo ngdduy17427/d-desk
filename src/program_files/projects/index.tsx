@@ -8,7 +8,7 @@ export interface IProject {
   id?: string;
   name: string;
   description: string;
-  techs: string[];
+  techs: Array<string>;
   thumnnail: string;
   link?: string;
   linkGit?: string;
@@ -46,7 +46,7 @@ const createProject = ({
   linkNPM,
 });
 
-export const techList: ITech[] = [
+export const techList: Array<ITech> = [
   createTech({
     name: "React",
     link: "https://react.dev/",
@@ -65,7 +65,7 @@ export const techList: ITech[] = [
   }),
 ];
 
-const projectList: IProject[] = [
+const projectList: Array<IProject> = [
   createProject({
     name: "D-Desk",
     description:

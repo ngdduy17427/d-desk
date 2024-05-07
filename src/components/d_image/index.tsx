@@ -8,9 +8,10 @@ interface IDImageProps {
   alt: string;
   className?: string;
   onLoad?: () => void;
+  unoptimized?: boolean;
 }
 
-const DImage = ({ src, alt, className, onLoad }: IDImageProps): JSX.Element => {
+const DImage = ({ src, alt, className, unoptimized, onLoad }: IDImageProps): JSX.Element => {
   return (
     <WCDImage className={className}>
       <Image
@@ -20,6 +21,7 @@ const DImage = ({ src, alt, className, onLoad }: IDImageProps): JSX.Element => {
         sizes="(max-width: 768px) 100vw, 33vw"
         quality={100}
         priority
+        unoptimized={unoptimized}
         onLoad={onLoad}
       />
     </WCDImage>

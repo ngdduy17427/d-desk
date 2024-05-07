@@ -1,0 +1,8 @@
+.d-select-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  .select2-container *:focus {
+    outline: none;
+  }
+}

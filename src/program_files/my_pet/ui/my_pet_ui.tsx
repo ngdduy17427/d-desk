@@ -1,38 +1,35 @@
-import DContainer from "components/d_container";
-import { useEffect, useRef } from "react";
-import { uuidv4 } from "utils/utils_helper";
-import { GameService } from "../game/game_service";
-import { PlayerSprite } from "../sprites/player_sprite";
+import { FormEvent, memo, useState } from "react";
+import { PetAvatarOption, PetSettings } from "../@type";
+import { PetAvatars, YellowCat } from "../utils/pet_helper";
+import MyPetGUI from "./my_pet_gui";
+import MyPetLogin from "./my_pet_login";
 
 interface IMyPetUIProps {
-  isServerAlive: boolean;
-  petName: string;
+  isServerOnline: boolean;
 }
 
-const MyPetUI = ({ isServerAlive, petName }: IMyPetUIProps): JSX.Element => {
-  const gameServiceRef = useRef<GameService>(new GameService(isServerAlive));
-  const gameGUIRef = useRef<HTMLCanvasElement>(null);
+const MyPetUI = ({ isServerOnline }: IMyPetUIProps): JSX.Element => {
+  const [isGameStart, setIsGameStart] = useState<boolean>(false);
+  const [petSettings, setPetSettings] = useState<PetSettings>({
+    petName: "",
+    petAvatar: PetAvatars.get(YellowCat) as PetAvatarOption,
+  });
 
-  useEffect((): (() => void) => {
-    const gameService = gameServiceRef.current;
+  const onSubmit = (event: FormEvent): void => {
+    event.preventDefault();
+    if (petSettings.petName !== "") setIsGameStart(true);
+  };
 
-    gameService.start(
-      new PlayerSprite(
-        uuidv4(),
-        petName,
-        gameService.game.canvas.width / 2,
-        gameService.game.canvas.height / 2
-      ),
-      gameGUIRef.current as HTMLCanvasElement
-    );
-    return (): void => gameService.destroy();
-  }, [petName]);
-
-  return (
-    <DContainer className="my-pet-ui-container">
-      <canvas ref={gameGUIRef} className="my-pet-gui" />
-    </DContainer>
+  return isGameStart ? (
+    <MyPetGUI isServerOnline={isServerOnline} petSettings={petSettings} />
+  ) : (
+    <MyPetLogin
+      isServerOnline={isServerOnline}
+      petSettings={petSettings}
+      setPetSettings={setPetSettings}
+      onSubmit={onSubmit}
+    />
   );
 };
 
-export default MyPetUI;
+export default memo(MyPetUI);

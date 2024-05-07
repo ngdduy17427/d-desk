@@ -18,7 +18,7 @@ export class GameGUI {
 
   init(gameGUI: HTMLCanvasElement): void {
     this.gameGUI = gameGUI;
-    this.gameGUIContext = <CanvasRenderingContext2D>this.gameGUI.getContext("2d");
+    this.gameGUIContext = <CanvasRenderingContext2D>this.gameGUI?.getContext("2d");
   }
   draw(): void {
     if (!this.gameGUI || !this.gameGUIContext) return;
@@ -27,23 +27,35 @@ export class GameGUI {
     this.gameGUI.height = this.gameGUI.offsetHeight;
 
     this.gameGUIContext.clearRect(0, 0, this.gameGUI.width, this.gameGUI.height);
+    this.gameGUIContext.shadowColor = "#000";
+    this.gameGUIContext.shadowOffsetX = 1;
+    this.gameGUIContext.shadowOffsetY = 1;
+    this.gameGUIContext.font = `bold 16px Source Code Pro`;
+    this.gameGUIContext.fillStyle = "#fff";
 
+    this.drawAvatarBox();
     this.drawAvatar();
-
-    this.gameGUIContext.font = "16px Source Code Pro";
-    this.drawInfo();
-    this.drawStats();
+    this.drawText(`Name: ${this.game.player?.petName}`, this.avatarBox.width + 10, 16);
+    this.drawText(`FPS: ${Math.round(this.fps)}`, this.avatarBox.width + 10, 32);
+    this.drawText(`X: ${this.game.player?.entity.position.x}`, this.avatarBox.width + 10, 48);
+    this.drawText(`Y: ${this.game.player?.entity.position.y}`, this.avatarBox.width + 10, 64);
   }
   destroy(): void {
     this.gameGUI = undefined;
   }
 
+  private drawAvatarBox(): void {
+    if (!this.gameGUIContext) return;
+
+    this.gameGUIContext.strokeRect(0, 0, this.avatarBox.width, this.avatarBox.height);
+  }
   private drawAvatar(): void {
-    this.gameGUIContext?.strokeRect(0, 0, this.avatarBox.width, this.avatarBox.height);
-    this.gameGUIContext?.drawImage(
-      <CanvasImageSource>this.game.player?.entity.avatar,
-      Number(this.game.player?.entity.frameX),
-      Number(this.game.player?.entity.frameY),
+    if (!this.gameGUIContext) return;
+
+    this.gameGUIContext.drawImage(
+      <HTMLImageElement>this.game.gameAsset?.get(String(this.game.player?.entity.type)),
+      Number(this.game.player?.entity.frameX) * Number(this.game.player?.entity.sw),
+      Number(this.game.player?.entity.frameY) * Number(this.game.player?.entity.sh),
       Number(this.game.player?.entity.sw),
       Number(this.game.player?.entity.sh),
       0,
@@ -52,24 +64,11 @@ export class GameGUI {
       this.avatarBox.height
     );
   }
-  private drawInfo(): void {
-    this.gameGUIContext?.fillText(
-      `Name: ${this.game.player?.petName}`,
-      this.avatarBox.width + 5,
-      16
-    );
-  }
-  private drawStats(): void {
-    this.gameGUIContext?.fillText(`FPS: ${Math.round(this.fps)}`, this.avatarBox.width + 5, 32);
-    this.gameGUIContext?.fillText(
-      `X: ${this.game.player?.entity.position.x}`,
-      this.avatarBox.width + 5,
-      48
-    );
-    this.gameGUIContext?.fillText(
-      `Y: ${this.game.player?.entity.position.y}`,
-      this.avatarBox.width + 5,
-      64
-    );
+  private drawText(text: string, x: number, y: number): void {
+    if (!this.gameGUIContext) return;
+
+    this.gameGUIContext.strokeStyle = "#000";
+    this.gameGUIContext.strokeText(text, x, y);
+    this.gameGUIContext.fillText(text, x, y);
   }
 }

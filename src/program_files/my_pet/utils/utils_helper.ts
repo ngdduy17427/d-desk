@@ -1,6 +1,7 @@
 import { clamp } from "utils/utils_helper";
 import { AnimationState } from "../@type";
-import { GameEntity, GameEntityHitbox } from "../game/game_entity";
+import { GameEntity, GameEntityHitbox, GameEntityState } from "../game/game_entity";
+import { PetSprite } from "../sprites/pet_sprite";
 
 export function createCanvas(): HTMLCanvasElement {
   const canvas = document.createElement("canvas");
@@ -10,7 +11,9 @@ export function createCanvas(): HTMLCanvasElement {
 
   canvas.style.position = `fixed`;
   canvas.style.inset = `${0}px`;
+  canvas.style.imageRendering = `pixelated`;
   canvas.style.pointerEvents = `none`;
+  canvas.style.userSelect = `none`;
 
   addEventListener("resize", (): void => {
     canvas.width = document.body.offsetWidth;
@@ -22,46 +25,46 @@ export function createCanvas(): HTMLCanvasElement {
   return canvas;
 }
 
-export function playAnimation(gEntity: GameEntity, spriteSheet: number[][], delta: number): void {
-  gEntity.entity.timeSinceLastFrame += delta;
+export function createContext(canvas: HTMLCanvasElement): CanvasRenderingContext2D {
+  return <CanvasRenderingContext2D>canvas.getContext("2d", { willReadFrequently: true });
+}
+
+export function playAnimation(
+  gEntity: GameEntity,
+  spriteSheet: Array<Array<number>>,
+  delta: number
+): void {
+  gEntity.entity.timeSinceLastFrame += delta / 1000;
   gEntity.entity.currentFrameIndex = Math.floor(
-    gEntity.entity.timeSinceLastFrame * spriteSheet.length
+    gEntity.entity.timeSinceLastFrame * spriteSheet?.length
   );
 
-  if (gEntity.entity.currentFrameIndex < spriteSheet.length) {
-    gEntity.entity.currentFrameIndex = (gEntity.entity.currentFrameIndex + 1) % spriteSheet.length;
+  if (gEntity.entity.currentFrameIndex < spriteSheet?.length) {
+    gEntity.entity.currentFrameIndex = (gEntity.entity.currentFrameIndex + 1) % spriteSheet?.length;
   } else {
     gEntity.entity.currentFrameIndex = 0;
     gEntity.entity.timeSinceLastFrame = 0;
   }
 
-  gEntity.entity.frameX = spriteSheet[gEntity.entity.currentFrameIndex][0] * gEntity.entity.sw;
-  gEntity.entity.frameY = spriteSheet[gEntity.entity.currentFrameIndex][1] * gEntity.entity.sh;
+  gEntity.entity.frameX = spriteSheet?.[gEntity.entity.currentFrameIndex][0];
+  gEntity.entity.frameY = spriteSheet?.[gEntity.entity.currentFrameIndex][1];
 }
 
-export function calcAngleDegrees(x: number, y: number): number {
-  return (Math.atan2(y, x) * 180) / Math.PI;
-}
-
-export function entityDirection(x: number, y: number): AnimationState {
-  if (calcAngleDegrees(x, y) >= -45 && calcAngleDegrees(x, y) < 45) {
-    return AnimationState.EAST;
-  } else if (calcAngleDegrees(x, y) >= 45 && calcAngleDegrees(x, y) < 135) {
-    return AnimationState.SOUTH;
-  } else if (calcAngleDegrees(x, y) >= 135 || calcAngleDegrees(x, y) < -135) {
-    return AnimationState.WEST;
-  } else {
-    return AnimationState.NORTH;
-  }
-}
-
-export function moveToPoint(gEntity: GameEntity, dx: number, dy: number, delta: number): void {
+export function moveToPoint(gEntity: PetSprite, dx: number, dy: number, delta: number): void {
   const diffX = dx - gEntity.entity.position.x;
   const diffY = dy - gEntity.entity.position.y;
-  const distance = Math.hypot(diffX, diffY);
 
-  gEntity.entity.position.x += (diffX / distance) * gEntity.entity.speed * delta;
-  gEntity.entity.position.y += (diffY / distance) * gEntity.entity.speed * delta;
+  const distance = Math.sqrt(diffX * diffX + diffY * diffY);
+  const distanceToMove = gEntity.entity.speed * delta;
+
+  if (distance > distanceToMove) {
+    gEntity.entity.position.x += (diffX / distance) * distanceToMove;
+    gEntity.entity.position.y += (diffY / distance) * distanceToMove;
+  } else {
+    gEntity.entity.position.x = dx;
+    gEntity.entity.position.y = dy;
+    gEntity.entityState = GameEntityState.IDLE;
+  }
 
   gEntity.entity.hitbox.top = gEntity.entity.position.y - gEntity.entity.dh / 2;
   gEntity.entity.hitbox.right = gEntity.entity.position.x + gEntity.entity.dw / 2;
@@ -79,18 +82,30 @@ export function moveToPoint(gEntity: GameEntity, dx: number, dy: number, delta: 
     window.innerHeight - gEntity.entity.dh / 2
   );
 
-  playAnimation(
-    gEntity,
-    <number[][]>gEntity.entity.avatarSheet[entityDirection(diffX, diffY)],
-    delta
-  );
+  gEntity.entityAnimationState = entityDirection(diffX, diffY);
+}
+
+export function entityDirection(x: number, y: number): AnimationState {
+  if (calcAngleDegrees(x, y) >= -45 && calcAngleDegrees(x, y) < 45) {
+    return AnimationState.EAST;
+  } else if (calcAngleDegrees(x, y) >= 45 && calcAngleDegrees(x, y) < 135) {
+    return AnimationState.SOUTH;
+  } else if (calcAngleDegrees(x, y) >= 135 || calcAngleDegrees(x, y) < -135) {
+    return AnimationState.WEST;
+  } else {
+    return AnimationState.NORTH;
+  }
+}
+
+export function calcAngleDegrees(x: number, y: number): number {
+  return (Math.atan2(y, x) * 180) / Math.PI;
 }
 
 export function isCollision(sHitbox: GameEntityHitbox, dHitbox: GameEntityHitbox): boolean {
   return !(
-    sHitbox.top > dHitbox.bottom ||
-    sHitbox.right < dHitbox.left ||
-    sHitbox.bottom < dHitbox.top ||
-    sHitbox.left > dHitbox.right
+    sHitbox?.top > dHitbox?.bottom ||
+    sHitbox?.right < dHitbox?.left ||
+    sHitbox?.bottom < dHitbox?.top ||
+    sHitbox?.left > dHitbox?.right
   );
 }
