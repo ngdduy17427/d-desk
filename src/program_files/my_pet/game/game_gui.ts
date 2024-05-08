@@ -23,15 +23,22 @@ export class GameGUI {
   draw(): void {
     if (!this.gameGUI || !this.gameGUIContext) return;
 
-    this.gameGUI.width = this.gameGUI.offsetWidth;
-    this.gameGUI.height = this.gameGUI.offsetHeight;
+    this.gameGUI.width = this.gameGUI.getBoundingClientRect().width;
+    this.gameGUI.height = this.gameGUI.getBoundingClientRect().height;
 
     this.gameGUIContext.clearRect(0, 0, this.gameGUI.width, this.gameGUI.height);
-    this.gameGUIContext.shadowColor = "#000";
+    this.gameGUIContext.imageSmoothingEnabled = true;
+    this.gameGUIContext.imageSmoothingQuality = `high`;
+
+    this.gameGUIContext.font = `bold 16px Source Code Pro`;
+    this.gameGUIContext.fillStyle = `#fff`;
+    this.gameGUIContext.letterSpacing = "2px";
+    this.gameGUIContext.wordSpacing = "2px";
+    this.gameGUIContext.textRendering = "geometricPrecision";
+
+    this.gameGUIContext.shadowColor = `#000`;
     this.gameGUIContext.shadowOffsetX = 1;
     this.gameGUIContext.shadowOffsetY = 1;
-    this.gameGUIContext.font = `bold 16px Source Code Pro`;
-    this.gameGUIContext.fillStyle = "#fff";
 
     this.drawAvatarBox();
     this.drawAvatar();
@@ -67,7 +74,7 @@ export class GameGUI {
   private drawText(text: string, x: number, y: number): void {
     if (!this.gameGUIContext) return;
 
-    this.gameGUIContext.strokeStyle = "#000";
+    this.gameGUIContext.strokeStyle = `#000`;
     this.gameGUIContext.strokeText(text, x, y);
     this.gameGUIContext.fillText(text, x, y);
   }

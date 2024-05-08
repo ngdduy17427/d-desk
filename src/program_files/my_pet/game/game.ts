@@ -48,7 +48,16 @@ export class Game {
     if (!this.canvas || !this.context) return;
 
     this.context.clearRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
-    this.context.shadowColor = "#000";
+    this.context.imageSmoothingEnabled = true;
+    this.context.imageSmoothingQuality = `high`;
+
+    this.context.font = `bold 14px Source Code Pro`;
+    this.context.fillStyle = `#fff`;
+    this.context.letterSpacing = "2px";
+    this.context.wordSpacing = "2px";
+    this.context.textRendering = "geometricPrecision";
+
+    this.context.shadowColor = `#000`;
     this.context.shadowOffsetX = 1;
     this.context.shadowOffsetY = 1;
 
@@ -62,8 +71,10 @@ export class Game {
   }
 
   private initCanvas(): void {
-    this.canvas = createCanvas();
+    this.canvas = createCanvas(document.body.offsetWidth, document.body.offsetHeight);
     this.context = createContext(this.canvas);
+
+    document.body.appendChild(this.canvas);
   }
   private initPlayer(playerSettings: PetSettings): void {
     this.player = new PlayerSprite(
@@ -74,7 +85,7 @@ export class Game {
     );
   }
   private initSocket(): void {
-    this.gameSocket?.on("playerJoin", (player: EntityMap): void => {
+    this.gameSocket?.on("playerJoinGame", (player: EntityMap): void => {
       const petEntity = new PetSprite(
         player.id,
         player.petName,

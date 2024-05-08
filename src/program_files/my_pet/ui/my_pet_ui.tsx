@@ -9,7 +9,7 @@ interface IMyPetUIProps {
 }
 
 const MyPetUI = ({ isServerOnline }: IMyPetUIProps): JSX.Element => {
-  const [isGameStart, setIsGameStart] = useState<boolean>(false);
+  const [isLogin, setIsLogin] = useState<boolean>(false);
   const [petSettings, setPetSettings] = useState<PetSettings>({
     petName: "",
     petAvatar: PetAvatars.get(YellowCat) as PetAvatarOption,
@@ -17,10 +17,10 @@ const MyPetUI = ({ isServerOnline }: IMyPetUIProps): JSX.Element => {
 
   const onSubmit = (event: FormEvent): void => {
     event.preventDefault();
-    if (petSettings.petName !== "") setIsGameStart(true);
+    if (petSettings.petName !== "") setIsLogin(true);
   };
 
-  return isGameStart ? (
+  return isLogin ? (
     <MyPetGUI isServerOnline={isServerOnline} petSettings={petSettings} />
   ) : (
     <MyPetLogin

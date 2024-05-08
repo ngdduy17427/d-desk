@@ -3,24 +3,24 @@ import { AnimationState } from "../@type";
 import { GameEntity, GameEntityHitbox, GameEntityState } from "../game/game_entity";
 import { PetSprite } from "../sprites/pet_sprite";
 
-export function createCanvas(): HTMLCanvasElement {
+export function createCanvas(width: number, height: number): HTMLCanvasElement {
   const canvas = document.createElement("canvas");
 
-  canvas.width = document.body.offsetWidth;
-  canvas.height = document.body.offsetHeight;
+  canvas.width = width;
+  canvas.height = height;
 
   canvas.style.position = `fixed`;
   canvas.style.inset = `${0}px`;
-  canvas.style.imageRendering = `pixelated`;
   canvas.style.pointerEvents = `none`;
   canvas.style.userSelect = `none`;
 
   addEventListener("resize", (): void => {
-    canvas.width = document.body.offsetWidth;
-    canvas.height = document.body.offsetHeight;
-  });
+    canvas.width = canvas.getBoundingClientRect().width;
+    canvas.height = canvas.getBoundingClientRect().height;
 
-  document.body.appendChild(canvas);
+    canvas.style.width = `${canvas.getBoundingClientRect().width}px`;
+    canvas.style.height = `${canvas.getBoundingClientRect().height}px`;
+  });
 
   return canvas;
 }

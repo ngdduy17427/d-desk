@@ -26,7 +26,12 @@ const MyPetLogin = ({
 
   return (
     <form className="my-pet-login-box" onSubmit={onSubmit}>
-      <DInputField label="Pet name:" value={petSettings.petName} onChange={handleChangePetName} />
+      <DInputField
+        label="Pet name:"
+        maxLength={20}
+        value={petSettings.petName}
+        onChange={handleChangePetName}
+      />
       <DSelectField
         label="Pet avatar:"
         options={Array.from(PetAvatars.values())}

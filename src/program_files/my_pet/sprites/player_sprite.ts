@@ -1,12 +1,20 @@
 import { randomNumber } from "utils/utils_helper";
-import { PetSettings, SpriteSheetType } from "../@type";
+import { PetSettings, PlayerMessage, SpriteSheetType } from "../@type";
 import { Game } from "../game/game";
 import { GameEntityHitbox, GameEntityState } from "../game/game_entity";
 import { isCollision, moveToPoint, playAnimation } from "../utils/utils_helper";
 import { FoodSprite } from "./food_sprite";
 import { PetSprite } from "./pet_sprite";
 
+export enum PlayerState {
+  IDLE,
+  MOVE,
+  SLEEP,
+}
+
 export class PlayerSprite extends PetSprite {
+  playerState: PlayerState = PlayerState.MOVE;
+
   private foodSprite: FoodSprite | undefined = new FoodSprite(-100, -100);
 
   constructor(id: string, petSettings: PetSettings, x: number, y: number) {
@@ -30,7 +38,7 @@ export class PlayerSprite extends PetSprite {
   }
 
   initSocket(): void {
-    this.game?.gameSocket?.emit("playerJoin", {
+    this.game?.gameSocket?.emit("playerJoinGame", {
       id: this.entity.id,
       petName: this.petName,
       petAvatar: this.petAvatar,
@@ -43,10 +51,16 @@ export class PlayerSprite extends PetSprite {
     });
   }
   entityAction(delta: number): void {
+    if (this.playerState === PlayerState.IDLE) {
+      return playAnimation(this, this.entity.avatarSheet.IDLE, delta);
+    }
+    if (this.playerState === PlayerState.SLEEP) {
+      return playAnimation(this, <SpriteSheetType>this.entity.avatarSheet.SLEEP, delta);
+    }
+
     switch (this.entityState) {
       case GameEntityState.IDLE: {
-        playAnimation(this, this.entity.avatarSheet.IDLE, delta);
-        break;
+        return playAnimation(this, this.entity.avatarSheet.IDLE, delta);
       }
       case GameEntityState.MOVING: {
         if (isCollision(this.entity.hitbox, <GameEntityHitbox>this.foodSprite?.entity.hitbox)) {
@@ -77,12 +91,30 @@ export class PlayerSprite extends PetSprite {
         break;
     }
   }
+  setPlayerState(playerState: PlayerState): void {
+    this.playerState = playerState;
+  }
+  setPlayerMessage(playerMessage: PlayerMessage): void {
+    super.setPlayerMessage(playerMessage);
+  }
 
   private onMoveToMouse(event: MouseEvent): void {
     if (event.button !== 0) return;
+    if (document.getElementById("my-pet-state-idle")?.contains(<Node>event.target)) return;
+    if (document.getElementById("my-pet-state-move")?.contains(<Node>event.target)) return;
+    if (document.getElementById("my-pet-state-sleep")?.contains(<Node>event.target)) return;
+    if (document.getElementById("my-pet-chat-input-field")?.contains(<Node>event.target)) return;
+    if (document.getElementById("my-pet-chat-btn-send")?.contains(<Node>event.target)) return;
+
     this.onAddFood(event.pageX, event.pageY);
   }
   private onMoveToTouch(event: TouchEvent): void {
+    if (document.getElementById("my-pet-state-idle")?.contains(<Node>event.target)) return;
+    if (document.getElementById("my-pet-state-move")?.contains(<Node>event.target)) return;
+    if (document.getElementById("my-pet-state-sleep")?.contains(<Node>event.target)) return;
+    if (document.getElementById("my-pet-chat-input-field")?.contains(<Node>event.target)) return;
+    if (document.getElementById("my-pet-chat-btn-send")?.contains(<Node>event.target)) return;
+
     this.onAddFood(event.targetTouches[0].pageX, event.targetTouches[0].pageY);
   }
   private onAddFood(x: number, y: number): void {

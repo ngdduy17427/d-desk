@@ -18,6 +18,7 @@ PetAvatars.set(WhiteCat, {
     EAST: [...repeat(2, [1, 0], [0, 0], [1, 0], [2, 0])],
     SOUTH: [...repeat(2, [1, 2], [0, 2], [1, 2], [2, 2])],
     WEST: [...repeat(2, [1, 3], [0, 3], [1, 3], [2, 3])],
+    SLEEP: [[3, 0]],
   },
 });
 PetAvatars.set(YellowCat, {
@@ -30,6 +31,7 @@ PetAvatars.set(YellowCat, {
     EAST: [...repeat(2, [5, 0], [4, 0], [5, 0], [6, 0])],
     SOUTH: [...repeat(2, [5, 2], [4, 2], [5, 2], [6, 2])],
     WEST: [...repeat(2, [5, 3], [4, 3], [5, 3], [6, 3])],
+    SLEEP: [[7, 0]],
   },
 });
 PetAvatars.set(BrownCat, {
@@ -42,6 +44,7 @@ PetAvatars.set(BrownCat, {
     EAST: [...repeat(2, [9, 0], [8, 0], [9, 0], [10, 0])],
     SOUTH: [...repeat(2, [9, 2], [8, 2], [9, 2], [10, 2])],
     WEST: [...repeat(2, [9, 3], [8, 3], [9, 3], [10, 3])],
+    SLEEP: [[11, 0]],
   },
 });
 PetAvatars.set(BlackCat, {
@@ -54,5 +57,6 @@ PetAvatars.set(BlackCat, {
     EAST: [...repeat(2, [13, 0], [12, 0], [13, 0], [14, 0])],
     SOUTH: [...repeat(2, [13, 2], [12, 2], [13, 2], [14, 2])],
     WEST: [...repeat(2, [13, 3], [12, 3], [13, 3], [14, 3])],
+    SLEEP: [[15, 0]],
   },
 });

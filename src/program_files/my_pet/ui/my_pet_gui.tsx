@@ -1,7 +1,9 @@
 import { Fragment, memo, useEffect, useRef, useState } from "react";
-import { GameService } from "../game/game_service";
 import { PetSettings } from "../@type";
+import { GameService } from "../game/game_service";
+import MyPetChat from "./my_pet_chat";
 import MyPetLoading from "./my_pet_loading";
+import MyPetState from "./my_pet_state";
 
 interface IMyPetGUIProps {
   isServerOnline: boolean;
@@ -34,6 +36,8 @@ const MyPetGUI = ({ isServerOnline, petSettings }: IMyPetGUIProps): JSX.Element 
       {isGameStarting && <MyPetLoading />}
       <div className="my-pet-gui-container">
         <canvas ref={gameGUIRef} className="my-pet-gui" />
+        <MyPetState gameService={gameServiceRef.current} />
+        <MyPetChat gameService={gameServiceRef.current} />
       </div>
     </Fragment>
   );

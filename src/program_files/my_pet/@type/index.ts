@@ -39,6 +39,7 @@ export interface SpriteSheet {
   NORTH_WEST?: SpriteSheetType;
   SOUTH_EAST?: SpriteSheetType;
   SOUTH_WEST?: SpriteSheetType;
+  SLEEP?: SpriteSheetType;
 }
 
 export enum AnimationState {
@@ -51,4 +52,11 @@ export enum AnimationState {
   NORTH_WEST = "NORTH_WEST",
   SOUTH_EAST = "SOUTH_EAST",
   SOUTH_WEST = "SOUTH_WEST",
+  SLEEP = "SLEEP",
+}
+
+export interface PlayerMessage {
+  id: string;
+  name: string;
+  message: string;
 }

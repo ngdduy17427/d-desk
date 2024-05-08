@@ -4,16 +4,26 @@ import { WCDImage } from "web_components";
 import "./css.css";
 
 interface IDImageProps {
+  id?: string;
   src: string;
   alt: string;
   className?: string;
-  onLoad?: () => void;
   unoptimized?: boolean;
+  onLoad?: () => void;
+  onClick?: () => void;
 }
 
-const DImage = ({ src, alt, className, unoptimized, onLoad }: IDImageProps): JSX.Element => {
+const DImage = ({
+  id,
+  src,
+  alt,
+  className,
+  unoptimized,
+  onLoad,
+  onClick,
+}: IDImageProps): JSX.Element => {
   return (
-    <WCDImage className={className}>
+    <WCDImage id={id} className={className} onClick={onClick}>
       <Image
         src={src}
         alt={alt}

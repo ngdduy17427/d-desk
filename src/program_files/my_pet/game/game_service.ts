@@ -7,11 +7,11 @@ import { GameLoop } from "./game_loop";
 import { GameSocket } from "./game_socket";
 
 export class GameService {
-  isServerAlive: boolean = false;
-
   private gameAsset: GameAsset;
   private gameSocket: GameSocket;
-  private game: Game;
+
+  game: Game;
+
   private gameGUI: GameGUI;
   private gameLoop: GameLoop;
 
@@ -46,5 +46,9 @@ export class GameService {
     this.game.destroy();
     this.gameAsset.destroy();
     this.gameSocket.destroy();
+  }
+
+  getGameSocket(): GameSocket {
+    return this.gameSocket;
   }
 }
