@@ -5,7 +5,7 @@ import { SpriteActionState } from "../@type";
 
 const MyPetState = (): JSX.Element => {
   const [playerActionState, setPlayerActionState] = useState<SpriteActionState>(
-    SpriteActionState.MOVE
+    SpriteActionState.MOVING
   );
 
   const handlePlayerState = (state: SpriteActionState): void => {
@@ -25,8 +25,8 @@ const MyPetState = (): JSX.Element => {
         id="my-pet-state-move"
         src={`${process.env.NEXT_PUBLIC_BASE_URL}/images/my_pet/cat_state_move.png`}
         alt="Cat State Move"
-        className={classNames({ active: playerActionState === SpriteActionState.MOVE })}
-        onClick={() => handlePlayerState(SpriteActionState.MOVE)}
+        className={classNames({ active: playerActionState === SpriteActionState.MOVING })}
+        onClick={() => handlePlayerState(SpriteActionState.MOVING)}
       />
       <DImage
         id="my-pet-state-sleep"

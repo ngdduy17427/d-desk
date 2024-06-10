@@ -15,7 +15,7 @@ import { updateSpriteAnimation, updateSpriteDirection } from "../utils/utils_hel
 export const PetSpriteType: SpriteType = "PET_SPRITE";
 
 export class PetSprite extends GameSprite {
-  private spriteName: SpriteName | undefined;
+  spriteName: SpriteName | undefined;
 
   private playerMessage: string | undefined;
   private playerMessageTimeout: NodeJS.Timeout | undefined;
