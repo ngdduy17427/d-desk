@@ -6,6 +6,7 @@ const MyPetLoading = (): JSX.Element => (
     <DImage
       src={`${process.env.NEXT_PUBLIC_BASE_URL}/images/my_pet/cat_loading.gif`}
       alt="Cat Loading"
+      unoptimized
     />
   </div>
 );

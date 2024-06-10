@@ -66,6 +66,18 @@ body {
     text-shadow: none;
     background: var(--glb-color-text);
   }
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--glb-bg-header);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    opacity: 0.9;
+  }
   > canvas {
     z-index: 100;
   }

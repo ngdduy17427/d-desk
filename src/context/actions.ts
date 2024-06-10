@@ -7,9 +7,8 @@ import { deepCopy } from "utils/utils_helper";
 
 export enum AppActionType {
   OPEN_NEW_WINDOW = "OPEN_WINDOW",
-  OPEN_WINDOW_FROM_MINIMIZE = "OPEN_WINDOW_FROM_MINIMIZE",
   CLICK_WINDOW = "CLICK_WINDOW",
-  SIZING_WINDOW = "SIZING_WINDOW",
+  NORMAL_WINDOW = "NORMAL_WINDOW",
   MINIMIZE_WINDOW = "MINIMIZE_WINDOW",
   MAXIMIZE_WINDOW = "MAXIMIZE_WINDOW",
   CLOSE_WINDOW = "CLOSE_WINDOW",
@@ -24,97 +23,104 @@ interface AppActionProps {
 export const appAction = (state: IAppContext, action: AppActionProps): IAppContext => {
   switch (action.type) {
     case AppActionType.OPEN_NEW_WINDOW: {
+      for (const [appId, appProcess] of state.appProcesses.entries()) {
+        (<IDWindowState>appProcess.windowState).isFocus = false;
+        state.appProcesses.set(appId, appProcess);
+      }
+
       const newProgramFile = <IProgramFile>deepCopy<IProgramFile>(action.payload.programFile);
+      (<IDWindowState>newProgramFile.windowState).isFocus = true;
       (<IDWindowState>newProgramFile.windowState).runtime = new Date();
 
-      return {
-        ...state,
-        appProcesses: state.appProcesses.set(String(newProgramFile?.id), newProgramFile),
-        processIndex: [String(newProgramFile.id), ...state.processIndex],
-      };
-    }
-    case AppActionType.OPEN_WINDOW_FROM_MINIMIZE: {
-      const programFileModified = <IProgramFile>(
-        state.appProcesses.get(action.payload.programFileId)
-      );
+      state.appProcesses.set(String(newProgramFile.id), newProgramFile);
+      state.processIndex = [String(newProgramFile.id), ...state.processIndex];
 
-      if (programFileModified?.windowState?.sizing === EDWindowSizing.MINIMIZE)
-        programFileModified.windowState.sizing = EDWindowSizing.NORMAL;
-
-      return {
-        ...state,
-        appProcesses: state.appProcesses.set(action.payload.programFileId, programFileModified),
-        processIndex: [
-          action.payload.programFileId,
-          ...state.processIndex.filter(
-            (id: string): boolean => id !== action.payload.programFileId
-          ),
-        ],
-        processMinimize: state.processMinimize?.filter(
-          (id: string): boolean => id !== action.payload.programFileId
-        ),
-      };
+      return { ...state };
     }
     case AppActionType.CLICK_WINDOW: {
-      return {
-        ...state,
-        processIndex: [
-          action.payload.programFileId,
-          ...state.processIndex.filter(
-            (id: string): boolean => id !== action.payload.programFileId
-          ),
-        ],
-      };
-    }
-    case AppActionType.SIZING_WINDOW: {
-      const programFileModified = <IProgramFile>(
-        state.appProcesses.get(action.payload.programFileId)
-      );
-      (<IDWindowState>programFileModified.windowState).sizing = action.payload.sizing;
+      for (const [appId, appProcess] of state.appProcesses.entries()) {
+        if (appId === action.payload.programFileId) {
+          (<IDWindowState>appProcess.windowState).isFocus =
+            (<IDWindowState>appProcess.windowState).sizing !== EDWindowSizing.MINIMIZE;
+          state.appProcesses.set(appId, appProcess);
+        } else {
+          (<IDWindowState>appProcess.windowState).isFocus = false;
+          state.appProcesses.set(appId, appProcess);
+        }
+      }
 
-      return {
-        ...state,
-        appProcesses: state.appProcesses.set(action.payload.programFileId, programFileModified),
-      };
+      state.processIndex = [
+        action.payload.programFileId,
+        ...state.processIndex.filter((id: string): boolean => id !== action.payload.programFileId),
+      ];
+
+      return { ...state };
+    }
+    case AppActionType.NORMAL_WINDOW: {
+      dispatchEvent(new CustomEvent(`resize-window-${action.payload.programFileId}`));
+
+      for (const [appId, appProcess] of state.appProcesses.entries()) {
+        if (appId === action.payload.programFileId) {
+          (<IDWindowState>appProcess.windowState).sizing = EDWindowSizing.NORMAL;
+          (<IDWindowState>appProcess.windowState).isFocus = true;
+          state.appProcesses.set(appId, appProcess);
+        } else {
+          (<IDWindowState>appProcess.windowState).isFocus = false;
+          state.appProcesses.set(appId, appProcess);
+        }
+      }
+
+      state.processIndex = [
+        action.payload.programFileId,
+        ...state.processIndex.filter((id: string): boolean => id !== action.payload.programFileId),
+      ];
+      state.processMinimize = state.processMinimize.filter(
+        (id: string): boolean => id !== action.payload.programFileId
+      );
+
+      return { ...state };
     }
     case AppActionType.MINIMIZE_WINDOW: {
+      dispatchEvent(new CustomEvent(`resize-window-${action.payload.programFileId}`));
+
       const programFileModified = <IProgramFile>(
         state.appProcesses.get(action.payload.programFileId)
       );
       (<IDWindowState>programFileModified.windowState).sizing = EDWindowSizing.MINIMIZE;
+      (<IDWindowState>programFileModified.windowState).isFocus = false;
 
-      return {
-        ...state,
-        appProcesses: state.appProcesses.set(action.payload.programFileId, programFileModified),
-        processMinimize: [action.payload.programFileId, ...state.processMinimize],
-      };
+      state.appProcesses.set(action.payload.programFileId, programFileModified);
+      state.processMinimize = [action.payload.programFileId, ...state.processMinimize];
+
+      return { ...state };
     }
     case AppActionType.MAXIMIZE_WINDOW: {
+      dispatchEvent(new CustomEvent(`resize-window-${action.payload.programFileId}`));
+
       const programFileModified = <IProgramFile>(
         state.appProcesses.get(action.payload.programFileId)
       );
       (<IDWindowState>programFileModified.windowState).sizing = EDWindowSizing.MAXIMIZE;
 
-      return {
-        ...state,
-        appProcesses: state.appProcesses.set(action.payload.programFileId, programFileModified),
-        processMinimize: state.processMinimize?.filter(
-          (id: string): boolean => id !== action.payload.programFileId
-        ),
-      };
+      state.appProcesses.set(action.payload.programFileId, programFileModified);
+      state.processMinimize = state.processMinimize.filter(
+        (id: string): boolean => id !== action.payload.programFileId
+      );
+
+      return { ...state };
     }
     case AppActionType.CLOSE_WINDOW: {
-      state.appProcesses.delete(action.payload.programFileId);
+      dispatchEvent(new CustomEvent(`close-window-${action.payload.programFileId}`));
 
-      return {
-        ...state,
-        processIndex: state.processIndex?.filter(
-          (id: string): boolean => id !== action.payload.programFileId
-        ),
-        processMinimize: state.processMinimize?.filter(
-          (id: string): boolean => id !== action.payload.programFileId
-        ),
-      };
+      state.appProcesses.delete(action.payload.programFileId);
+      state.processIndex = state.processIndex.filter(
+        (id: string): boolean => id !== action.payload.programFileId
+      );
+      state.processMinimize = state.processMinimize.filter(
+        (id: string): boolean => id !== action.payload.programFileId
+      );
+
+      return { ...state };
     }
     case AppActionType.UPDATE_APP_SETTINGS: {
       state.appSettings.appCursorEffectResult?.destroy();

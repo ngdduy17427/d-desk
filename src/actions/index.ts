@@ -6,14 +6,14 @@ export const getMarkdown = async (url: string): Promise<string> => {
     cache: "no-cache",
   }).then((response): Promise<string> => response.text());
 };
-export const checkMyPetServer = async (): Promise<any> => {
-  return fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}`, {
+export const getMyPetPlayersOnline = async (): Promise<any> => {
+  return fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/myPet/getPlayersOnline`, {
     method: "GET",
     cache: "no-cache",
   }).then((response): Promise<any> => response.json());
 };
-export const getMyPetServer = async (): Promise<any> => {
-  return fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/getMyPetServer`, {
+export const getMyPetPlayerList = async (): Promise<any> => {
+  return fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/myPet/getPlayerList`, {
     method: "GET",
     cache: "no-cache",
   }).then((response): Promise<any> => response.json());

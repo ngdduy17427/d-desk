@@ -44,9 +44,9 @@ const DTaskbar = ({ appContext: { appProcesses }, appDispatch }: IDTaskbarProps)
   };
 
   const handleOpenWindow = (programFile: IProgramFile): void => {
-    if (appProcesses.has(String(programFile.id)))
-      appDispatch(AppActionType.OPEN_WINDOW_FROM_MINIMIZE, { programFileId: programFile.id });
-    else {
+    if (appProcesses.has(String(programFile.id))) {
+      appDispatch(AppActionType.NORMAL_WINDOW, { programFileId: programFile.id });
+    } else {
       appDispatch(AppActionType.OPEN_NEW_WINDOW, { programFile: programFile });
     }
 

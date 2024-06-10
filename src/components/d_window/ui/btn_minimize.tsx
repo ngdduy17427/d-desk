@@ -15,9 +15,7 @@ const BtnMinimize = ({ windowApp, appDispatch }: IBtnMinimizeProps): JSX.Element
 
   const handleMinimizeWindow = (): void => {
     if (windowState?.sizing === EDWindowSizing.MINIMIZE)
-      appDispatch(AppActionType.OPEN_WINDOW_FROM_MINIMIZE, {
-        programFileId: windowApp.id,
-      });
+      appDispatch(AppActionType.NORMAL_WINDOW, { programFileId: windowApp.id });
     else {
       appDispatch(AppActionType.MINIMIZE_WINDOW, { programFileId: windowApp.id });
     }

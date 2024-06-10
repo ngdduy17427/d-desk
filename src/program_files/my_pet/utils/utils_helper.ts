@@ -1,111 +1,112 @@
 import { clamp } from "utils/utils_helper";
-import { AnimationState } from "../@type";
-import { GameEntity, GameEntityHitbox, GameEntityState } from "../game/game_entity";
+import { SpriteSheetState } from "../@type";
+import { GameSprite } from "../game/game_sprite";
 import { PetSprite } from "../sprites/pet_sprite";
-
-export function createCanvas(width: number, height: number): HTMLCanvasElement {
-  const canvas = document.createElement("canvas");
-
-  canvas.width = width;
-  canvas.height = height;
-
-  canvas.style.position = `fixed`;
-  canvas.style.inset = `${0}px`;
-  canvas.style.pointerEvents = `none`;
-  canvas.style.userSelect = `none`;
-
-  addEventListener("resize", (): void => {
-    canvas.width = canvas.getBoundingClientRect().width;
-    canvas.height = canvas.getBoundingClientRect().height;
-
-    canvas.style.width = `${canvas.getBoundingClientRect().width}px`;
-    canvas.style.height = `${canvas.getBoundingClientRect().height}px`;
-  });
-
-  return canvas;
-}
+import { layerWalkable } from "./layer_helper";
 
 export function createContext(canvas: HTMLCanvasElement): CanvasRenderingContext2D {
-  return <CanvasRenderingContext2D>canvas.getContext("2d", { willReadFrequently: true });
+  return <CanvasRenderingContext2D>canvas.getContext("2d");
 }
 
-export function playAnimation(
-  gEntity: GameEntity,
-  spriteSheet: Array<Array<number>>,
+export function updateSpriteAnimation(
+  sprite: GameSprite,
+  spriteSheetState: SpriteSheetState,
   delta: number
 ): void {
-  gEntity.entity.timeSinceLastFrame += delta / 1000;
-  gEntity.entity.currentFrameIndex = Math.floor(
-    gEntity.entity.timeSinceLastFrame * spriteSheet?.length
+  sprite.animation.timeSinceLastFrame += delta / 1000;
+
+  sprite.animation.currentFrameIndex = Math.floor(
+    sprite.animation.timeSinceLastFrame * spriteSheetState.length
   );
 
-  if (gEntity.entity.currentFrameIndex < spriteSheet?.length) {
-    gEntity.entity.currentFrameIndex = (gEntity.entity.currentFrameIndex + 1) % spriteSheet?.length;
+  if (sprite.animation.currentFrameIndex < spriteSheetState.length) {
+    sprite.animation.currentFrameIndex =
+      (sprite.animation.currentFrameIndex + 1) % spriteSheetState.length;
   } else {
-    gEntity.entity.currentFrameIndex = 0;
-    gEntity.entity.timeSinceLastFrame = 0;
+    sprite.animation.currentFrameIndex = 0;
+    sprite.animation.timeSinceLastFrame = 0;
   }
 
-  gEntity.entity.frameX = spriteSheet?.[gEntity.entity.currentFrameIndex][0];
-  gEntity.entity.frameY = spriteSheet?.[gEntity.entity.currentFrameIndex][1];
+  sprite.animation.frameX = spriteSheetState[sprite.animation.currentFrameIndex][0];
+  sprite.animation.frameY = spriteSheetState[sprite.animation.currentFrameIndex][1];
 }
 
-export function moveToPoint(gEntity: PetSprite, dx: number, dy: number, delta: number): void {
-  const diffX = dx - gEntity.entity.position.x;
-  const diffY = dy - gEntity.entity.position.y;
-
-  const distance = Math.sqrt(diffX * diffX + diffY * diffY);
-  const distanceToMove = gEntity.entity.speed * delta;
-
-  if (distance > distanceToMove) {
-    gEntity.entity.position.x += (diffX / distance) * distanceToMove;
-    gEntity.entity.position.y += (diffY / distance) * distanceToMove;
-  } else {
-    gEntity.entity.position.x = dx;
-    gEntity.entity.position.y = dy;
-    gEntity.entityState = GameEntityState.IDLE;
+export function updateSpriteDirection(sprite: PetSprite, delta: number): void {
+  if (
+    !sprite.spriteDirections.NORTH &&
+    !sprite.spriteDirections.EAST &&
+    !sprite.spriteDirections.SOUTH &&
+    !sprite.spriteDirections.WEST
+  ) {
+    sprite.animation.spriteSheetState = <SpriteSheetState>sprite.animation.spriteSheet.IDLE;
+    return;
   }
 
-  gEntity.entity.hitbox.top = gEntity.entity.position.y - gEntity.entity.dh / 2;
-  gEntity.entity.hitbox.right = gEntity.entity.position.x + gEntity.entity.dw / 2;
-  gEntity.entity.hitbox.bottom = gEntity.entity.position.y + gEntity.entity.dh / 2;
-  gEntity.entity.hitbox.left = gEntity.entity.position.x - gEntity.entity.dw / 2;
+  if (sprite.spriteDirections.NORTH)
+    sprite.animation.spriteSheetState = <SpriteSheetState>sprite.animation.spriteSheet.NORTH;
+  if (sprite.spriteDirections.EAST)
+    sprite.animation.spriteSheetState = <SpriteSheetState>sprite.animation.spriteSheet.EAST;
+  if (sprite.spriteDirections.SOUTH)
+    sprite.animation.spriteSheetState = <SpriteSheetState>sprite.animation.spriteSheet.SOUTH;
+  if (sprite.spriteDirections.WEST)
+    sprite.animation.spriteSheetState = <SpriteSheetState>sprite.animation.spriteSheet.WEST;
 
-  gEntity.entity.position.x = clamp(
-    gEntity.entity.position.x,
-    0 + gEntity.entity.dw / 2,
-    window.innerWidth - gEntity.entity.dw / 2
-  );
-  gEntity.entity.position.y = clamp(
-    gEntity.entity.position.y,
-    0 + gEntity.entity.dh / 2,
-    window.innerHeight - gEntity.entity.dh / 2
-  );
+  if (sprite.position.x === 0 && sprite.position.x === Number(sprite.game?.gameMap?.cols)) return;
+  if (sprite.position.y === 0 && sprite.position.y === Number(sprite.game?.gameMap?.rows)) return;
 
-  gEntity.entityAnimationState = entityDirection(diffX, diffY);
-}
+  let distanceToMove = sprite.speed * delta;
+  let newX = sprite.position.x;
+  let newY = sprite.position.y;
 
-export function entityDirection(x: number, y: number): AnimationState {
-  if (calcAngleDegrees(x, y) >= -45 && calcAngleDegrees(x, y) < 45) {
-    return AnimationState.EAST;
-  } else if (calcAngleDegrees(x, y) >= 45 && calcAngleDegrees(x, y) < 135) {
-    return AnimationState.SOUTH;
-  } else if (calcAngleDegrees(x, y) >= 135 || calcAngleDegrees(x, y) < -135) {
-    return AnimationState.WEST;
-  } else {
-    return AnimationState.NORTH;
+  if (
+    (sprite.spriteDirections.NORTH && sprite.spriteDirections.EAST) ||
+    (sprite.spriteDirections.NORTH && sprite.spriteDirections.WEST) ||
+    (sprite.spriteDirections.SOUTH && sprite.spriteDirections.EAST) ||
+    (sprite.spriteDirections.SOUTH && sprite.spriteDirections.WEST)
+  ) {
+    distanceToMove *= 0.7071;
   }
+
+  if (sprite.spriteDirections.NORTH)
+    newY -= isWalkable(newX, newY - distanceToMove) ? distanceToMove : 0;
+  if (sprite.spriteDirections.EAST)
+    newX += isWalkable(newX + distanceToMove, newY) ? distanceToMove : 0;
+  if (sprite.spriteDirections.SOUTH)
+    newY += isWalkable(newX, newY + distanceToMove) ? distanceToMove : 0;
+  if (sprite.spriteDirections.WEST)
+    newX -= isWalkable(newX - distanceToMove, newY) ? distanceToMove : 0;
+
+  sprite.position.x = newX;
+  sprite.position.y = newY;
+
+  sprite.relPosition.x = sprite.position.x * Number(sprite.game?.gameMap?.tileSize);
+  sprite.relPosition.y = sprite.position.y * Number(sprite.game?.gameMap?.tileSize);
 }
 
-export function calcAngleDegrees(x: number, y: number): number {
-  return (Math.atan2(y, x) * 180) / Math.PI;
+export function isWalkable(newX: number, newY: number): boolean {
+  if (!layerWalkable[Math.floor(newY)] || !layerWalkable[Math.floor(newY)][Math.floor(newX)])
+    return false;
+
+  return layerWalkable[Math.floor(newY)][Math.floor(newX)] === 1;
 }
 
-export function isCollision(sHitbox: GameEntityHitbox, dHitbox: GameEntityHitbox): boolean {
-  return !(
-    sHitbox?.top > dHitbox?.bottom ||
-    sHitbox?.right < dHitbox?.left ||
-    sHitbox?.bottom < dHitbox?.top ||
-    sHitbox?.left > dHitbox?.right
+export function reorderGameObjectsByY(gameObjects: Array<GameSprite>): Array<GameSprite> {
+  return gameObjects.sort((sSprite, dSprite) => sSprite.relPosition.y - dSprite.relPosition.y);
+}
+
+export function calculateTileSize(
+  currentWidth: number,
+  currentHeight: number,
+  baseWidth: number,
+  baseHeight: number,
+  baseTileSize: number
+) {
+  const widthRatio = currentWidth / baseWidth;
+  const heightRatio = currentHeight / baseHeight;
+
+  return clamp(
+    baseTileSize * Math.min(widthRatio, heightRatio),
+    baseTileSize,
+    baseTileSize * Math.min(widthRatio, heightRatio)
   );
 }

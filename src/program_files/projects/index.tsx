@@ -59,10 +59,6 @@ export const techList: Array<ITech> = [
     name: "Next.js",
     link: "https://nextjs.org/",
   }),
-  createTech({
-    name: "Electron",
-    link: "https://www.electronjs.org/",
-  }),
 ];
 
 const projectList: Array<IProject> = [
@@ -74,6 +70,13 @@ const projectList: Array<IProject> = [
     thumnnail: `${process.env.NEXT_PUBLIC_BASE_URL}/images/thumb/d_desk_thumb.png`,
   }),
   createProject({
+    name: "1AM 🌕",
+    description: "An online chat game with pet avatar.",
+    techs: [String(techList[0].id), String(techList[1].id), String(techList[2].id)],
+    thumnnail: `${process.env.NEXT_PUBLIC_BASE_URL}/images/thumb/1am_thumb.png`,
+    link: "https://d-desk.vercel.app/",
+  }),
+  createProject({
     name: "D-Store",
     description:
       "An online shopping destination that offers a diverse range of products to cater to various consumer needs.",
@@ -81,14 +84,6 @@ const projectList: Array<IProject> = [
     thumnnail: `${process.env.NEXT_PUBLIC_BASE_URL}/images/thumb/d_store_thumb.png`,
     link: "https://d-store-ssr.vercel.app/",
     linkGit: "https://github.com/ngdduy17427/d-store-ssr",
-  }),
-  createProject({
-    name: "D-POS",
-    description: "A POS Software can be used as Restaurant Table App, Restaurant Online Order.",
-    techs: [String(techList[0].id), String(techList[1].id), String(techList[3].id)],
-    thumnnail: `${process.env.NEXT_PUBLIC_BASE_URL}/images/thumb/d_pos_thumb.png`,
-    link: "https://drive.google.com/file/d/1savpO-3n0LRZabVAu6oWGtU50swoAReu/view",
-    linkGit: "https://github.com/ngdduy17427/d-pos",
   }),
 ];
 

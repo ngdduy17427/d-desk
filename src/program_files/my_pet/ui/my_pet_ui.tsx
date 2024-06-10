@@ -1,18 +1,20 @@
+import { IProgramFile } from "program_files";
 import { FormEvent, memo, useState } from "react";
-import { PetAvatarOption, PetSettings } from "../@type";
-import { PetAvatars, YellowCat } from "../utils/pet_helper";
+import { PetOptions, PetSelectOption, PetSettings } from "../@type";
+import { PetSelectOptions } from "../utils/pet_helper";
+import MyPetGame from "./my_pet_game";
 import MyPetGUI from "./my_pet_gui";
-import MyPetLogin from "./my_pet_login";
 
 interface IMyPetUIProps {
-  isServerOnline: boolean;
+  windowApp: IProgramFile;
+  playersOnline: number | undefined;
 }
 
-const MyPetUI = ({ isServerOnline }: IMyPetUIProps): JSX.Element => {
+const MyPetUI = ({ windowApp, playersOnline }: IMyPetUIProps): JSX.Element => {
   const [isLogin, setIsLogin] = useState<boolean>(false);
   const [petSettings, setPetSettings] = useState<PetSettings>({
     petName: "",
-    petAvatar: PetAvatars.get(YellowCat) as PetAvatarOption,
+    petSelectOption: PetSelectOptions.get(PetOptions.YELLOW_CAT) as PetSelectOption,
   });
 
   const onSubmit = (event: FormEvent): void => {
@@ -21,10 +23,10 @@ const MyPetUI = ({ isServerOnline }: IMyPetUIProps): JSX.Element => {
   };
 
   return isLogin ? (
-    <MyPetGUI isServerOnline={isServerOnline} petSettings={petSettings} />
+    <MyPetGame windowApp={windowApp} playersOnline={playersOnline} petSettings={petSettings} />
   ) : (
-    <MyPetLogin
-      isServerOnline={isServerOnline}
+    <MyPetGUI
+      playersOnline={playersOnline}
       petSettings={petSettings}
       setPetSettings={setPetSettings}
       onSubmit={onSubmit}

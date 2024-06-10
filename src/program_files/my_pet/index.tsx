@@ -1,38 +1,40 @@
-import { checkMyPetServer } from "actions";
+import { getMyPetPlayersOnline } from "actions";
 import DContainer from "components/d_container";
-import { createProgramFile } from "program_files";
+import { IProgramFile, createProgramFile } from "program_files";
 import { useEffect, useState } from "react";
 import "./css.css";
 import MyPetLoading from "./ui/my_pet_loading";
 import MyPetUI from "./ui/my_pet_ui";
 
-const UI = (): JSX.Element => {
+interface IMyPetProps {
+  windowApp: IProgramFile;
+}
+
+const UI = ({ windowApp }: IMyPetProps): JSX.Element => {
   const [isCheckingServer, setIsCheckingServer] = useState<boolean>(true);
-  const [isServerOnline, setIsServerOnline] = useState<boolean>(false);
+  const [playersOnline, setPlayersOnline] = useState<number | undefined>(undefined);
 
   useEffect((): void => {
-    checkMyPetServer()
-      .then((response): void =>
-        response?.status === "ok" ? setIsServerOnline(true) : setIsServerOnline(false)
-      )
-      .catch((): void => setIsServerOnline(false))
+    getMyPetPlayersOnline()
+      .then((numPlayer): void => setPlayersOnline(numPlayer))
+      .catch((): void => setPlayersOnline(undefined))
       .finally((): void => setIsCheckingServer(false));
   }, []);
 
   return (
     <DContainer className="my-pet-container">
       {isCheckingServer && <MyPetLoading />}
-      <MyPetUI isServerOnline={isServerOnline} />
+      <MyPetUI windowApp={windowApp} playersOnline={playersOnline} />
     </DContainer>
   );
 };
 
 const MyPetProgram = createProgramFile({
-  name: "My Pet 🐈",
+  name: "1AM 🌕",
   component: UI,
   windowState: {
-    width: 500,
-    height: 500,
+    width: 1024,
+    height: 616,
   },
 });
 

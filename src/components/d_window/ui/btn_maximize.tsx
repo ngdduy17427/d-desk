@@ -15,10 +15,7 @@ const BtnMaximize = ({ windowApp, appDispatch }: IBtnMaximizeProps): JSX.Element
 
   const handleMaximizeWindow = (): void => {
     if (windowState?.sizing === EDWindowSizing.MAXIMIZE)
-      appDispatch(AppActionType.SIZING_WINDOW, {
-        programFileId: windowApp.id,
-        sizing: EDWindowSizing.NORMAL,
-      });
+      appDispatch(AppActionType.NORMAL_WINDOW, { programFileId: windowApp.id });
     else {
       appDispatch(AppActionType.MAXIMIZE_WINDOW, { programFileId: windowApp.id });
     }

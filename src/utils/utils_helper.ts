@@ -6,32 +6,16 @@ export function uuidv4() {
   );
 }
 
-export function copyToClipboard(text: string): Promise<void> {
-  return navigator.clipboard.writeText(text);
-}
-
 export function isUndefined(object: unknown): boolean {
   return typeof object === "undefined";
 }
 
-export function isNull(object: unknown): boolean {
-  return object === null;
-}
-
-export function hasUpperCase(str: string): boolean {
-  return str !== str.toLowerCase();
-}
-
-export function hasSpecialChar(str: string): boolean {
-  return new RegExp(/[ `!@#$%^&*()+\-=\\[\]{};':"\\|,.<>\\/?~]/).test(str);
-}
-
-export function regexEmail(str: string): boolean {
-  return new RegExp(/^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/).test(str);
-}
-
 export function clamp(value: number, min: number, max: number): number {
   return value >= min ? (value <= max ? value : max) : min;
+}
+
+export function copyToClipboard(text: string): Promise<void> {
+  return navigator.clipboard.writeText(text);
 }
 
 export function formatCurrency(
@@ -46,14 +30,6 @@ export function convertURLSearchParams(
   values: string | Array<Array<string>> | Record<string, string> | URLSearchParams | undefined
 ): string {
   return new URLSearchParams(values).toString();
-}
-
-export function addClassToElement(elementId: string, ...classNames: Array<string>): void {
-  document.getElementById(elementId)?.classList.add(...classNames);
-}
-
-export function removeClassFromElement(elementId: string, ...classNames: Array<string>): void {
-  document.getElementById(elementId)?.classList.remove(...classNames);
 }
 
 export function deepCopy<T>(object: T): T | undefined {

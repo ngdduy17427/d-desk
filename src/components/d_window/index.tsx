@@ -30,6 +30,7 @@ export interface IDWindowState {
   };
   isCenter?: boolean;
   isDraggable?: boolean;
+  isFocus?: boolean;
   runtime?: Date;
 }
 

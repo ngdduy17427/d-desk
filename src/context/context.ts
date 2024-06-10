@@ -20,7 +20,6 @@ const AppProvider = ({ children, initialValue }: IAppProviderProps): JSX.Element
   const [appContext, setAppContext] = React.useState<IAppContext>(initialValue);
 
   const appContextMemo = React.useMemo((): IAppContext => appContext, [appContext]);
-
   const appDispatchCallback = React.useCallback(
     (type: AppActionType, payload?: any): void =>
       setAppContext((prevState): IAppContext => appAction(prevState, { type, payload })),

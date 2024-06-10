@@ -13,11 +13,7 @@ const BtnClose = ({ appDispatch, windowId }: IBtnCloseProps): JSX.Element => {
     <button
       type="button"
       className="window-nav-item"
-      onClick={(): void =>
-        appDispatch(AppActionType.CLOSE_WINDOW, {
-          programFileId: windowId,
-        })
-      }
+      onClick={(): void => appDispatch(AppActionType.CLOSE_WINDOW, { programFileId: windowId })}
     >
       <MdClose />
     </button>

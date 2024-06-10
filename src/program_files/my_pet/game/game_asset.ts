@@ -1,26 +1,29 @@
-import { SpriteImageSrc, SpriteType } from "../@type";
-import { FoodSpriteType } from "../sprites/food_sprite";
+import { SpriteType } from "../@type";
 import { PetSpriteType } from "../sprites/pet_sprite";
+import { MapSpriteType } from "./game_map";
 
 export type GameAssetMap = Map<SpriteType, HTMLImageElement>;
 
 interface GameAssetObject {
   name: SpriteType;
-  src: SpriteImageSrc;
+  src: string;
 }
 
 export class GameAsset {
-  assets: GameAssetMap | undefined = new Map();
+  assets: GameAssetMap = new Map();
 
-  private promiseAssetArray: Array<Promise<void>> = [];
+  private assetPromiseArray: Array<Promise<void>> = [];
   private assetArray: Array<GameAssetObject> = [
+    {
+      name: MapSpriteType,
+      src: `${process.env.NEXT_PUBLIC_BASE_URL}/images/my_pet/map_assets.png`,
+    },
     { name: PetSpriteType, src: `${process.env.NEXT_PUBLIC_BASE_URL}/images/my_pet/cat.png` },
-    { name: FoodSpriteType, src: `${process.env.NEXT_PUBLIC_BASE_URL}/images/my_pet/fruits.png` },
   ];
 
   constructor() {
-    this.promiseAssetArray = this.assetArray.map(
-      (asset): Promise<void> =>
+    this.assetArray.forEach((asset): number =>
+      this.assetPromiseArray.push(
         new Promise((resolve): void => {
           const image = new Image();
           image.onload = (): void => {
@@ -29,14 +32,12 @@ export class GameAsset {
           };
           image.src = asset.src;
         })
+      )
     );
   }
 
-  async init(): Promise<void> {
-    await Promise.all(this.promiseAssetArray);
-  }
-  destroy(): void {
-    this.assets = undefined;
+  init(): Promise<Array<void>> {
+    return Promise.all(this.assetPromiseArray);
   }
 
   get(key: string): HTMLImageElement {

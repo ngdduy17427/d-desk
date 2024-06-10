@@ -1,112 +1,115 @@
+import { getMyPetPlayerList } from "actions";
+import { IProgramFile } from "program_files";
 import { uuidv4 } from "utils/utils_helper";
-import { EntityMap, PetSettings } from "../@type";
+import { PetSettings, PlayerPet } from "../@type";
 import { PetSprite } from "../sprites/pet_sprite";
 import { PlayerSprite } from "../sprites/player_sprite";
-import { createCanvas, createContext } from "../utils/utils_helper";
+import { createContext } from "../utils/utils_helper";
 import { GameAsset } from "./game_asset";
-import { GameEntity } from "./game_entity";
+import { GameCamera } from "./game_camera";
+import { GameMap } from "./game_map";
 import { GameSocket } from "./game_socket";
 
 export class Game {
-  gameAsset: GameAsset | undefined;
-  gameSocket: GameSocket | undefined;
+  windowApp: IProgramFile;
 
-  canvas: HTMLCanvasElement | undefined;
-  context: CanvasRenderingContext2D | undefined;
+  baseWidth: number = 1024;
+  baseHeight: number = 576;
+  baseTileSize: number = 32;
+
+  gameAsset: GameAsset;
+  gameSocket: GameSocket;
+
+  gameCanvas: HTMLCanvasElement | undefined;
+  gameContext: CanvasRenderingContext2D | undefined;
+
+  gameMap: GameMap | undefined;
+  gameCamera: GameCamera | undefined;
+
   player: PlayerSprite | undefined;
 
-  private gameEntities: Array<GameEntity> = [];
+  debug: boolean = false;
 
-  constructor(gameAsset: GameAsset, gameSocket: GameSocket) {
+  constructor(windowApp: IProgramFile, gameAsset: GameAsset, gameSocket: GameSocket) {
+    this.windowApp = windowApp;
     this.gameAsset = gameAsset;
     this.gameSocket = gameSocket;
+
+    addEventListener("resize", () => this.resizeGameCanvas());
+    addEventListener(`resize-window-${this.windowApp.id}`, () => this.resizeGameCanvas());
   }
 
-  load(entityMap: Array<EntityMap>): void {
-    entityMap.forEach((entity): number =>
-      this.gameEntities.push(
-        new PetSprite(entity.id, entity.petName, entity.petAvatar, entity.x, entity.y)
+  load(): void {
+    getMyPetPlayerList().then((response) =>
+      response.forEach((playerPet: PlayerPet): void =>
+        this.gameMap?.addObject(
+          new PetSprite(
+            this,
+            playerPet.id,
+            playerPet.spriteName,
+            playerPet.spriteAvatar,
+            playerPet.x,
+            playerPet.y
+          )
+        )
       )
     );
   }
-  init(playerSettings: PetSettings): void {
-    this.initCanvas();
-    this.initPlayer(playerSettings);
+  init(gameCanvas: HTMLCanvasElement, playerSettings: PetSettings): void {
+    this.gameCanvas = gameCanvas;
 
-    if (!this.player) return;
+    this.gameCanvas.width = this.gameCanvas.offsetWidth;
+    this.gameCanvas.height = this.gameCanvas.offsetHeight;
 
-    this.gameEntities.push(this.player);
-    this.gameEntities.forEach((gEntity): void => gEntity.init(this));
+    this.gameContext = createContext(this.gameCanvas);
 
-    this.initSocket();
+    this.gameMap = new GameMap(this);
+    this.gameCamera = new GameCamera(this);
+    this.player = new PlayerSprite(this, uuidv4(), playerSettings, 8.5, 25.5);
+
+    this.gameMap.init();
   }
   update(delta: number): void {
-    this.updateGameEntityOrder();
-    this.gameEntities.forEach((gEntity): void => gEntity.update(delta));
+    if (!this.gameMap || !this.gameCamera) return;
+
+    this.gameMap.update(delta);
+    this.gameCamera.update();
   }
   draw(): void {
-    if (!this.canvas || !this.context) return;
+    if (!this.gameCanvas || !this.gameContext || !this.gameMap) return;
 
-    this.context.clearRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
-    this.context.imageSmoothingEnabled = true;
-    this.context.imageSmoothingQuality = `high`;
+    this.gameContext.clearRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
+    this.gameContext.imageSmoothingEnabled = false;
+    this.gameContext.font = `bold 14px Source Code Pro`;
+    this.gameContext.fillStyle = `#fff`;
+    this.gameContext.letterSpacing = `2px`;
+    this.gameContext.wordSpacing = `2px`;
+    this.gameContext.textRendering = `geometricPrecision`;
 
-    this.context.font = `bold 14px Source Code Pro`;
-    this.context.fillStyle = `#fff`;
-    this.context.letterSpacing = "2px";
-    this.context.wordSpacing = "2px";
-    this.context.textRendering = "geometricPrecision";
+    this.gameContext.fillStyle = `#000`;
+    this.gameContext.fillRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
 
-    this.context.shadowColor = `#000`;
-    this.context.shadowOffsetX = 1;
-    this.context.shadowOffsetY = 1;
-
-    this.gameEntities.forEach((gEntity) => gEntity.draw());
+    this.gameMap.draw();
   }
   destroy(): void {
-    if (!this.canvas || !document.body.contains(this.canvas)) return;
+    if (!this.gameMap || !this.gameCamera) return;
 
-    this.gameSocket?.emit("playerDisconnect", this.player?.entity.id);
-    document.body.removeChild(this.canvas);
+    this.gameMap.destroy();
+    this.gameCamera.destroy();
+
+    removeEventListener("resize", () => this.resizeGameCanvas());
+    removeEventListener(`resize-window-${this.windowApp.id}`, () => this.resizeGameCanvas());
   }
 
-  private initCanvas(): void {
-    this.canvas = createCanvas(document.body.offsetWidth, document.body.offsetHeight);
-    this.context = createContext(this.canvas);
+  private resizeGameCanvas(): void {
+    setTimeout((): void => {
+      if (!this.gameCanvas || !this.gameContext || !this.gameMap || !this.gameCamera) return;
 
-    document.body.appendChild(this.canvas);
-  }
-  private initPlayer(playerSettings: PetSettings): void {
-    this.player = new PlayerSprite(
-      uuidv4(),
-      playerSettings,
-      Number(this.canvas?.width) / 2,
-      Number(this.canvas?.height) / 2
-    );
-  }
-  private initSocket(): void {
-    this.gameSocket?.on("playerJoinGame", (player: EntityMap): void => {
-      const petEntity = new PetSprite(
-        player.id,
-        player.petName,
-        player.petAvatar,
-        player.x,
-        player.y
-      );
-      petEntity.init(this);
+      this.gameCanvas.width = this.gameCanvas.offsetWidth;
+      this.gameCanvas.height = this.gameCanvas.offsetHeight;
 
-      this.gameEntities.push(petEntity);
-    });
-    this.gameSocket?.on("playerDisconnect", (playerId: string): void => {
-      this.gameEntities = this.gameEntities.filter((gEntity) => gEntity.entity.id !== playerId);
-    });
-  }
-  private updateGameEntityOrder(): void {
-    this.gameEntities.sort(
-      (sEntity, dEntity) =>
-        sEntity.entity.position.y +
-        sEntity.entity.dh -
-        (dEntity.entity.position.y + dEntity.entity.dh)
-    );
+      this.gameMap.updateTileSize();
+      this.gameCamera.updateCameraSize();
+    }, 300);
   }
 }

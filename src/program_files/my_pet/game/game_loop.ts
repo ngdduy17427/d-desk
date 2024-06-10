@@ -1,20 +1,17 @@
 import { Game } from "./game";
-import { GameGUI } from "./game_gui";
 
 export class GameLoop {
   private game: Game | undefined;
-  private gameGUI: GameGUI | undefined;
 
   private handle: number | undefined;
-
   private last: number = Math.round(performance.now());
   private lastFps: number = Math.round(performance.now());
   private frames: number = 0;
-  private fps: number = 0;
 
-  constructor(game: Game, gameGUI: GameGUI) {
+  fps: number = 0;
+
+  constructor(game: Game) {
     this.game = game;
-    this.gameGUI = gameGUI;
   }
 
   start(): void {
@@ -25,7 +22,7 @@ export class GameLoop {
   }
 
   private step(now: number): void {
-    if (!this.game || !this.game.gameAsset?.assets || !this.gameGUI) return this.destroy();
+    if (!this.game) return this.destroy();
 
     this.frames++;
 
@@ -38,9 +35,6 @@ export class GameLoop {
     try {
       this.game.update(now - this.last);
       this.game.draw();
-
-      this.gameGUI.fps = this.fps;
-      this.gameGUI.draw();
     } catch (error: any) {
       console.error(error);
     }

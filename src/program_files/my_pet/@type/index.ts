@@ -1,62 +1,76 @@
-import { GameEntityState } from "../game/game_entity";
-
-export type SpriteType = string;
-export type SpriteAvatar = string;
-export type SpriteImageSrc = string;
-export type SpriteSheetType = Array<Array<number>>;
-
-export interface PetAvatarOption {
+export enum PetOptions {
+  WHITE_CAT = "WHITE_CAT",
+  YELLOW_CAT = "YELLOW_CAT",
+  BROWN_CAT = "BROWN_CAT",
+  BLACK_CAT = "BLACK_CAT",
+}
+export type PetName = string;
+export type PetOption = string;
+export interface PetSelectOption {
   value: string;
   label: string;
   thumb: string;
-  avatarSheet: SpriteSheet;
+  spriteSheet: SpriteSheet;
 }
-
 export interface PetSettings {
-  petName: string;
-  petAvatar: PetAvatarOption;
+  petName: PetName;
+  petSelectOption: PetSelectOption;
 }
-
-export interface EntityMap {
-  id: string;
-  petName: string;
-  petAvatar: string;
+export enum SpriteActionState {
+  IDLE,
+  MOVING,
+  SLEEP,
+}
+export type SpriteId = string;
+export type SpriteType = string;
+export type SpriteAssetImage = HTMLImageElement;
+export type SpriteName = string;
+export type SpriteAvatar = string;
+export type SpriteSheetState = Array<Array<number>>;
+export interface SpritePosition {
   x: number;
   y: number;
+}
+export interface SpriteScale {
+  width: number;
+  height: number;
+}
+export interface SpriteDirection {
+  NORTH: boolean;
+  EAST: boolean;
+  SOUTH: boolean;
+  WEST: boolean;
+}
+export interface SpriteSheet {
+  IDLE: SpriteSheetState;
+  NORTH?: SpriteSheetState;
+  EAST?: SpriteSheetState;
+  SOUTH?: SpriteSheetState;
+  WEST?: SpriteSheetState;
+  NORTH_EAST?: SpriteSheetState;
+  NORTH_WEST?: SpriteSheetState;
+  SOUTH_EAST?: SpriteSheetState;
+  SOUTH_WEST?: SpriteSheetState;
+  SLEEP?: SpriteSheetState;
+}
+export interface SpriteAnimation {
+  spriteSheet: SpriteSheet;
+  spriteSheetState: SpriteSheetState;
   frameX: number;
   frameY: number;
-  animationState: AnimationState;
-  entityState: GameEntityState;
+  currentFrameIndex: number;
+  timeSinceLastFrame: number;
 }
 
-export interface SpriteSheet {
-  IDLE: SpriteSheetType;
-  NORTH?: SpriteSheetType;
-  EAST?: SpriteSheetType;
-  SOUTH?: SpriteSheetType;
-  WEST?: SpriteSheetType;
-  NORTH_EAST?: SpriteSheetType;
-  NORTH_WEST?: SpriteSheetType;
-  SOUTH_EAST?: SpriteSheetType;
-  SOUTH_WEST?: SpriteSheetType;
-  SLEEP?: SpriteSheetType;
+export interface PlayerPet {
+  id: SpriteId;
+  spriteName: SpriteName;
+  spriteAvatar: SpriteAvatar;
+  x: number;
+  y: number;
 }
-
-export enum AnimationState {
-  IDLE = "IDLE",
-  NORTH = "NORTH",
-  EAST = "EAST",
-  SOUTH = "SOUTH",
-  WEST = "WEST",
-  NORTH_EAST = "NORTH_EAST",
-  NORTH_WEST = "NORTH_WEST",
-  SOUTH_EAST = "SOUTH_EAST",
-  SOUTH_WEST = "SOUTH_WEST",
-  SLEEP = "SLEEP",
-}
-
 export interface PlayerMessage {
-  id: string;
-  name: string;
+  id: SpriteId;
+  name: SpriteName;
   message: string;
 }
