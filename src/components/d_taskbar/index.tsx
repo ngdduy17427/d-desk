@@ -4,7 +4,7 @@ import { withContext } from "context/context";
 import { IProgramFile } from "program_files";
 import AboutMeProgram from "program_files/about_me";
 import ContactProgram from "program_files/contact";
-import MyPetProgram from "program_files/my_pet";
+import OneAMProgram from "program_files/one_am";
 import ProjectsProgram from "program_files/projects";
 import SettingsProgram from "program_files/settings";
 import SkillsProgram from "program_files/skills";
@@ -18,7 +18,7 @@ import DesktopShortcut from "./ui/desktop_shortcut";
 import MobileShortcut from "./ui/mobile_shortcut";
 
 export const programFiles = [
-  MyPetProgram,
+  OneAMProgram,
   AboutMeProgram,
   ProjectsProgram,
   SkillsProgram,

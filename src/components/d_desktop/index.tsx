@@ -4,7 +4,7 @@ import { AppBackgroundOptions, AppCursorOptions, AppThemeOptions } from "config"
 import { AppActionType } from "context/actions";
 import { withContext } from "context/context";
 import { IProgramFile } from "program_files";
-import MyPetProgram from "program_files/my_pet";
+import OneAMProgram from "program_files/one_am";
 import { useCallback, useLayoutEffect, useRef } from "react";
 import localStorageHelper from "utils/local_storage_helper";
 import { isUndefined } from "utils/utils_helper";
@@ -55,7 +55,7 @@ const DDesktop = ({
   }, [localLocalSettings]);
 
   useLayoutEffect(
-    (): void => appDispatch(AppActionType.OPEN_NEW_WINDOW, { programFile: MyPetProgram }),
+    (): void => appDispatch(AppActionType.OPEN_NEW_WINDOW, { programFile: OneAMProgram }),
     [appDispatch]
   );
 

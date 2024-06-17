@@ -4,17 +4,6 @@ import { uuidv4 } from "utils/utils_helper";
 import "./css.css";
 import ProjectCard from "./ui/project_card";
 
-export interface IProject {
-  id?: string;
-  name: string;
-  description: string;
-  techs: Array<string>;
-  thumnnail: string;
-  link?: string;
-  linkGit?: string;
-  linkNPM?: string;
-}
-
 interface ITech {
   id?: string;
   name: string;
@@ -27,6 +16,39 @@ const createTech = ({ name, link }: ITech): ITech => ({
   link,
 });
 
+export const techList: Array<ITech> = [
+  createTech({
+    name: "React",
+    link: "https://react.dev/",
+  }),
+  createTech({
+    name: "TypeScript",
+    link: "https://www.typescriptlang.org/",
+  }),
+  createTech({
+    name: "Next.js",
+    link: "https://nextjs.org/",
+  }),
+  createTech({
+    name: "Node.js",
+    link: "https://nodejs.org",
+  }),
+  createTech({
+    name: "WebSocket",
+    link: "https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API",
+  }),
+];
+
+export interface IProject {
+  id?: string;
+  name: string;
+  description: string;
+  techs: Array<string>;
+  thumnnail: string;
+  link?: string;
+  linkGit?: string;
+  linkNPM?: string;
+}
 const createProject = ({
   name,
   description,
@@ -46,35 +68,19 @@ const createProject = ({
   linkNPM,
 });
 
-export const techList: Array<ITech> = [
-  createTech({
-    name: "React",
-    link: "https://react.dev/",
-  }),
-  createTech({
-    name: "TypeScript",
-    link: "https://www.typescriptlang.org/",
-  }),
-  createTech({
-    name: "Next.js",
-    link: "https://nextjs.org/",
-  }),
-];
-
 const projectList: Array<IProject> = [
   createProject({
     name: "D-Desk",
     description:
       "A customizable workspace, which allows to organize digital tasks, notes, and projects in a way that suits their individual preferences and workflow.",
-    techs: [String(techList[0].id), String(techList[1].id)],
+    techs: [String(techList[0].id), String(techList[1].id), String(techList[2].id)],
     thumnnail: `${process.env.NEXT_PUBLIC_BASE_URL}/images/thumb/d_desk_thumb.png`,
   }),
   createProject({
     name: "1AM 🌕",
-    description: "An online chat game with pet avatar.",
-    techs: [String(techList[0].id), String(techList[1].id), String(techList[2].id)],
+    description: "An online chat game with character.",
+    techs: [String(techList[1].id), String(techList[3].id), String(techList[4].id)],
     thumnnail: `${process.env.NEXT_PUBLIC_BASE_URL}/images/thumb/1am_thumb.png`,
-    link: "https://d-desk.vercel.app/",
   }),
   createProject({
     name: "D-Store",

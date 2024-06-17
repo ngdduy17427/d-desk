@@ -1,0 +1,132 @@
+.one-am-container {
+  max-width: 100%;
+  height: 100%;
+  position: relative;
+  .one-am-gui-container {
+    width: 100%;
+    height: 100%;
+    font-weight: bold;
+    text-shadow: 1px 1px #000;
+    background-image: url("../../../public/images/one_am/gui_bg.png");
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: bg-scrolling 5s infinite linear;
+    .one-am-login-box {
+      width: 300px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      .btn-login {
+        color: #fff;
+        background-color: #d9b75c;
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+      }
+      .one-am-server-status {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        .status-dot {
+          width: 0.5rem;
+          height: 0.5rem;
+          background-color: red;
+          border-radius: 0.5rem;
+          display: inline-block;
+          &.online {
+            background-color: green;
+          }
+        }
+        .status-description {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+  .one-am-game-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    .one-am-game {
+      width: 100%;
+      height: 100%;
+      image-rendering: crisp-edges;
+      image-rendering: pixelated;
+    }
+    .one-am-chat-container {
+      position: absolute;
+      right: 1rem;
+      bottom: 2rem;
+      left: 1rem;
+      .one-am-chat-toggle {
+        font-size: 1.5rem;
+        color: #fff;
+        background-color: #d9b75c;
+        padding: 0.5rem;
+        border-radius: 100%;
+      }
+      .one-am-chat-box-container {
+        background-color: rgba(0, 0, 0, 0.3);
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        .one-am-chat-box {
+          height: 200px;
+          overflow-y: auto;
+          .one-am-player-message {
+            font-size: 0.8rem;
+            color: #fff;
+            word-break: break-all;
+          }
+        }
+        .one-am-chat-nav {
+          display: flex;
+          gap: 0.5rem;
+          .d-input-field {
+            width: 100%;
+            height: 100%;
+            input {
+              height: 100%;
+            }
+          }
+          button {
+            color: #fff;
+            background-color: #d9b75c;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+          }
+        }
+      }
+    }
+    .one-am-game-joystick-container {
+      display: none;
+      position: absolute;
+      bottom: 2rem;
+      right: 2rem;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .one-am-container {
+    .one-am-game-container {
+      .one-am-game-joystick-container {
+        display: block;
+      }
+    }
+  }
+}
+
+@keyframes bg-scrolling {
+  0% {
+    background-position: 0 0;
+  }
+  0% {
+    background-position: 160px 160px;
+  }
+}
