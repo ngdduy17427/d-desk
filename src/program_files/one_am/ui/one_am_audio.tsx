@@ -9,7 +9,7 @@ const OneAMAudio = (): JSX.Element => {
 
   return (
     <audio ref={gameAudioRef} autoPlay loop>
-      <source src={`${process.env.NEXT_PUBLIC_BASE_URL}/sounds/8bit_1am.mp3`} type="audio/mpeg" />
+      <source src={`${process.env.NEXT_PUBLIC_BASE_URL}/sounds/1am.mp3`} type="audio/mpeg" />
     </audio>
   );
 };
