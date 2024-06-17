@@ -106,16 +106,12 @@ export class GameEntity {
 
     this.game.gameContext.drawImage(
       this.game.gameAsset,
-
-      this.animation.frameX * this.sw,
-      this.animation.frameY * this.sh,
-
+      this.animation.frameX * this.game.baseTileSize,
+      this.animation.frameY * this.game.baseTileSize,
       this.sw,
       this.sh,
-
       this.relPosition.x - this.game.gameCamera.position.x - this.centerX,
       this.relPosition.y - this.game.gameCamera.position.y - this.centerY,
-
       this.dw,
       this.dh
     );

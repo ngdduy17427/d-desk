@@ -19,17 +19,17 @@ export class PlayerEntity extends GameEntity {
   constructor(game: Game, id: EntityId, playerName: PlayerName, x: number, y: number) {
     super(game, id, 32, 64, { x, y }, { width: 1.5, height: 3 }, 0.01, {
       IDLE: [...repeat(2, [16, 0], [17, 0])],
-      IDLE_NORTH: [...repeat(2, [16, 1], [17, 1])],
-      IDLE_EAST: [...repeat(2, [16, 3], [17, 3])],
+      IDLE_NORTH: [...repeat(2, [16, 2], [17, 2])],
+      IDLE_EAST: [...repeat(2, [16, 6], [17, 6])],
       IDLE_SOUTH: [...repeat(2, [16, 0], [17, 0])],
-      IDLE_WEST: [...repeat(2, [16, 2], [17, 2])],
-      NORTH: [...repeat(2, [16, 1], [18, 1], [16, 1], [19, 1])],
-      EAST: [...repeat(2, [16, 3], [18, 3], [16, 3], [19, 3])],
+      IDLE_WEST: [...repeat(2, [16, 4], [17, 4])],
+      NORTH: [...repeat(2, [16, 2], [18, 2], [16, 2], [19, 2])],
+      EAST: [...repeat(2, [16, 6], [18, 6], [16, 6], [19, 6])],
       SOUTH: [...repeat(2, [16, 0], [18, 0], [16, 0], [19, 0])],
-      WEST: [...repeat(2, [16, 2], [18, 2], [16, 2], [19, 2])],
+      WEST: [...repeat(2, [16, 4], [18, 4], [16, 4], [19, 4])],
     });
 
-    this.centerY = this.dh * 0.7;
+    this.centerY = this.dh * 0.75;
 
     this.playerName = playerName;
     this.playerNameWidth = game.gameContext?.measureText(playerName).width;
@@ -42,7 +42,7 @@ export class PlayerEntity extends GameEntity {
   }
   updateSpriteSize(): void {
     super.updateSpriteSize();
-    this.centerY = this.dh * 0.7;
+    this.centerY = this.dh * 0.75;
   }
   draw(): void {
     super.draw();

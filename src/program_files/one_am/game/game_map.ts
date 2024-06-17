@@ -94,7 +94,7 @@ export class GameMap {
     this.addObject(new TreeEntity(this.game, uuidv4(), 47.5, 27));
     this.addObject(new OldTreeEntity(this.game, uuidv4(), 45.5, 6.5));
 
-    this.addObject(new NonPlayerEntity(this.game, uuidv4(), { playerName: "Duy" }, 23, 23));
+    this.addObject(new NonPlayerEntity(this.game, uuidv4(), { playerName: "Duy" }, 12, 22));
 
     this.game.gamePlayers.forEach((otherPlayer: PlayerEntity): void => this.addObject(otherPlayer));
     this.addObject(<PlayerEntity>this.game.player);
@@ -136,22 +136,18 @@ export class GameMap {
     this.drawLayer(layers[1]);
   }
   private drawLayer(layer: Array<Array<number>>): void {
-    if (!this.game.gameAsset) return;
+    if (!this.game.gameContext || !this.game.gameAsset || !this.game.gameCamera) return;
 
     for (let row = 0; row < this.rows; row++) {
       for (let col = 0; col < this.cols; col++) {
-        this.game.gameContext?.drawImage(
+        this.game.gameContext.drawImage(
           this.game.gameAsset,
-
           this.getTileX(layer, row, col),
           this.getTileY(layer, row, col),
-
           this.game.baseTileSize,
           this.game.baseTileSize,
-
-          col * this.game.tileSize - Number(this.game.gameCamera?.position.x),
-          row * this.game.tileSize - Number(this.game.gameCamera?.position.y),
-
+          col * this.game.tileSize - this.game.gameCamera.position.x,
+          row * this.game.tileSize - this.game.gameCamera.position.y,
           this.game.tileSize,
           this.game.tileSize
         );

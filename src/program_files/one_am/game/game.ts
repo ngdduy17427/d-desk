@@ -86,8 +86,10 @@ export class Game {
     if (!this.gameCanvas || !this.gameContext || !this.gameMap) return;
 
     this.gameContext.clearRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
+
     this.gameContext.fillStyle = `#000`;
     this.gameContext.fillRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
+
     this.gameMap.draw();
   }
   destroy(): void {

@@ -199,6 +199,7 @@ const DWindow = ({
       style={windowStyle}
       className={classNames(
         { center: windowState?.isCenter },
+        { focus: windowState?.isFocus },
         { minimize: windowState?.sizing === EDWindowSizing.MINIMIZE },
         { maximize: windowState?.sizing === EDWindowSizing.MAXIMIZE }
       )}

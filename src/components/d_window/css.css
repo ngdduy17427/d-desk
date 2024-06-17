@@ -10,6 +10,10 @@ d-window {
   transition: all 0.25s ease-in-out;
   transition-property: width, height, top, right, bottom, left;
   animation: slide-in-fwd-center 0.25s ease-in-out;
+  opacity: 0.8;
+  &.focus {
+    opacity: 1;
+  }
   &.minimize {
     border: 1px solid var(--glb-border-color);
     box-shadow: none;
