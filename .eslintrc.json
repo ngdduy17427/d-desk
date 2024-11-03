@@ -19,7 +19,6 @@
     "react/jsx-fragments": "off",
     "react/jsx-props-no-spreading": "off",
     "react/jsx-uses-react": "off",
-    "react/no-array-index-key": "error",
     "react/no-unescaped-entities": "off",
     "react/react-in-jsx-scope": "off",
     "react/self-closing-comp": "error",

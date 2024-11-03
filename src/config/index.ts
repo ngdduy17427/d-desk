@@ -25,17 +25,17 @@ export const AppBackgroundOptions: Array<IAppBackgroundOption> = [
   {
     value: "bg-1",
     label: "Forest 1",
-    image: `${process.env.NEXT_PUBLIC_BASE_URL}/images/background/app_bg_1.png`,
+    image: `${process.env.NEXT_PUBLIC_BASE_URL}/images/background/app-bg-1.png`,
   },
   {
     value: "bg-2",
     label: "Forest 2",
-    image: `${process.env.NEXT_PUBLIC_BASE_URL}/images/background/app_bg_2.png`,
+    image: `${process.env.NEXT_PUBLIC_BASE_URL}/images/background/app-bg-2.png`,
   },
   {
     value: "bg-3",
     label: "Forest 3",
-    image: `${process.env.NEXT_PUBLIC_BASE_URL}/images/background/app_bg_3.png`,
+    image: `${process.env.NEXT_PUBLIC_BASE_URL}/images/background/app-bg-3.png`,
   },
 ];
 export const AppCursorOptions: Array<IAppCursorOption> = [

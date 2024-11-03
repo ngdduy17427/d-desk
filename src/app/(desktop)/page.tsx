@@ -1,4 +1,4 @@
-import AppInit from "./ui/app_init";
+import AppInit from "./ui/app-init";
 
 const Homepage = (): JSX.Element => <AppInit />;
 

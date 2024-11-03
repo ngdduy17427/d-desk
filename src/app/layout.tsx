@@ -10,7 +10,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  icons: `/images/thumb/my_thumb.png`,
+  icons: `/images/thumb/my-thumb.png`,
   title: process.env.NEXT_PUBLIC_APP_TITLE,
   description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
   authors: [
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     url: process.env.NEXT_PUBLIC_BASE_URL,
     siteName: process.env.NEXT_PUBLIC_APP_TITLE,
     locale: process.env.NEXT_PUBLIC_APP_LOCALE,
-    images: `${process.env.NEXT_PUBLIC_BASE_URL}/images/thumb/d_desk_thumb.png`,
+    images: `${process.env.NEXT_PUBLIC_BASE_URL}/images/thumb/d-desk-thumb.png`,
     emails: process.env.NEXT_PUBLIC_APP_EMAIL,
     type: "website",
   },

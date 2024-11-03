@@ -1,6 +1,6 @@
-import { AppActionType } from "context/actions";
+import { AppActionType } from "store/actions";
 import { CursorEffectResult, DefaultOptions } from "cursor-effects";
-import { IProgramFile } from "program_files";
+import { IProgramFile } from "program-files";
 
 type TAppProcesses = Map<string, IProgramFile>;
 type TProcessIndex = Array<string>;
