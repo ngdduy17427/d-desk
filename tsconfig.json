@@ -19,7 +19,8 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@laguz": ["../libs/laguz"]
     },
     "resolveJsonModule": true,
     /* Type Checking */

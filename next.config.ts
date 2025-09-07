@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next'
+import path from 'node:path'
 
 const cspHeader = `
   default-src 'self';
@@ -16,6 +17,14 @@ const cspHeader = `
 const nextConfig: NextConfig = {
   reactStrictMode: false,
   productionBrowserSourceMaps: false,
+  experimental: {
+    externalDir: true,
+    esmExternals: 'loose',
+  },
+  webpack: (config) => {
+    config.resolve.alias['@laguz'] = path.resolve(__dirname, '../libs/laguz')
+    return config
+  },
   headers: async () => {
     return [
       {
