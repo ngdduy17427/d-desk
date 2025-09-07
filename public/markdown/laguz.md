@@ -10,14 +10,6 @@
 
 ---
 
-## 📦 Installation
-
-```bash
-npm install github:ngdduy17427/laguz
-# or
-yarn add github:ngdduy17427/laguz
-```
-
 ## ⚡During Optimization
 
 _This library is still being optimized._

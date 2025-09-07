@@ -1,6 +1,6 @@
 {
   "name": "d-desk",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "private": true,
   "author": "Nguyen Duc Duy",
   "license": "MIT",
@@ -55,7 +55,6 @@
     "typescript-eslint": "^8.41.0"
   },
   "dependencies": {
-    "@ngdduy17427/laguz": "github:ngdduy17427/laguz",
     "axios": "^1.11.0",
     "classnames": "^2.5.1",
     "cursor-effects": "^1.0.17",

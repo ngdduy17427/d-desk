@@ -1,6 +1,6 @@
-import { createStore, withDebug } from '@ngdduy17427/laguz'
 import { EDWindowSizing } from 'components/d-window'
 import { AppBackgroundOptions, AppCursorOptions, AppThemeOptions } from 'config'
+import { createStore, withDebug } from 'libs/laguz'
 import { ProgramFile } from 'program-files'
 import {
   AppBackgroundOption,
