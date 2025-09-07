@@ -23,12 +23,12 @@ export const AppInit = () => {
     if (!localStorageSettingsStr) {
       updateAppSetting(initAppSettings)
     } else {
-      const localStorageSettingsParsed: AppSettings = JSON.parse(localStorageSettingsStr)
+      const localStorageSettingsParsed = JSON.parse(localStorageSettingsStr)
 
       if (
-        isUndefined(localStorageSettingsParsed.appTheme?.value) ||
-        isUndefined(localStorageSettingsParsed.appBackground?.value) ||
-        isUndefined(localStorageSettingsParsed.appCursor?.value)
+        isUndefined(localStorageSettingsParsed?.appTheme?.value) ||
+        isUndefined(localStorageSettingsParsed?.appBackground?.value) ||
+        isUndefined(localStorageSettingsParsed?.appCursor?.value)
       ) {
         updateAppSetting(initAppSettings)
       } else {
