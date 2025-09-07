@@ -1,6 +1,6 @@
 {
   "name": "d-desk",
-  "version": "4.0.3",
+  "version": "5.0.0",
   "private": true,
   "author": "Nguyen Duc Duy",
   "license": "MIT",
@@ -71,6 +71,7 @@
     "remark-gfm": "^4.0.1",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
+    "socket.io-client": "^4.8.1",
     "unified": "^11.0.5"
   }
 }

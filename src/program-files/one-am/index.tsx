@@ -1,12 +1,19 @@
 import { DContainer } from 'components/d-container'
-import { EDWindowSizing } from 'components/d-window'
 import { ProgramFile, createProgramFile } from 'program-files'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './css.css'
 import { OneAMUI } from './ui/one-am-ui'
 
 const UI = (props: ProgramFile) => {
-  const [playersOnline] = useState<number | undefined>(undefined)
+  const [playersOnline, setPlayersOnline] = useState<number | undefined>(undefined)
+
+  useEffect((): void => {
+    fetch(`${process.env.NEXT_PUBLIC_DUHI_HOME_SERVER_URL}/api/one-am/get-all-players-online`, {
+      method: 'GET',
+    })
+      .then((response) => response.json())
+      .then((response) => setPlayersOnline(response.data ?? undefined))
+  }, [])
 
   return (
     <DContainer className='one-am-container'>
@@ -19,12 +26,11 @@ const UI = (props: ProgramFile) => {
 }
 
 export const OneAMProgram = createProgramFile({
-  name: '1AM 🌕',
+  name: '1AM',
   component: UI,
   windowState: {
     width: 1024,
-    height: 616,
-    sizing: EDWindowSizing.MAXIMIZE,
+    height: 768,
     isCenter: true,
   },
 })

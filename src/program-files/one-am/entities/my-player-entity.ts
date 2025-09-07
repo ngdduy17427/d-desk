@@ -1,52 +1,47 @@
-import { Direction, EntityId, PlayerSettings } from '../@type'
+import { EntityId, PlayerSettings } from '../@type'
 import { Game } from '../game/game'
+import { InputHelper } from '../utils/input-helper'
 import { PlayerEntity } from './player-entity'
 
 export class MyPlayerEntity extends PlayerEntity {
+  inputHelper?: InputHelper
+
   isChatting: boolean = false
 
   constructor(game: Game, id: EntityId, playerSettings: PlayerSettings, x: number, y: number) {
-    super(game, id, playerSettings.playerName, x, y)
+    super(game, id, playerSettings.name, x, y)
 
-    addEventListener('keydown', (event: KeyboardEvent) => this.playerMoving(event))
-    addEventListener('keyup', (event: KeyboardEvent) => this.playerStopMoving(event))
+    this.inputHelper = new InputHelper(this)
+
+    addEventListener('keydown', this.onKeyDown)
+    addEventListener('keyup', this.onKeyUp)
+  }
+
+  update(delta: number) {
+    if (this.game?.gameNetState && this.game.gameService?.gameSocket?.id) {
+      const playerSnapshot = this.game.gameNetState.sample(this.game.gameService.gameSocket.id)
+      if (playerSnapshot) this.applyNetSnapshot(playerSnapshot)
+    }
+
+    super.update(delta)
   }
 
   destroy() {
-    removeEventListener('keydown', (event: KeyboardEvent) => this.playerMoving(event))
-    removeEventListener('keyup', (event: KeyboardEvent) => this.playerStopMoving(event))
+    removeEventListener('keydown', this.onKeyDown)
+    removeEventListener('keyup', this.onKeyUp)
   }
 
   setIsChatting(isChatting: boolean) {
     this.isChatting = isChatting
   }
 
-  private playerMoving(event: KeyboardEvent) {
+  private onKeyDown = (event: KeyboardEvent) => {
     if (!this.game?.windowApp.windowState.isFocus || this.isChatting) return
-
-    if (event.code === 'KeyW' || event.code === 'ArrowUp') this.directions.NORTH = true
-    if (event.code === 'KeyD' || event.code === 'ArrowRight') this.directions.EAST = true
-    if (event.code === 'KeyS' || event.code === 'ArrowDown') this.directions.SOUTH = true
-    if (event.code === 'KeyA' || event.code === 'ArrowLeft') this.directions.WEST = true
+    this.inputHelper?.setFromKeyboard(event.code, true)
   }
-  private playerStopMoving(event: KeyboardEvent) {
-    if (!this.game?.windowApp.windowState.isFocus || this.isChatting) return
 
-    if (event.code === 'KeyW' || event.code === 'ArrowUp') {
-      this.directions.NORTH = false
-      this.directions.lastDirection = Direction.NORTH
-    }
-    if (event.code === 'KeyD' || event.code === 'ArrowRight') {
-      this.directions.EAST = false
-      this.directions.lastDirection = Direction.EAST
-    }
-    if (event.code === 'KeyS' || event.code === 'ArrowDown') {
-      this.directions.SOUTH = false
-      this.directions.lastDirection = Direction.SOUTH
-    }
-    if (event.code === 'KeyA' || event.code === 'ArrowLeft') {
-      this.directions.WEST = false
-      this.directions.lastDirection = Direction.WEST
-    }
+  private onKeyUp = (event: KeyboardEvent) => {
+    if (!this.game?.windowApp.windowState.isFocus || this.isChatting) return
+    this.inputHelper?.setFromKeyboard(event.code, false)
   }
 }

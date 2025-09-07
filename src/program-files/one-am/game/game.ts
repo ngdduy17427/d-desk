@@ -6,6 +6,9 @@ import { PlayerEntity } from '../entities/player-entity'
 import { calculateTileSize, createContext } from '../utils/utils-helper'
 import { GameCamera } from './game-camera'
 import { GameMap } from './game-map'
+import { GameNetState } from './game-net-state'
+import { GamePlayer } from './game-player'
+import { GameService } from './game-service'
 
 export class Game {
   windowApp: ProgramFile
@@ -16,6 +19,8 @@ export class Game {
 
   tileSize: number = this.baseTileSize
 
+  gameService: GameService | undefined
+
   gameCanvas: HTMLCanvasElement | undefined
   gameContext: CanvasRenderingContext2D | undefined
 
@@ -23,19 +28,22 @@ export class Game {
   gameMap: GameMap | undefined
   gameCamera: GameCamera | undefined
 
-  gamePlayers: Array<PlayerEntity> = []
+  gameNetState: GameNetState | undefined
+  gamePlayer: GamePlayer | undefined
+
+  players: Map<string, PlayerEntity> = new Map()
   player: MyPlayerEntity | undefined
 
   debug: boolean = false
 
-  constructor(windowApp: ProgramFile) {
+  constructor(windowApp: ProgramFile, gameService: GameService) {
     this.windowApp = windowApp
+    this.gameService = gameService
 
     addEventListener('resize', () => this.resizeGameCanvas())
     addEventListener(`resize-window-${this.windowApp.id}`, () => this.resizeGameCanvas())
   }
 
-  load() {}
   init(gameCanvas: HTMLCanvasElement, playerSettings: PlayerSettings) {
     this.gameCanvas = gameCanvas
     this.gameCanvas.width = this.gameCanvas.offsetWidth
@@ -63,28 +71,31 @@ export class Game {
       this.player = new MyPlayerEntity(this, uniqueId(), playerSettings, 8.5, 25.5)
       this.gameMap = new GameMap(this)
       this.gameCamera = new GameCamera(this)
+      this.gameNetState = new GameNetState(this)
+      this.gamePlayer = new GamePlayer(this)
     }
   }
+
   update(delta: number) {
     if (!this.gameMap || !this.gameCamera) return
-
     this.gameMap.update(delta)
     this.gameCamera.update()
   }
+
   draw() {
     if (!this.gameCanvas || !this.gameContext || !this.gameMap) return
-
     this.gameContext.clearRect(0, 0, this.gameCanvas.width, this.gameCanvas.height)
-
     this.gameContext.fillStyle = '#000'
     this.gameContext.fillRect(0, 0, this.gameCanvas.width, this.gameCanvas.height)
-
     this.gameMap.draw()
   }
+
   destroy() {
-    if (!this.gameMap || !this.gameCamera) return
+    if (!this.gameMap || !this.gameNetState || !this.gamePlayer) return
 
     this.gameMap.destroy()
+    this.gameNetState.destroy()
+    this.gamePlayer.destroy()
 
     removeEventListener('resize', () => this.resizeGameCanvas())
     removeEventListener(`resize-window-${this.windowApp.id}`, () => this.resizeGameCanvas())

@@ -29,6 +29,7 @@ export class GameCamera {
     this.position.x = clamp(this.position.x, 0, this.maxX)
     this.position.y = clamp(this.position.y, 0, this.maxY)
   }
+
   updateCameraSize() {
     if (!this.game.gameCanvas || !this.game.gameMap) return
 

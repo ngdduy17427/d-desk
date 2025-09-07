@@ -8,8 +8,6 @@
 - ⚙️ **Batched updates** — changes are queued and flushed in a microtask.
 - 🎯 **React integration** — `useStore` hook for selecting slices of state.
 
----
-
 ## ⚡During Optimization
 
 _This library is still being optimized._

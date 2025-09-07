@@ -78,6 +78,7 @@ export class GameEntity {
   update(delta: number) {
     updateEntitySpriteAnimation(this, delta)
   }
+
   updateSpriteSize() {
     if (!this.game) return
 
@@ -92,18 +93,8 @@ export class GameEntity {
       y: Math.round(this.position.y * this.game.tileSize),
     }
   }
+
   draw() {
-    if (!this.game) return
-
-    this.drawSprite()
-
-    if (this.game.debug) {
-      this.drawRect()
-    }
-  }
-  destroy() {}
-
-  private drawSprite() {
     if (!this.game || !this.game.gameContext || !this.game.gameAsset || !this.game.gameCamera)
       return
 
@@ -118,7 +109,14 @@ export class GameEntity {
       this.dw,
       this.dh,
     )
+
+    if (this.game.debug) {
+      this.drawRect()
+    }
   }
+
+  destroy() {}
+
   private drawRect() {
     if (!this.game || !this.game.gameContext || !this.game.gameCamera) return
 

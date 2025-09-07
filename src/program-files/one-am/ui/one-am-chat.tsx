@@ -1,98 +1,66 @@
-import { DInputField } from 'components/d-fields/d-input-field'
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useState } from 'react'
-import { MdChatBubble, MdClose, MdSend } from 'react-icons/md'
+import { useEffect, useState } from 'react'
+import { MdChatBubble } from 'react-icons/md'
+import { useStore } from 'store'
 import { uniqueId } from 'utils/utils-helper'
 import { PlayerMessage } from '../@type'
 import { GameService } from '../game/game-service'
+import { OneAMChatBox } from './one-am-chat-box'
+import { OneAMChatForm } from './one-am-chat-form'
 
 type OneAMChatProps = {
   gameService: GameService
-  isOpenChat: boolean
-  setIsOpenChat: Dispatch<SetStateAction<boolean>>
 }
 
-export const OneAMChat = ({ gameService, isOpenChat, setIsOpenChat }: OneAMChatProps) => {
-  const [playerMessages, setPlayerMessages] = useState<Array<PlayerMessage>>([])
-  const [message, setMessage] = useState('')
+export const OneAMChat = ({ gameService }: OneAMChatProps) => {
+  const isOpenChat = useStore((store) => store.oneAMStore.isOpenChat)
+  const updateIsOpenChat = useStore((store) => store.oneAMStore.updateIsOpenChat)
 
-  const handleChangeMessage = (event: ChangeEvent<HTMLInputElement>) => {
-    setMessage(event.target.value)
+  const [playerMessages, setPlayerMessages] = useState<Array<PlayerMessage>>([])
+
+  const onNetMessage = (playerMessage: PlayerMessage) => {
+    setPlayerMessages((prevState): Array<PlayerMessage> => [...prevState, playerMessage])
   }
 
-  const onSubmit = (event: FormEvent) => {
-    event.preventDefault()
-
-    if (message !== '') {
-      setMessage('')
-
-      const playerMessage: PlayerMessage = {
-        id: String(gameService.game?.player?.id),
-        name: String(gameService.game?.player?.playerName),
-        message: String(message),
-      }
-
-      setPlayerMessages((prevState): Array<PlayerMessage> => [...prevState, playerMessage])
-      gameService.game?.player?.setPlayerMessage(playerMessage.message)
+  useEffect(() => {
+    gameService.gameSocket?.on('player:message', onNetMessage)
+    return () => {
+      gameService.gameSocket?.off('player:message', onNetMessage)
     }
+  }, [gameService.gameSocket])
+
+  const toHHMM = (time: number) => {
+    const date = new Date(time)
+    const hours = String(date.getHours()).padStart(2, '0')
+    const minutes = String(date.getMinutes()).padStart(2, '0')
+    return `${hours}:${minutes}`
   }
 
   return (
     <div className='one-am-chat-container'>
-      {!isOpenChat && (
-        <button
-          className='one-am-chat-toggle'
-          type='button'
-          onClick={() => {
-            setIsOpenChat(!isOpenChat)
-            gameService.game?.player?.setIsChatting(false)
-          }}
-        >
-          <MdChatBubble />
-        </button>
-      )}
-      {isOpenChat && (
+      {isOpenChat ? (
         <div className='one-am-chat-box-container'>
-          <div className='one-am-chat-box'>
+          <OneAMChatBox>
             {playerMessages.map((playerMessage) => (
               <p
                 key={uniqueId()}
                 className='one-am-player-message'
               >
-                <span>{playerMessage.name}: </span>
+                <span>[{toHHMM(playerMessage.time)}]</span>
+                <span>[{playerMessage.name}]</span>
                 <span>{playerMessage.message}</span>
               </p>
             ))}
-          </div>
-          <form
-            className='one-am-chat-nav'
-            onSubmit={onSubmit}
-          >
-            <DInputField
-              label=''
-              maxLength={50}
-              value={message}
-              onChange={handleChangeMessage}
-              onFocus={() => gameService.game?.player?.setIsChatting(true)}
-              onBlur={() => gameService.game?.player?.setIsChatting(false)}
-            />
-            <button
-              type='submit'
-              className='cursor-pointer'
-            >
-              <MdSend />
-            </button>
-            <button
-              type='button'
-              className='cursor-pointer'
-              onClick={() => {
-                setIsOpenChat(false)
-                gameService.game?.player?.setIsChatting(false)
-              }}
-            >
-              <MdClose />
-            </button>
-          </form>
+          </OneAMChatBox>
+          <OneAMChatForm gameService={gameService} />
         </div>
+      ) : (
+        <button
+          type='button'
+          className='one-am-chat-toggle'
+          onClick={() => updateIsOpenChat(true)}
+        >
+          <MdChatBubble />
+        </button>
       )}
     </div>
   )

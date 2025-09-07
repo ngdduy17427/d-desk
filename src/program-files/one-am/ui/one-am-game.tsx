@@ -1,5 +1,5 @@
 import { ProgramFile } from 'program-files'
-import { memo, useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import { PlayerSettings } from '../@type'
 import { GameService } from '../game/game-service'
 import { OneAMAudio } from './one-am-audio'
@@ -8,21 +8,21 @@ import { OneAMJoystick } from './one-am-joystick'
 
 type OneAMGameProps = {
   windowApp: ProgramFile
+  playersOnline: number | undefined
   playerSettings: PlayerSettings
 }
 
-const OneAMGameComp = ({ windowApp, playerSettings }: OneAMGameProps) => {
-  const gameServiceRef = useRef<GameService>(new GameService(windowApp))
+const OneAMGameComp = ({ windowApp, playersOnline, playerSettings }: OneAMGameProps) => {
+  const gameServiceRef = useRef<GameService>(new GameService(windowApp, playersOnline))
   const gameCanvasRef = useRef<HTMLCanvasElement>(null)
 
-  const [isOpenChat, setIsOpenChat] = useState(false)
-
-  useEffect((): (() => void) => {
+  useEffect(() => {
     const gameService = gameServiceRef.current
+    const gameCanvas = gameCanvasRef.current
 
-    gameService.start(gameCanvasRef.current as HTMLCanvasElement, playerSettings)
+    if (gameCanvas) gameService.start(gameCanvas, playerSettings)
 
-    return (): Promise<void> => gameService.destroy()
+    return () => gameService.destroy()
   }, [playerSettings])
 
   return (
@@ -31,12 +31,8 @@ const OneAMGameComp = ({ windowApp, playerSettings }: OneAMGameProps) => {
         ref={gameCanvasRef}
         className='one-am-game'
       />
-      <OneAMChat
-        gameService={gameServiceRef.current}
-        isOpenChat={isOpenChat}
-        setIsOpenChat={setIsOpenChat}
-      />
-      {!isOpenChat && <OneAMJoystick gameService={gameServiceRef.current} />}
+      <OneAMChat gameService={gameServiceRef.current} />
+      <OneAMJoystick gameService={gameServiceRef.current} />
       <OneAMAudio />
     </div>
   )
