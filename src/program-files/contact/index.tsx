@@ -1,90 +1,81 @@
-import classNames from "classnames";
-import DContainer from "components/d-container";
-import DIcon from "components/d-icon";
-import DText from "components/d-text";
-import { withContext } from "store/context";
-import { IProgramFile, createProgramFile } from "program-files";
-import { useState } from "react";
-import { SiGithub, SiGmail, SiLinkedin } from "react-icons/si";
-import { uuidv4 } from "utils/utils-helper";
-import "./css.css";
+import classNames from 'classnames'
+import { DContainer } from 'components/d-container'
+import { DPerspectiveIcon } from 'components/d-perspective-icon'
+import { DTypingText } from 'components/d-typing-text'
+import { ProgramFile, createProgramFile } from 'program-files'
+import { ReactNode, useState } from 'react'
+import { SiGmail, SiLinkedin } from 'react-icons/si'
+import { uniqueId } from 'utils/utils-helper'
+import './css.css'
 
-interface IContactUIProps {
-  windowApp: IProgramFile;
+type Contact = {
+  id?: string
+  icon: ReactNode
+  link: string
 }
 
-interface IContact {
-  id?: string;
-  icon: JSX.Element;
-  link: string;
-}
-
-const createContact = ({ icon, link }: IContact): IContact => ({
-  id: uuidv4(),
+const createContact = ({ icon, link }: Contact): Contact => ({
+  id: uniqueId(),
   icon,
   link,
-});
+})
 
-const contactList: Array<IContact> = [
+const contactList: Array<Contact> = [
   createContact({
-    icon: <SiGmail color="#d5463a" />,
-    link: "mailto:ngdduy17427@gmail.com",
+    icon: <SiGmail color='#d5463a' />,
+    link: 'mailto:ngdduy17427@gmail.com',
   }),
   createContact({
-    icon: <SiGithub />,
-    link: "https://github.com/ngdduy17427",
+    icon: <SiLinkedin color='#0a66c2' />,
+    link: 'https://www.linkedin.com/in/ngdduy17427',
   }),
-  createContact({
-    icon: <SiLinkedin color="#0a66c2" />,
-    link: "https://www.linkedin.com/in/ngdduy17427",
-  }),
-];
+]
 
-const UI = withContext(({ windowApp }: IContactUIProps): JSX.Element => {
-  const [isFinishText, setIsFinishText] = useState<boolean>(false);
-  const [isFinishTextDelay, setIsFinishTextDelay] = useState<boolean>(false);
+const UI = ({ windowState }: ProgramFile) => {
+  const [isFinishText, setIsFinishText] = useState(false)
+  const [isFinishTextDelay, setIsFinishTextDelay] = useState(false)
 
   return (
-    <DContainer className="contact-container">
-      <section className="contact-content">
-        <DText
-          texts="If you are interested please contact me at:"
-          className={classNames("intro", { finish: isFinishText })}
-          onFinish={(isFinish): void => {
-            setIsFinishText(isFinish);
+    <DContainer className='contact-container'>
+      <section className='contact-content'>
+        <DTypingText
+          texts='If you are interested please contact me at:'
+          className={classNames('intro', { finish: isFinishText })}
+          onFinish={(isFinish) => {
+            setIsFinishText(isFinish)
 
-            setTimeout((): void => setIsFinishTextDelay(isFinish), 500);
+            setTimeout(() => setIsFinishTextDelay(isFinish), 500)
           }}
         />
         {isFinishTextDelay && (
-          <div className="contacts">
-            {contactList.map(
-              (contact): JSX.Element => (
-                <DIcon
-                  key={contact.id}
-                  className="contact-icon"
-                  windowSizing={windowApp.windowState?.sizing}
+          <div className='contacts'>
+            {contactList.map((contact) => (
+              <DPerspectiveIcon
+                key={contact.id}
+                className='contact-icon'
+                windowSizing={windowState.sizing}
+              >
+                <a
+                  href={contact.link}
+                  target='_blank'
+                  rel='noreferrer'
                 >
-                  <a href={contact.link} target="_blank" rel="noreferrer">
-                    {contact.icon}
-                  </a>
-                </DIcon>
-              )
-            )}
+                  {contact.icon}
+                </a>
+              </DPerspectiveIcon>
+            ))}
           </div>
         )}
       </section>
     </DContainer>
-  );
-});
+  )
+}
 
-const ContactProgram = createProgramFile({
-  name: "Contact",
+export const ContactProgram = createProgramFile({
+  name: 'Contact',
   component: UI,
   windowState: {
     width: 500,
     height: 200,
   },
-});
-
-export default ContactProgram;
+})

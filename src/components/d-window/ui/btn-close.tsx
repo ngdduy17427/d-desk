@@ -1,23 +1,25 @@
-import { TAppDispatch } from "@type";
-import { AppActionType } from "store/actions";
-import { withContext } from "store/context";
-import { MdClose } from "react-icons/md";
+import { MdClose } from 'react-icons/md'
+import { useStore } from 'store'
 
-interface IBtnCloseProps {
-  appDispatch: TAppDispatch;
-  windowId: string;
+type BtnCloseProps = {
+  windowId: string
 }
 
-const BtnClose = ({ appDispatch, windowId }: IBtnCloseProps): JSX.Element => {
+export const BtnClose = ({ windowId }: BtnCloseProps) => {
+  const closeWindow = useStore((store) => store.appStore.closeWindow)
+
+  const handleCloseWindow = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.stopPropagation()
+    closeWindow(windowId)
+  }
+
   return (
     <button
-      type="button"
-      className="window-nav-item"
-      onClick={(): void => appDispatch(AppActionType.CLOSE_WINDOW, { programFileId: windowId })}
+      type='button'
+      className='window-nav-item'
+      onClick={handleCloseWindow}
     >
       <MdClose />
     </button>
-  );
-};
-
-export default withContext(BtnClose);
+  )
+}

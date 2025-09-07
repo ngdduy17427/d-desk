@@ -1,7 +1,7 @@
 .projects-container {
   padding: 1rem;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
   .project-card {
     padding: 1rem;
@@ -34,23 +34,6 @@
       gap: 1rem;
       a:hover {
         color: var(--glb-color-title);
-      }
-    }
-    .project-links {
-      width: 100%;
-      min-height: 2rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
-      .project-link {
-        display: inline-block;
-        svg {
-          font-size: 1.5rem;
-          &:hover {
-            color: var(--glb-color-title);
-          }
-        }
       }
     }
   }

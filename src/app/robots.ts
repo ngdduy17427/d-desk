@@ -1,11 +1,14 @@
-import { MetadataRoute } from "next";
+import { MetadataRoute } from 'next'
 
-export default function robots(): MetadataRoute.Robots {
+const robots = (): MetadataRoute.Robots => {
   return {
     rules: {
-      userAgent: "*",
-      allow: "/",
+      userAgent: '*',
+      allow: '/',
     },
     sitemap: `${process.env.NEXT_PUBLIC_BASE_URL}/sitemap.xml`,
-  };
+  }
 }
+
+// eslint-disable-next-line import/no-default-export
+export default robots

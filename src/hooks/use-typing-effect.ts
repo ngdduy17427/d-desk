@@ -1,69 +1,61 @@
-import React from "react";
+import React from 'react'
 
-export type TTexts = string | Array<string>;
+export type TTexts = string | Array<string>
 
-interface ITypingEffect {
-  isFinish: boolean;
+type TypingEffect = {
+  isFinish: boolean
 }
 
-const useTypingEffect = <T extends HTMLElement>(
-  element: T,
+export const useTypingEffect = <T extends React.RefObject<HTMLElement | null>>(
   texts: TTexts,
-  speed: number = 50
-): ITypingEffect => {
-  const [isFinishTypeAnimation, setIsFinishTypeAnimation] = React.useState<boolean>(false);
-  const [isFinish, setIsFinish] = React.useState<boolean>(false);
+  element?: T,
+  speed: number = 50,
+): TypingEffect => {
+  const [isFinishTypeAnimation, setIsFinishTypeAnimation] = React.useState(false)
+  const [isFinish, setIsFinish] = React.useState(false)
 
   const doTypeAnimation = React.useCallback(
     async (texts: string, parent: HTMLElement): Promise<void> => {
-      if (!parent) return;
-
-      setIsFinishTypeAnimation(false);
-      let textsLength = texts.length;
+      setIsFinishTypeAnimation(false)
+      let textsLength = texts.length
       for (const char of texts)
         await new Promise(
           (resolve): NodeJS.Timeout =>
-            setTimeout((): void => {
-              if (!--textsLength) setIsFinishTypeAnimation(true);
-              resolve((parent.innerHTML += char));
-            }, speed)
-        );
+            setTimeout(() => {
+              if (!--textsLength) setIsFinishTypeAnimation(true)
+              resolve((parent.innerHTML += char))
+            }, speed),
+        )
     },
-    [speed]
-  );
+    [speed],
+  )
 
   const doCreateNode = React.useCallback(
     async (texts: string, parent: HTMLElement): Promise<void> => {
-      const textsDoc = new DOMParser().parseFromString(texts, "text/html");
-      let textsDocLength = textsDoc.body.childNodes.length;
+      const textsDoc = new DOMParser().parseFromString(texts, 'text/html')
+      let textsDocLength = textsDoc.body.childNodes.length
 
       for await (const childNode of textsDoc.body.childNodes) {
-        if (!--textsDocLength) setIsFinish(true);
+        if (!--textsDocLength) setIsFinish(true)
 
-        const deepElement = <HTMLElement>childNode.cloneNode(true);
-        const shallowElement = <HTMLElement>childNode.cloneNode(false);
+        const deepElement = <HTMLElement>childNode.cloneNode(true)
+        const shallowElement = <HTMLElement>childNode.cloneNode(false)
 
-        if (deepElement.nodeName === "#text") {
-          await doTypeAnimation(String(deepElement.nodeValue), parent);
+        if (deepElement.nodeName === '#text') {
+          await doTypeAnimation(String(deepElement.nodeValue), parent)
         } else {
-          parent?.appendChild(shallowElement);
-          await doCreateNode(deepElement.innerHTML, shallowElement);
+          parent.appendChild(shallowElement)
+          await doCreateNode(deepElement.innerHTML, shallowElement)
         }
       }
     },
-    [doTypeAnimation]
-  );
+    [doTypeAnimation],
+  )
 
-  const doTypeEffect = React.useCallback(
-    (texts: TTexts): void => {
-      if (typeof texts === "string") doCreateNode(texts, element);
-    },
-    [doCreateNode, element]
-  );
+  React.useEffect(() => {
+    if (typeof texts !== 'string' || !element || !element.current) return
+    doCreateNode(texts, element.current)
+  }, [doCreateNode, element, texts])
 
-  React.useEffect((): void => doTypeEffect(texts), [doTypeEffect, texts]);
-
-  return { isFinish: isFinishTypeAnimation && isFinish };
-};
-
-export default useTypingEffect;
+  return { isFinish: isFinishTypeAnimation && isFinish }
+}

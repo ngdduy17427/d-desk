@@ -1,19 +1,17 @@
-import useWindowSize from "./use-window-size";
+import { useWindowSize } from './use-window-size'
 
-interface IScreenDetector {
-  isMobile: boolean;
-  isTablet: boolean;
-  isDesktop: boolean;
+type ScreenDetector = {
+  isMobile: boolean
+  isTablet: boolean
+  isDesktop: boolean
 }
 
-const useScreenDetector = (): IScreenDetector => {
-  const { windowWidth } = useWindowSize();
+export const useScreenDetector = (): ScreenDetector => {
+  const { windowWidth } = useWindowSize()
 
   return {
     isMobile: Number(windowWidth) < 481,
     isTablet: Number(windowWidth) >= 481 && Number(windowWidth) <= 768,
     isDesktop: Number(windowWidth) > 769,
-  };
-};
-
-export default useScreenDetector;
+  }
+}

@@ -1,31 +1,35 @@
-import { TAppDispatch } from "@type";
-import { AppActionType } from "store/actions";
-import { withContext } from "store/context";
-import { IProgramFile } from "program-files";
-import { MdMinimize, MdOpenInNew } from "react-icons/md";
-import { EDWindowSizing } from "..";
+import { ProgramFile } from 'program-files'
+import { MdMinimize, MdOpenInNew } from 'react-icons/md'
+import { useStore } from 'store'
+import { EDWindowSizing } from '..'
 
-interface IBtnMinimizeProps {
-  windowApp: IProgramFile;
-  appDispatch: TAppDispatch;
+type BtnMinimizeProps = {
+  windowApp: ProgramFile
 }
 
-const BtnMinimize = ({ windowApp, appDispatch }: IBtnMinimizeProps): JSX.Element => {
-  const { windowState } = windowApp;
+export const BtnMinimize = ({ windowApp }: BtnMinimizeProps) => {
+  const minimizeWindow = useStore((store) => store.appStore.minimizeWindow)
+  const normalWindow = useStore((store) => store.appStore.normalWindow)
 
-  const handleMinimizeWindow = (): void => {
-    if (windowState?.sizing === EDWindowSizing.MINIMIZE)
-      appDispatch(AppActionType.NORMAL_WINDOW, { programFileId: windowApp.id });
-    else {
-      appDispatch(AppActionType.MINIMIZE_WINDOW, { programFileId: windowApp.id });
+  const { windowState } = windowApp
+
+  const handleMinimizeWindow = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.stopPropagation()
+
+    if (windowState.sizing === EDWindowSizing.MINIMIZE) {
+      normalWindow(windowApp.id)
+    } else {
+      minimizeWindow(windowApp.id)
     }
-  };
+  }
 
   return (
-    <button type="button" className="window-nav-item" onClick={handleMinimizeWindow}>
-      {windowState?.sizing === EDWindowSizing.MINIMIZE ? <MdOpenInNew /> : <MdMinimize />}
+    <button
+      type='button'
+      className='window-nav-item'
+      onClick={handleMinimizeWindow}
+    >
+      {windowState.sizing === EDWindowSizing.MINIMIZE ? <MdOpenInNew /> : <MdMinimize />}
     </button>
-  );
-};
-
-export default withContext(BtnMinimize);
+  )
+}

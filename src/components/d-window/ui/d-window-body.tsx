@@ -1,15 +1,20 @@
-import { IProgramFile } from "program-files";
-import { memo } from "react";
-import { WCDWindowBody } from "web-components";
+import { ProgramFile } from 'program-files'
+import { ForwardedRef, memo } from 'react'
+import { WCDWindowBody } from 'web-components'
 
-const DWindowBody = ({ windowApp }: { windowApp: IProgramFile }): JSX.Element => {
-  const WindowComponent = windowApp.component;
+type DWindowBodyProps = {
+  ref: ForwardedRef<HTMLElement>
+  windowApp: ProgramFile
+}
+
+const DWindowBodyComp = ({ ref, windowApp }: DWindowBodyProps) => {
+  const WindowComponent = windowApp.component
 
   return (
-    <WCDWindowBody>
-      <WindowComponent windowApp={windowApp} />
+    <WCDWindowBody ref={ref}>
+      <WindowComponent {...windowApp} />
     </WCDWindowBody>
-  );
-};
+  )
+}
 
-export default memo(DWindowBody);
+export const DWindowBody = memo(DWindowBodyComp)

@@ -1,17 +1,17 @@
-import { EntityId, EntityScale } from "../@type";
-import { Game } from "../game/game";
-import { GameEntity } from "../game/game-entity";
+import { EntityId, EntityScale } from '../@type'
+import { Game } from '../game/game'
+import { GameEntity } from '../game/game-entity'
 
 export class MoonEntity extends GameEntity {
   constructor(game: Game, id: EntityId, x: number, y: number, scale: EntityScale) {
     super(game, id, 96, 96, { x, y }, scale, 0, {
       IDLE: [[0, 0]],
-    });
+    })
   }
 
-  draw(): void {
+  draw() {
     if (!this.game || !this.game.gameContext || !this.game.gameAsset || !this.game.gameCamera)
-      return;
+      return
 
     this.game.gameContext.drawImage(
       this.game.gameAsset,
@@ -22,7 +22,7 @@ export class MoonEntity extends GameEntity {
       this.relPosition.x - this.centerX,
       this.relPosition.y - this.centerY,
       this.dw,
-      this.dh
-    );
+      this.dh,
+    )
   }
 }

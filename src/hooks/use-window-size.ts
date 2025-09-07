@@ -1,30 +1,28 @@
-import React from "react";
+import React from 'react'
 
-export interface IWindowSize {
-  windowWidth: number | undefined;
-  windowHeight: number | undefined;
+type WindowSize = {
+  windowWidth: number | undefined
+  windowHeight: number | undefined
 }
 
-const useWindowSize = (): IWindowSize => {
-  const [windowSize, setWindowSize] = React.useState<IWindowSize>({
+export const useWindowSize = (): WindowSize => {
+  const [windowSize, setWindowSize] = React.useState<WindowSize>({
     windowWidth: undefined,
     windowHeight: undefined,
-  });
+  })
 
-  const updateWindowSize = (): void =>
+  const updateWindowSize = () =>
     setWindowSize({
       windowWidth: window.innerWidth,
       windowHeight: window.innerHeight,
-    });
+    })
 
   React.useEffect((): (() => void) => {
-    updateWindowSize();
+    updateWindowSize()
 
-    addEventListener("resize", updateWindowSize);
-    return (): void => removeEventListener("resize", updateWindowSize);
-  }, []);
+    addEventListener('resize', updateWindowSize)
+    return () => removeEventListener('resize', updateWindowSize)
+  }, [])
 
-  return windowSize;
-};
-
-export default useWindowSize;
+  return windowSize
+}

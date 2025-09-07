@@ -1,4 +1,13 @@
 {
+  "include": [
+    "new-types.d.ts",
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": ["node_modules", ".next"],
   "compilerOptions": {
     /* Language and Environment */
     "target": "ESNext",
@@ -38,7 +47,5 @@
     "incremental": true,
     /* Completeness */
     "skipLibCheck": true
-  },
-  "include": ["**/*.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  }
 }

@@ -1,27 +1,30 @@
-import { IProgramFile } from "program-files";
-import { FormEvent, memo, useState } from "react";
-import { PlayerSettings } from "../@type";
-import OneAMGame from "./one-am-game";
-import OneAMGUI from "./one-am-gui";
+import { ProgramFile } from 'program-files'
+import { FormEvent, memo, useState } from 'react'
+import { PlayerSettings } from '../@type'
+import { OneAMGame } from './one-am-game'
+import { OneAMGUI } from './one-am-gui'
 
-interface IOneAMUIProps {
-  windowApp: IProgramFile;
-  playersOnline: number | undefined;
+type OneAMUIProps = {
+  windowApp: ProgramFile
+  playersOnline: number | undefined
 }
 
-const OneAMUI = ({ windowApp, playersOnline }: IOneAMUIProps): JSX.Element => {
-  const [isLogin, setIsLogin] = useState<boolean>(false);
+export const OneAMUIComp = ({ windowApp, playersOnline }: OneAMUIProps) => {
+  const [isLogin, setIsLogin] = useState(false)
   const [playerSettings, setPlayerSettings] = useState<PlayerSettings>({
-    playerName: "",
-  });
+    playerName: '',
+  })
 
-  const onSubmit = (event: FormEvent): void => {
-    event.preventDefault();
-    if (playerSettings.playerName !== "") setIsLogin(true);
-  };
+  const onSubmit = (event: FormEvent) => {
+    event.preventDefault()
+    if (playerSettings.playerName !== '') setIsLogin(true)
+  }
 
   return isLogin ? (
-    <OneAMGame windowApp={windowApp} playerSettings={playerSettings} />
+    <OneAMGame
+      windowApp={windowApp}
+      playerSettings={playerSettings}
+    />
   ) : (
     <OneAMGUI
       playersOnline={playersOnline}
@@ -29,7 +32,7 @@ const OneAMUI = ({ windowApp, playersOnline }: IOneAMUIProps): JSX.Element => {
       setPlayerSettings={setPlayerSettings}
       onSubmit={onSubmit}
     />
-  );
-};
+  )
+}
 
-export default memo(OneAMUI);
+export const OneAMUI = memo(OneAMUIComp)

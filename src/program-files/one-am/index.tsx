@@ -1,30 +1,30 @@
-import DContainer from "components/d-container";
-import { IProgramFile, createProgramFile } from "program-files";
-import { useState } from "react";
-import "./css.css";
-import OneAMUI from "./ui/one-am-ui";
+import { DContainer } from 'components/d-container'
+import { EDWindowSizing } from 'components/d-window'
+import { ProgramFile, createProgramFile } from 'program-files'
+import { useState } from 'react'
+import './css.css'
+import { OneAMUI } from './ui/one-am-ui'
 
-interface IOneAMProps {
-  windowApp: IProgramFile;
-}
-
-const UI = ({ windowApp }: IOneAMProps): JSX.Element => {
-  const [playersOnline] = useState<number | undefined>(undefined);
+const UI = (props: ProgramFile) => {
+  const [playersOnline] = useState<number | undefined>(undefined)
 
   return (
-    <DContainer className="one-am-container">
-      <OneAMUI windowApp={windowApp} playersOnline={playersOnline} />
+    <DContainer className='one-am-container'>
+      <OneAMUI
+        windowApp={props}
+        playersOnline={playersOnline}
+      />
     </DContainer>
-  );
-};
+  )
+}
 
-const OneAMProgram = createProgramFile({
-  name: "1AM 🌕",
+export const OneAMProgram = createProgramFile({
+  name: '1AM 🌕',
   component: UI,
   windowState: {
     width: 1024,
     height: 616,
+    sizing: EDWindowSizing.MAXIMIZE,
+    isCenter: true,
   },
-});
-
-export default OneAMProgram;
+})

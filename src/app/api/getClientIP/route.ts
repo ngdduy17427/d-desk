@@ -1,6 +1,7 @@
-import { headers } from "next/headers";
-import { NextResponse } from "next/server";
+import { headers } from 'next/headers'
+import { NextResponse } from 'next/server'
 
-export async function GET(): Promise<NextResponse<any>> {
-  return NextResponse.json({ clientIP: headers().get("x-forwarded-for") }, { status: 200 });
+export const GET = async (): Promise<NextResponse<any>> => {
+  const clientIP = (await headers()).get('x-forwarded-for')
+  return NextResponse.json({ clientIP }, { status: 200 })
 }

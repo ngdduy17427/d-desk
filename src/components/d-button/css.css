@@ -1,0 +1,22 @@
+.d-button {
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  background-color: var(--glb-bg-header);
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--glb-color-text);
+  }
+  &:active {
+    box-shadow:
+      0 1px 2px 1px rgb(0 0 0 / 50%) inset,
+      0px 0px 20px 20px rgb(0 0 0 / 10%) inset;
+    transform: translateY(1px);
+  }
+  &:disabled {
+    background-color: #00000040;
+    cursor: not-allowed;
+  }
+}

@@ -1,29 +1,29 @@
-import { IProgramFile } from "program-files";
-import { PlayerSettings } from "../@type";
-import { Game } from "./game";
-import { GameLoop } from "./game-loop";
+import { ProgramFile } from 'program-files'
+import { PlayerSettings } from '../@type'
+import { Game } from './game'
+import { GameLoop } from './game-loop'
 
 export class GameService {
-  private windowApp: IProgramFile;
+  private windowApp: ProgramFile
 
-  game: Game | undefined;
-  gameLoop: GameLoop | undefined;
+  game: Game | undefined
+  gameLoop: GameLoop | undefined
 
-  constructor(windowApp: IProgramFile) {
-    this.windowApp = windowApp;
+  constructor(windowApp: ProgramFile) {
+    this.windowApp = windowApp
   }
 
   async start(gameCanvas: HTMLCanvasElement, playerSettings: PlayerSettings): Promise<void> {
-    this.game = new Game(this.windowApp);
-    this.gameLoop = new GameLoop();
+    this.game = new Game(this.windowApp)
+    this.gameLoop = new GameLoop()
 
     return Promise.resolve()
-      .then((): void => this.game?.init(gameCanvas, playerSettings))
-      .then((): void => this.gameLoop?.start(<Game>this.game));
+      .then(() => this.game?.init(gameCanvas, playerSettings))
+      .then(() => this.gameLoop?.start(<Game>this.game))
   }
   async destroy(): Promise<void> {
     return Promise.resolve()
-      .then((): void => this.gameLoop?.destroy())
-      .then((): void => this.game?.destroy());
+      .then(() => this.gameLoop?.destroy())
+      .then(() => this.game?.destroy())
   }
 }

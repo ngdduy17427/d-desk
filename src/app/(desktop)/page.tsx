@@ -1,5 +1,6 @@
-import AppInit from "./ui/app-init";
+import { AppInit } from './ui/app-init'
 
-const Homepage = (): JSX.Element => <AppInit />;
+const Homepage = () => <AppInit />
 
-export default Homepage;
+// eslint-disable-next-line import/no-default-export
+export default Homepage

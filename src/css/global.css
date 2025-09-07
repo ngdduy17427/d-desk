@@ -1,66 +1,22 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import 'tailwindcss';
 
-@import "./font.css";
-@import "./markdown.css";
-@import "./highlight.css";
-@import "./animation.css";
-@import "./skeleton.css";
+@import './font.css';
+@import './markdown.css';
+@import './highlight.css';
+@import './animation.css';
+@import './skeleton.css';
 
 :root {
+  font-size: 16px;
+  font-family: 'Source Code Pro', monospace;
+
   --glb-taskbar-height: 2.5rem;
   --glb-bg-header: #231f20;
   --glb-color-text: #ebc490;
   --glb-color-title: #e07a5f;
   --glb-border-color: #c3c3c3;
   --glb-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-}
 
-[data-theme="normal"] {
-  --glb-bg-header: #231f20;
-  --glb-color-text: #ebc490;
-  --glb-color-title: #e07a5f;
-}
-[data-theme="theme-1"] {
-  --glb-bg-header: #0e2431;
-  --glb-color-text: #f9b248;
-  --glb-color-title: #fc3a52;
-}
-[data-theme="theme-2"] {
-  --glb-bg-header: #1d1716;
-  --glb-color-text: #a55233;
-  --glb-color-title: #f3bc77;
-}
-[data-theme="theme-3"] {
-  --glb-bg-header: #42240c;
-  --glb-color-text: #fdba9a;
-  --glb-color-title: #f64b3c;
-}
-[data-theme="theme-4"] {
-  --glb-bg-header: #8f1537;
-  --glb-color-text: #f6aad0;
-  --glb-color-title: #fef2f2;
-}
-[data-theme="theme-5"] {
-  --glb-bg-header: #1d1716;
-  --glb-color-text: #a55233;
-  --glb-color-title: #ffffff;
-}
-
-html {
-  width: 100vw;
-  height: 100vh;
-}
-
-body {
-  width: 100%;
-  height: 100%;
-  font-size: 16px;
-  font-family: "Source Code Pro", monospace;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
   ::selection {
     color: var(--glb-color-title);
     text-shadow: none;
@@ -78,13 +34,60 @@ body {
   ::-webkit-scrollbar-thumb:hover {
     opacity: 0.9;
   }
-  > canvas {
-    z-index: 100;
+}
+
+[data-theme='normal'] {
+  --glb-bg-header: #231f20;
+  --glb-color-text: #ebc490;
+  --glb-color-title: #e07a5f;
+}
+[data-theme='theme-1'] {
+  --glb-bg-header: #0e2431;
+  --glb-color-text: #f9b248;
+  --glb-color-title: #fc3a52;
+}
+[data-theme='theme-2'] {
+  --glb-bg-header: #1d1716;
+  --glb-color-text: #a55233;
+  --glb-color-title: #f3bc77;
+}
+[data-theme='theme-3'] {
+  --glb-bg-header: #42240c;
+  --glb-color-text: #fdba9a;
+  --glb-color-title: #f64b3c;
+}
+[data-theme='theme-4'] {
+  --glb-bg-header: #8f1537;
+  --glb-color-text: #f6aad0;
+  --glb-color-title: #fef2f2;
+}
+[data-theme='theme-5'] {
+  --glb-bg-header: #1d1716;
+  --glb-color-text: #a55233;
+  --glb-color-title: #ffffff;
+}
+
+html {
+  width: 100vw;
+  height: 100vh;
+  body {
+    width: 100%;
+    height: 100%;
+    main {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    > canvas {
+      z-index: 100;
+    }
   }
 }
 
 @media screen and (max-width: 768px) {
-  body {
+  :root {
     font-size: 14px;
   }
 }

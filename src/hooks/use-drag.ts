@@ -1,48 +1,48 @@
-import React from "react";
-import { clamp } from "utils/utils-helper";
-import useContainerSize from "./use-container-size";
+import React from 'react'
+import { clamp } from 'utils/utils-helper'
+import { useContainerSize } from './use-container-size'
 
-interface IUseDragProps<T> {
-  dragRef: T;
-  dragLayerRef: Array<T>;
-  isDraggable?: boolean;
-  onDragStart?: () => void;
-  container?: HTMLElement;
+type UseDragProps<T> = {
+  dragRef: T
+  dragLayerRef?: Array<T>
+  isDraggable?: boolean
+  onDragStart?: () => void
+  container?: HTMLElement
 }
 
-interface IDragPosition {
-  top: number | undefined;
-  left: number | undefined;
-  bottom: number | undefined;
-  right: number | undefined;
+type DragPosition = {
+  top: number | undefined
+  left: number | undefined
+  bottom: number | undefined
+  right: number | undefined
 }
 
-interface IDragState {
-  isPressing: boolean;
-  isDragging: boolean;
+type DragState = {
+  isPressing: boolean
+  isDragging: boolean
   relCursor: {
-    relX: number;
-    relY: number;
-  };
-  position: IDragPosition;
+    relX: number
+    relY: number
+  }
+  position: DragPosition
 }
 
-export interface IDrag {
+export type Drag = {
   dragState: {
-    isDragging: boolean;
-    position: IDragPosition;
-  };
+    isDragging: boolean
+    position: DragPosition
+  }
 }
 
-const useDrag = <T extends HTMLElement>({
+export const useDrag = <T extends HTMLElement>({
   dragRef,
   dragLayerRef,
   isDraggable = true,
   onDragStart,
   container,
-}: IUseDragProps<T>): IDrag => {
-  const containerSize = useContainerSize(container);
-  const [dragState, setDragState] = React.useState<IDragState>({
+}: UseDragProps<T>): Drag => {
+  const containerSize = useContainerSize(container)
+  const [dragState, setDragState] = React.useState<DragState>({
     isPressing: false,
     isDragging: false,
     relCursor: {
@@ -55,80 +55,80 @@ const useDrag = <T extends HTMLElement>({
       bottom: undefined,
       right: undefined,
     },
-  });
+  })
 
-  const overrideEventDefaults = (event: any): void => {
-    event.preventDefault();
-    event.stopPropagation();
-  };
+  const overrideEventDefaults = (event: any) => {
+    event.preventDefault()
+    event.stopPropagation()
+  }
 
   const onInitRelCursor = React.useCallback(
-    (x: number, y: number): void => {
-      requestAnimationFrame((): void => {
+    (x: number, y: number) => {
+      requestAnimationFrame(() => {
         setDragState(
-          (prevState): IDragState => ({
+          (prevState): DragState => ({
             ...prevState,
             isPressing: true,
             relCursor: {
               relX: Math.floor(x - dragRef.getBoundingClientRect().left),
               relY: Math.floor(y - dragRef.getBoundingClientRect().top),
             },
-          })
-        );
-      });
+          }),
+        )
+      })
     },
-    [dragRef]
-  );
+    [dragRef],
+  )
 
   const onMoveElement = React.useCallback(
-    (x: number, y: number): void => {
-      requestAnimationFrame((): void => {
+    (x: number, y: number) => {
+      requestAnimationFrame(() => {
         setDragState(
-          (prevState): IDragState => ({
+          (prevState): DragState => ({
             ...prevState,
             isDragging: true,
-          })
-        );
+          }),
+        )
 
-        let posTop: any = y - dragState.relCursor.relY;
-        let posLeft: any = x - dragState.relCursor.relX;
+        let posTop: any = y - dragState.relCursor.relY
+        let posLeft: any = x - dragState.relCursor.relX
         let posBottom: any =
-          containerSize.offsetHeight - dragRef.offsetHeight - posTop + containerSize.offsetTop;
+          containerSize.offsetHeight - dragRef.offsetHeight - posTop + containerSize.offsetTop
         let posRight: any =
-          containerSize.offsetWidth - dragRef.offsetWidth - posLeft + containerSize.offsetLeft;
+          containerSize.offsetWidth - dragRef.offsetWidth - posLeft + containerSize.offsetLeft
 
         posTop = clamp(
           posTop,
           containerSize.offsetTop,
-          containerSize.offsetHeight - dragRef.offsetHeight + containerSize.offsetTop
-        );
+          containerSize.offsetHeight - dragRef.offsetHeight + containerSize.offsetTop,
+        )
         posLeft = clamp(
           posLeft,
           containerSize.offsetLeft,
-          containerSize.offsetWidth - dragRef.offsetWidth + containerSize.offsetLeft
-        );
+          containerSize.offsetWidth - dragRef.offsetWidth + containerSize.offsetLeft,
+        )
         posBottom = clamp(
           posBottom,
           containerSize.offsetBottom,
-          containerSize.offsetHeight - dragRef.offsetHeight
-        );
+          containerSize.offsetHeight - dragRef.offsetHeight,
+        )
         posRight = clamp(
           posRight,
           containerSize.offsetRight,
-          containerSize.offsetWidth - dragRef.offsetWidth
-        );
+          containerSize.offsetWidth - dragRef.offsetWidth,
+        )
 
-        dragRef.style.boxSizing = "border-box";
-        dragRef.style.position = "fixed";
-        dragRef.style.transition = "none";
-        dragRef.style.pointerEvents = "none";
-        dragRef.style.top = `${Math.floor(posTop)}px`;
-        dragRef.style.left = `${Math.floor(posLeft)}px`;
-        dragRef.style.bottom = `${Math.floor(posBottom)}px`;
-        dragRef.style.right = `${Math.floor(posRight)}px`;
+        dragRef.style.boxSizing = 'border-box'
+        dragRef.style.position = 'fixed'
+        dragRef.style.transition = 'none'
+        dragRef.style.pointerEvents = 'none'
+        dragRef.style.top = `${Math.floor(posTop)}px`
+        dragRef.style.left = `${Math.floor(posLeft)}px`
+        dragRef.style.bottom = `${Math.floor(posBottom)}px`
+        dragRef.style.right = `${Math.floor(posRight)}px`
 
         setDragState(
-          (prevState): IDragState => ({
+          (prevState): DragState => ({
             ...prevState,
             position: {
               top: posTop,
@@ -136,9 +136,9 @@ const useDrag = <T extends HTMLElement>({
               bottom: posBottom,
               right: posRight,
             },
-          })
-        );
-      });
+          }),
+        )
+      })
     },
     [
       dragRef,
@@ -150,100 +150,99 @@ const useDrag = <T extends HTMLElement>({
       containerSize.offsetLeft,
       containerSize.offsetBottom,
       containerSize.offsetRight,
-    ]
-  );
+    ],
+  )
 
   const onMouseMoveStart = React.useCallback(
-    (event: MouseEvent): void => {
-      onDragStart?.();
+    (event: MouseEvent) => {
+      onDragStart?.()
 
-      if (!dragRef || !isDraggable || event.button !== 0) return;
-      overrideEventDefaults(event);
-      onInitRelCursor(event.pageX, event.pageY);
+      if (!isDraggable || event.button !== 0) return
+      overrideEventDefaults(event)
+      onInitRelCursor(event.pageX, event.pageY)
     },
-    [onDragStart, dragRef, isDraggable, onInitRelCursor]
-  );
+    [isDraggable, onDragStart, onInitRelCursor],
+  )
 
   const onMouseMove = React.useCallback(
-    (event: MouseEvent): void => {
-      if (!dragRef || !isDraggable || !dragState.isPressing) return;
-      overrideEventDefaults(event);
-      onMoveElement(event.pageX, event.pageY);
+    (event: MouseEvent) => {
+      if (!isDraggable || !dragState.isPressing) return
+      overrideEventDefaults(event)
+      onMoveElement(event.pageX, event.pageY)
     },
-    [dragRef, isDraggable, dragState.isPressing, onMoveElement]
-  );
+    [dragState.isPressing, isDraggable, onMoveElement],
+  )
 
   const onTouchMoveStart = React.useCallback(
-    (event: TouchEvent): void => {
-      onDragStart?.();
+    (event: TouchEvent) => {
+      onDragStart?.()
 
-      if (!dragRef || !isDraggable) return;
-      onInitRelCursor(event.targetTouches[0].pageX, event.targetTouches[0].pageY);
+      if (!isDraggable) return
+      onInitRelCursor(event.targetTouches[0].pageX, event.targetTouches[0].pageY)
     },
-    [onDragStart, dragRef, isDraggable, onInitRelCursor]
-  );
+    [isDraggable, onDragStart, onInitRelCursor],
+  )
 
   const onTouchMove = React.useCallback(
-    (event: TouchEvent): void => {
-      if (!dragRef || !isDraggable || !dragState.isPressing) return;
-      onMoveElement(event.targetTouches[0].pageX, event.targetTouches[0].pageY);
+    (event: TouchEvent) => {
+      if (!isDraggable || !dragState.isPressing) return
+      onMoveElement(event.targetTouches[0].pageX, event.targetTouches[0].pageY)
     },
-    [dragRef, isDraggable, dragState.isPressing, onMoveElement]
-  );
+    [dragState.isPressing, isDraggable, onMoveElement],
+  )
 
   const onMoveEnd = React.useCallback(
-    (event: MouseEvent | TouchEvent): void => {
+    (event: MouseEvent | TouchEvent) => {
       if (dragState.isPressing)
         setDragState(
-          (prevState): IDragState => ({
+          (prevState): DragState => ({
             ...prevState,
             isPressing: false,
-          })
-        );
+          }),
+        )
 
-      if (!dragRef || !dragState.isDragging) return;
-      overrideEventDefaults(event);
+      if (!dragState.isDragging) return
+      overrideEventDefaults(event)
 
-      requestAnimationFrame((): void => {
-        dragRef.style.boxSizing = "";
-        dragRef.style.position = "";
-        dragRef.style.transition = "";
-        dragRef.style.pointerEvents = "";
+      requestAnimationFrame(() => {
+        dragRef.style.boxSizing = ''
+        dragRef.style.position = ''
+        dragRef.style.transition = ''
+        dragRef.style.pointerEvents = ''
 
         setDragState(
-          (prevState): IDragState => ({
+          (prevState): DragState => ({
             ...prevState,
             isDragging: false,
-          })
-        );
-      });
+          }),
+        )
+      })
     },
-    [dragRef, dragState.isPressing, dragState.isDragging]
-  );
+    [dragRef, dragState.isPressing, dragState.isDragging],
+  )
 
   React.useLayoutEffect((): (() => void) => {
-    if (dragLayerRef.length > 0) {
-      dragLayerRef.forEach((element): void => {
-        if (element) {
-          element.onmousedown = onMouseMoveStart;
-          element.ontouchstart = onTouchMoveStart;
-        }
-      });
-    } else if (dragRef) {
-      dragRef.onmousedown = onMouseMoveStart;
-      dragRef.ontouchstart = onTouchMoveStart;
+    if (dragLayerRef && dragLayerRef.length > 0) {
+      dragLayerRef.forEach((element: T | undefined) => {
+        if (!element) return
+        element.onmousedown = onMouseMoveStart
+        element.ontouchstart = onTouchMoveStart
+      })
+    } else {
+      dragRef.onmousedown = onMouseMoveStart
+      dragRef.ontouchstart = onTouchMoveStart
     }
 
-    addEventListener("mousemove", onMouseMove);
-    addEventListener("mouseup", onMoveEnd);
-    addEventListener("touchmove", onTouchMove);
-    addEventListener("touchend", onMoveEnd);
-    return (): void => {
-      removeEventListener("mousemove", onMouseMove);
-      removeEventListener("mouseup", onMoveEnd);
-      removeEventListener("touchmove", onTouchMove);
-      removeEventListener("touchend", onMoveEnd);
-    };
+    addEventListener('mousemove', onMouseMove)
+    addEventListener('mouseup', onMoveEnd)
+    addEventListener('touchmove', onTouchMove)
+    addEventListener('touchend', onMoveEnd)
+    return () => {
+      removeEventListener('mousemove', onMouseMove)
+      removeEventListener('mouseup', onMoveEnd)
+      removeEventListener('touchmove', onTouchMove)
+      removeEventListener('touchend', onMoveEnd)
+    }
   }, [
     dragRef,
     dragLayerRef,
@@ -252,9 +251,7 @@ const useDrag = <T extends HTMLElement>({
     onTouchMoveStart,
     onTouchMove,
     onMoveEnd,
-  ]);
+  ])
 
-  return { dragState };
-};
-
-export default useDrag;
+  return { dragState }
+}

@@ -1,23 +1,25 @@
-import useScreenDetector from "hooks/use-sreen-detector";
-import { memo } from "react";
-import { MdMenu } from "react-icons/md";
+import { useScreenDetector } from 'hooks/use-sreen-detector'
+import { memo } from 'react'
+import { MdMenu } from 'react-icons/md'
 
-interface IBtnMobileMenuProps {
-  handleToggleMobileMenu: () => void;
+type BtnMobileMenuProps = {
+  handleToggleMobileMenu: () => void
 }
 
-const BtnMobileMenu = ({ handleToggleMobileMenu }: IBtnMobileMenuProps): JSX.Element => {
-  const { isMobile, isTablet } = useScreenDetector();
+const BtnMobileMenuComp = ({ handleToggleMobileMenu }: BtnMobileMenuProps) => {
+  const { isMobile, isTablet } = useScreenDetector()
 
   return isMobile || isTablet ? (
-    <button type="button" className="btn-mobile-menu" onClick={handleToggleMobileMenu}>
+    <button
+      type='button'
+      className='btn-mobile-menu'
+      onClick={handleToggleMobileMenu}
+    >
       <MdMenu />
     </button>
   ) : (
     <></>
-  );
-};
+  )
+}
 
-BtnMobileMenu.displayName = "Button Mobile Menu";
-
-export default memo(BtnMobileMenu);
+export const BtnMobileMenu = memo(BtnMobileMenuComp)

@@ -1,15 +1,15 @@
-import { InputHTMLAttributes, memo } from "react";
-import "./css.css";
+import { InputHTMLAttributes, memo } from 'react'
+import './css.css'
 
-interface IInputFieldProps extends InputHTMLAttributes<HTMLInputElement> {
-  label: string;
+type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
+  label: string
 }
 
-const DInputField = ({ label, ...props }: IInputFieldProps): JSX.Element => (
-  <label className="d-input-field">
-    {label !== "" && <p>{label}</p>}
-    <input {...props} />
+const DInputFieldComp = ({ label, ...rest }: InputFieldProps) => (
+  <label className='d-input-field'>
+    {label !== '' && <p>{label}</p>}
+    <input {...rest} />
   </label>
-);
+)
 
-export default memo(DInputField);
+export const DInputField = memo(DInputFieldComp)

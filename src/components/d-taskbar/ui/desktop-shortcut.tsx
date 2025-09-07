@@ -1,28 +1,29 @@
-import useScreenDetector from "hooks/use-sreen-detector";
-import { IProgramFile } from "program-files";
-import { memo } from "react";
-import { programFiles } from "..";
+import { useScreenDetector } from 'hooks/use-sreen-detector'
+import { ProgramFile } from 'program-files'
+import { memo } from 'react'
+import { programFiles } from '..'
 
-interface IDesktopShortcutProps {
-  handleOpenWindow: (programFile: IProgramFile) => void;
+type DesktopShortcutProps = {
+  handleOpenWindow: (programFile: ProgramFile) => void
 }
 
-const DesktopShortcut = ({ handleOpenWindow }: IDesktopShortcutProps): JSX.Element => {
-  const { isDesktop } = useScreenDetector();
+const DesktopShortcutComp = ({ handleOpenWindow }: DesktopShortcutProps) => {
+  const { isDesktop } = useScreenDetector()
 
   return isDesktop ? (
-    <ul className="desktop-shortcut">
-      {programFiles.map(
-        (programFile): JSX.Element => (
-          <li key={programFile.id} onClick={(): void => handleOpenWindow(programFile)}>
-            {programFile.name}
-          </li>
-        )
-      )}
+    <ul className='desktop-shortcut'>
+      {programFiles.map((programFile) => (
+        <li
+          key={programFile.id}
+          onClick={() => handleOpenWindow(programFile)}
+        >
+          {programFile.name}
+        </li>
+      ))}
     </ul>
   ) : (
     <></>
-  );
-};
+  )
+}
 
-export default memo(DesktopShortcut);
+export const DesktopShortcut = memo(DesktopShortcutComp)

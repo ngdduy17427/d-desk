@@ -1,41 +1,47 @@
-import Image from "next/image";
-import { memo } from "react";
-import { WCDImage } from "web-components";
-import "./css.css";
+import Image from 'next/image'
+import { memo } from 'react'
+import { WCDImage } from 'web-components'
+import './css.css'
 
-interface IDImageProps {
-  id?: string;
-  src: string;
-  alt: string;
-  className?: string;
-  unoptimized?: boolean;
-  onLoad?: () => void;
-  onClick?: () => void;
+type DImageProps = {
+  id?: string
+  src: string
+  alt: string
+  className?: string
+  loading?: 'eager' | 'lazy'
+  unoptimized?: boolean
+  onLoad?: () => void
+  onClick?: () => void
 }
 
-const DImage = ({
+const DImageComp = ({
   id,
   src,
   alt,
   className,
+  loading,
   unoptimized,
   onLoad,
   onClick,
-}: IDImageProps): JSX.Element => {
+}: DImageProps) => {
   return (
-    <WCDImage id={id} className={className} onClick={onClick}>
+    <WCDImage
+      id={id}
+      className={className}
+      onClick={onClick}
+    >
       <Image
         src={src}
         alt={alt}
         fill
-        sizes="(max-width: 768px) 100vw, 33vw"
+        sizes='(max-width: 768px) 100vw, 33vw'
         quality={100}
-        priority
+        loading={loading}
         unoptimized={unoptimized}
         onLoad={onLoad}
       />
     </WCDImage>
-  );
-};
+  )
+}
 
-export default memo(DImage);
+export const DImage = memo(DImageComp)

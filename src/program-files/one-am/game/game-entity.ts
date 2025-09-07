@@ -7,25 +7,25 @@ import {
   EntityScale,
   EntitySpeed,
   SpriteSheet,
-} from "../@type";
-import { updateEntitySpriteAnimation } from "../utils/utils-helper";
-import { Game } from "./game";
+} from '../@type'
+import { updateEntitySpriteAnimation } from '../utils/utils-helper'
+import { Game } from './game'
 
 export class GameEntity {
-  game: Game | undefined;
-  id: EntityId;
-  sw: number;
-  sh: number;
-  dw: number;
-  dh: number;
-  centerX: number;
-  centerY: number;
-  position: EntityPosition;
-  relPosition: EntityPosition;
-  scale: EntityScale;
-  speed: EntitySpeed;
-  animation: EntityAnimation;
-  directions: EntityDirections;
+  game: Game | undefined
+  id: EntityId
+  sw: number
+  sh: number
+  dw: number
+  dh: number
+  centerX: number
+  centerY: number
+  position: EntityPosition
+  relPosition: EntityPosition
+  scale: EntityScale
+  speed: EntitySpeed
+  animation: EntityAnimation
+  directions: EntityDirections
 
   constructor(
     game: Game,
@@ -35,29 +35,29 @@ export class GameEntity {
     position: EntityPosition,
     scale: EntityScale,
     speed: number,
-    spriteSheet: SpriteSheet
+    spriteSheet: SpriteSheet,
   ) {
-    this.game = game;
-    this.id = id;
-    this.sw = sw;
-    this.sh = sh;
-    this.dw = game.tileSize * scale.width;
-    this.dh = game.tileSize * scale.height;
-    this.centerX = this.dw / 2;
-    this.centerY = this.dh / 2;
+    this.game = game
+    this.id = id
+    this.sw = sw
+    this.sh = sh
+    this.dw = game.tileSize * scale.width
+    this.dh = game.tileSize * scale.height
+    this.centerX = this.dw / 2
+    this.centerY = this.dh / 2
     this.position = {
       x: position.x,
       y: position.y,
-    };
+    }
     this.relPosition = {
       x: Math.round(position.x * game.tileSize),
       y: Math.round(position.y * game.tileSize),
-    };
+    }
     this.scale = {
       width: scale.width,
       height: scale.height,
-    };
-    this.speed = speed;
+    }
+    this.speed = speed
     this.animation = {
       spriteSheet: spriteSheet,
       spriteSheetState: spriteSheet.IDLE,
@@ -65,44 +65,47 @@ export class GameEntity {
       frameY: 0,
       currentFrameIndex: 0,
       timeSinceLastFrame: 0,
-    };
+    }
     this.directions = {
       NORTH: false,
       EAST: false,
       SOUTH: false,
       WEST: false,
       lastDirection: Direction.IDLE,
-    };
+    }
   }
 
-  update(delta: number): void {
-    updateEntitySpriteAnimation(this, delta);
+  update(delta: number) {
+    updateEntitySpriteAnimation(this, delta)
   }
-  updateSpriteSize(): void {
-    if (!this.game) return;
+  updateSpriteSize() {
+    if (!this.game) return
 
-    this.dw = this.game.tileSize * this.scale.width;
-    this.dh = this.game.tileSize * this.scale.height;
+    this.dw = this.game.tileSize * this.scale.width
+    this.dh = this.game.tileSize * this.scale.height
 
-    this.centerX = this.dw / 2;
-    this.centerY = this.dh / 2;
+    this.centerX = this.dw / 2
+    this.centerY = this.dh / 2
 
     this.relPosition = {
       x: Math.round(this.position.x * this.game.tileSize),
       y: Math.round(this.position.y * this.game.tileSize),
-    };
+    }
   }
-  draw(): void {
-    if (!this.game) return;
+  draw() {
+    if (!this.game) return
 
-    this.drawSprite();
-    this.game.debug && this.drawRect();
+    this.drawSprite()
+
+    if (this.game.debug) {
+      this.drawRect()
+    }
   }
-  destroy(): void {}
+  destroy() {}
 
-  private drawSprite(): void {
+  private drawSprite() {
     if (!this.game || !this.game.gameContext || !this.game.gameAsset || !this.game.gameCamera)
-      return;
+      return
 
     this.game.gameContext.drawImage(
       this.game.gameAsset,
@@ -113,18 +116,18 @@ export class GameEntity {
       this.relPosition.x - this.game.gameCamera.position.x - this.centerX,
       this.relPosition.y - this.game.gameCamera.position.y - this.centerY,
       this.dw,
-      this.dh
-    );
+      this.dh,
+    )
   }
-  private drawRect(): void {
-    if (!this.game || !this.game.gameContext || !this.game.gameCamera) return;
+  private drawRect() {
+    if (!this.game || !this.game.gameContext || !this.game.gameCamera) return
 
-    this.game.gameContext.strokeStyle = `red`;
+    this.game.gameContext.strokeStyle = 'red'
     this.game.gameContext.strokeRect(
       this.relPosition.x - this.game.gameCamera.position.x,
       this.relPosition.y - this.game.gameCamera.position.y,
       this.dw,
-      this.dh
-    );
+      this.dh,
+    )
   }
 }

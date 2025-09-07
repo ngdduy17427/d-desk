@@ -1,0 +1,13 @@
+.markdown-container {
+  height: 100%;
+  padding: 1rem;
+  position: relative;
+  overflow: auto;
+  d-markdown {
+    a:-webkit-any-link {
+      color: -webkit-link;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+}

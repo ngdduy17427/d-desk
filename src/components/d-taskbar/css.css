@@ -4,6 +4,7 @@ d-taskbar {
   padding: 0 1rem;
   border-bottom: 1px solid var(--glb-border-color);
   display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 1rem;
   position: relative;
@@ -62,7 +63,6 @@ d-taskbar {
   .btn-fullscreen {
     font-size: 1.5rem;
     color: var(--glb-color-text);
-    margin-left: auto;
     &:hover {
       color: var(--glb-color-title);
     }

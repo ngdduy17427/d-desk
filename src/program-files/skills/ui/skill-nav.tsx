@@ -1,23 +1,28 @@
-import { MdArrowBack, MdArrowUpward } from "react-icons/md";
+import { MdArrowBack, MdArrowUpward } from 'react-icons/md'
 
-interface ISkillNavProps {
-  handleGoBack: () => void;
+type SkillNavProps = {
+  handleGoBack: () => void
 }
 
-const SkillNav = ({ handleGoBack }: ISkillNavProps): JSX.Element => {
-  const handleScrollTop = (): void =>
-    document.getElementById("skillsAside")?.scrollTo({ top: 0, behavior: "smooth" });
+export const SkillNav = ({ handleGoBack }: SkillNavProps) => {
+  const handleScrollTop = () =>
+    document.getElementById('skillsAside')?.scrollTo({ top: 0, behavior: 'smooth' })
 
   return (
-    <div className="skill-nav">
-      <button type="button" onClick={handleGoBack}>
+    <div className='skill-nav'>
+      <button
+        type='button'
+        onClick={handleGoBack}
+      >
         <MdArrowBack />
       </button>
-      <button id="btnScrollTop" type="button" onClick={handleScrollTop}>
+      <button
+        id='btnScrollTop'
+        type='button'
+        onClick={handleScrollTop}
+      >
         <MdArrowUpward />
       </button>
     </div>
-  );
-};
-
-export default SkillNav;
+  )
+}

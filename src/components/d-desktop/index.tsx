@@ -1,63 +1,19 @@
-import { IAppContext, IAppSettings, TAppDispatch } from "@type";
-import DWindow from "components/d-window";
-import { AppBackgroundOptions, AppCursorOptions, AppThemeOptions } from "config";
-import { IProgramFile } from "program-files";
-import OneAMProgram from "program-files/one-am";
-import { useCallback, useLayoutEffect, useRef } from "react";
-import { AppActionType } from "store/actions";
-import { withContext } from "store/context";
-import localStorageHelper from "utils/local-storage-helper";
-import { isUndefined } from "utils/utils-helper";
-import { WCDDesktop } from "web-components";
-import "./css.css";
+import { DWindow } from 'components/d-window'
+import { ProgramFile } from 'program-files'
+import { AboutMeProgram } from 'program-files/about-me'
+import { useEffect, useRef } from 'react'
+import { useStore } from 'store'
+import { WCDDesktop } from 'web-components'
+import './css.css'
 
-interface IDDesktopProps {
-  appContext: IAppContext;
-  appDispatch: TAppDispatch;
-}
+export const DDesktop = () => {
+  const runProgram = useStore((store) => store.appStore.runProgram)
+  const appSettings = useStore((store) => store.appStore.appSettings)
+  const appProcesses = useStore((store) => Array.from(store.appStore.appProcesses.values()))
 
-const DDesktop = ({
-  appContext: { appSettings, appProcesses },
-  appDispatch,
-}: IDDesktopProps): JSX.Element => {
-  const containerRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLElement>(null)
 
-  const localLocalSettings = useCallback((): void => {
-    const localStorageSettingsStr: string = String(localStorageHelper.get("appSettings"));
-    const initAppSettings: IAppSettings = {
-      appTheme: AppThemeOptions[0],
-      appBackground: AppBackgroundOptions[0],
-      appCursor: AppCursorOptions[0],
-    };
-
-    if (!localStorageSettingsStr)
-      appDispatch(AppActionType.UPDATE_APP_SETTINGS, { appSettings: initAppSettings });
-    else {
-      const localStorageSettingsParsed: IAppSettings = JSON.parse(localStorageSettingsStr);
-
-      if (
-        isUndefined(localStorageSettingsParsed?.appTheme?.value) ||
-        isUndefined(localStorageSettingsParsed?.appBackground?.value) ||
-        isUndefined(localStorageSettingsParsed?.appCursor?.value)
-      ) {
-        appDispatch(AppActionType.UPDATE_APP_SETTINGS, { appSettings: initAppSettings });
-      } else {
-        appDispatch(AppActionType.UPDATE_APP_SETTINGS, { appSettings: localStorageSettingsParsed });
-      }
-    }
-  }, [appDispatch]);
-
-  useLayoutEffect((): (() => void) => {
-    localLocalSettings();
-
-    addEventListener("storage", localLocalSettings);
-    return (): void => removeEventListener("storage", localLocalSettings);
-  }, [localLocalSettings]);
-
-  useLayoutEffect(
-    (): void => appDispatch(AppActionType.OPEN_NEW_WINDOW, { programFile: OneAMProgram }),
-    [appDispatch]
-  );
+  useEffect(() => runProgram(AboutMeProgram), [runProgram])
 
   return (
     <WCDDesktop
@@ -66,17 +22,13 @@ const DDesktop = ({
         backgroundImage: `url(${appSettings.appBackground?.image})`,
       }}
     >
-      {Array.from(appProcesses.values()).map(
-        (appInProcess: IProgramFile): JSX.Element => (
-          <DWindow
-            key={appInProcess.id}
-            windowApp={appInProcess}
-            container={containerRef.current as HTMLElement}
-          />
-        )
-      )}
+      {appProcesses.map((appInProcess: ProgramFile) => (
+        <DWindow
+          key={appInProcess.id}
+          windowApp={appInProcess}
+          container={containerRef.current as HTMLElement}
+        />
+      ))}
     </WCDDesktop>
-  );
-};
-
-export default withContext(DDesktop);
+  )
+}

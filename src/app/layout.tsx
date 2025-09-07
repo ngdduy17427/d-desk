@@ -1,16 +1,16 @@
-import "css/global.css";
-import type { Metadata, Viewport } from "next";
+import 'css/global.css'
+import type { Metadata, Viewport } from 'next'
 
 export const viewport: Viewport = {
-  width: "device-width",
+  width: 'device-width',
   initialScale: 1,
   minimumScale: 1,
   maximumScale: 1,
   userScalable: false,
-};
+}
 
 export const metadata: Metadata = {
-  icons: `/images/thumb/my-thumb.png`,
+  icons: '/images/thumb/my-thumb.png',
   title: process.env.NEXT_PUBLIC_APP_TITLE,
   description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
   authors: [
@@ -27,18 +27,17 @@ export const metadata: Metadata = {
     locale: process.env.NEXT_PUBLIC_APP_LOCALE,
     images: `${process.env.NEXT_PUBLIC_BASE_URL}/images/thumb/d-desk-thumb.png`,
     emails: process.env.NEXT_PUBLIC_APP_EMAIL,
-    type: "website",
+    type: 'website',
   },
-};
-
-interface IRootLayoutProps {
-  children: React.ReactNode;
 }
 
-const RootLayout = ({ children }: IRootLayoutProps): JSX.Element => (
-  <html lang="en">
-    <body>{children}</body>
+const RootLayout = ({ children }: React.PropsWithChildren) => (
+  <html lang='en'>
+    <body>
+      <main>{children}</main>
+    </body>
   </html>
-);
+)
 
-export default RootLayout;
+// eslint-disable-next-line import/no-default-export
+export default RootLayout

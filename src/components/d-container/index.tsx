@@ -1,19 +1,22 @@
-import { memo } from "react";
-import { WCDContainer } from "web-components";
-import "./css.css";
+import { memo } from 'react'
+import { WCDContainer } from 'web-components'
+import './css.css'
 
-interface IDContainerProps {
-  children?: React.ReactNode;
-  id?: string;
-  className?: string;
+type DContainerProps = {
+  children?: React.ReactNode
+  id?: string
+  className?: string
 }
 
-const DContainer = ({ children, id, className }: IDContainerProps): JSX.Element => {
+const DContainerComp = ({ children, id, className }: DContainerProps) => {
   return (
-    <WCDContainer id={id} className={className}>
+    <WCDContainer
+      id={id}
+      className={className}
+    >
       {children}
     </WCDContainer>
-  );
-};
+  )
+}
 
-export default memo(DContainer);
+export const DContainer = memo(DContainerComp)

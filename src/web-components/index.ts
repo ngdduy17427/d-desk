@@ -1,48 +1,35 @@
-import React from "react";
+import React from 'react'
 
-export interface IWebComponent
-  extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {
-  htmlFor?: string;
-  className?: string;
+export type WebComponentProps<T extends HTMLElement> = React.HTMLAttributes<T> & {
+  ref?: React.Ref<T>
+  htmlFor?: string
+  className?: string
 }
 
-const createWebComponent = (name: string, type: string) => {
-  if (typeof window !== "undefined" && !window.customElements.get(type))
-    window.customElements.define(
-      type,
-      class extends HTMLElement {
-        constructor() {
-          super();
-        }
-      }
-    );
+const createWebComponent = <T extends HTMLElement = HTMLElement>(tagName: string) => {
+  const WebComponent = ({ ref, htmlFor, className, children, ...rest }: WebComponentProps<T>) => {
+    return React.createElement(
+      tagName,
+      {
+        ref,
+        ...(htmlFor ? { for: htmlFor } : {}),
+        className,
+        ...rest,
+      },
+      children,
+    )
+  }
 
-  const WebComponent = React.forwardRef<HTMLElement, IWebComponent>(
-    ({ htmlFor, className, ...props }, ref): JSX.Element =>
-      React.createElement(
-        type,
-        {
-          ref: ref,
-          for: htmlFor,
-          class: className,
-          ...props,
-        },
-        props.children
-      )
-  );
+  return WebComponent
+}
 
-  WebComponent.displayName = name;
-
-  return WebComponent;
-};
-
-export const WCDTaskbar = createWebComponent("WCDTaskbar", "d-taskbar");
-export const WCDDesktop = createWebComponent("WCDDesktop", "d-desktop");
-export const WCDWindow = createWebComponent("WCDWindow", "d-window");
-export const WCDWindowHeader = createWebComponent("WCDWindow", "d-window-header");
-export const WCDWindowBody = createWebComponent("WCDWindow", "d-window-body");
-export const WCDContainer = createWebComponent("WCDContainer", "d-container");
-export const WCDMarkdown = createWebComponent("WCDMarkdown", "d-markdown");
-export const WCDImage = createWebComponent("WCDImage", "d-image");
-export const WCDText = createWebComponent("WCDImage", "d-text");
-export const WCDIcon = createWebComponent("WCDImage", "d-icon");
+export const WCDTaskbar = createWebComponent('d-taskbar')
+export const WCDDesktop = createWebComponent('d-desktop')
+export const WCDWindow = createWebComponent('d-window')
+export const WCDWindowHeader = createWebComponent('d-window-header')
+export const WCDWindowBody = createWebComponent('d-window-body')
+export const WCDContainer = createWebComponent('d-container')
+export const WCDMarkdown = createWebComponent('d-markdown')
+export const WCDImage = createWebComponent('d-image')
+export const WCDTypingText = createWebComponent('d-typing-text')
+export const WCDPerspectiveIcon = createWebComponent('d-perspective-icon')

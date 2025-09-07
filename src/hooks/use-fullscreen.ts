@@ -1,92 +1,90 @@
-import React from "react";
+import React from 'react'
 
 declare global {
   interface Document {
-    mozCancelFullScreen?: () => Promise<void>;
-    mozFullScreen?: Element;
-    mozFullScreenElement?: Element;
-    msExitFullscreen?: () => Promise<void>;
-    msFullscreenElement?: Element;
-    webkitExitFullscreen?: () => Promise<void>;
-    webkitFullscreenElement?: Element;
-    webkitIsFullScreen?: boolean;
+    mozCancelFullScreen?: () => Promise<void>
+    mozFullScreen?: Element
+    mozFullScreenElement?: Element
+    msExitFullscreen?: () => Promise<void>
+    msFullscreenElement?: Element
+    webkitExitFullscreen?: () => Promise<void>
+    webkitFullscreenElement?: Element
+    webkitIsFullScreen?: boolean
   }
 
   interface HTMLElement {
-    mozRequestFullscreen?: () => Promise<void>;
-    msRequestFullscreen?: () => Promise<void>;
-    webkitRequestFullscreen?: () => Promise<void>;
+    mozRequestFullscreen?: () => Promise<void>
+    msRequestFullscreen?: () => Promise<void>
+    webkitRequestFullscreen?: () => Promise<void>
   }
 }
 
-interface IFullScreen {
-  isFullscreen: boolean;
-  handleFullscreen: () => void;
-  handleExitFullscreen: () => void;
+type FullScreen = {
+  isFullscreen: boolean
+  handleFullscreen: () => void
+  handleExitFullscreen: () => void
 }
 
-const useFullscreen = (): IFullScreen => {
-  const [isFullscreen, setIsFullScreen] = React.useState<boolean>(false);
+export const useFullscreen = (): FullScreen => {
+  const [isFullscreen, setIsFullScreen] = React.useState(false)
 
-  const handleFullscreen = (): void => {
-    if (isFullscreen) return;
+  const handleFullscreen = () => {
+    if (isFullscreen) return
 
-    if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen();
-    } else if (document.documentElement.webkitRequestFullscreen) {
-      document.documentElement.webkitRequestFullscreen();
+    if (document.documentElement.webkitRequestFullscreen) {
+      document.documentElement.webkitRequestFullscreen()
     } else if (document.documentElement.mozRequestFullscreen) {
-      document.documentElement.mozRequestFullscreen();
+      document.documentElement.mozRequestFullscreen()
     } else if (document.documentElement.msRequestFullscreen) {
-      document.documentElement.msRequestFullscreen();
+      document.documentElement.msRequestFullscreen()
+    } else {
+      document.documentElement.requestFullscreen()
     }
 
-    setIsFullScreen(true);
-  };
+    setIsFullScreen(true)
+  }
 
-  const handleExitFullscreen = React.useCallback((): void => {
-    if (!isFullscreen) return;
+  const handleExitFullscreen = React.useCallback(() => {
+    if (!isFullscreen) return
 
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
+    if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen()
     } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
+      document.mozCancelFullScreen()
     } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
+      document.msExitFullscreen()
+    } else {
+      document.exitFullscreen()
     }
 
-    setIsFullScreen(false);
-  }, [isFullscreen]);
+    setIsFullScreen(false)
+  }, [isFullscreen])
 
-  const handleFullscreenChange = React.useCallback((): void => {
+  const handleFullscreenChange = React.useCallback(() => {
     if (
       !document.fullscreenElement &&
       !document.webkitIsFullScreen &&
       !document.mozFullScreen &&
       !document.msFullscreenElement
     ) {
-      setIsFullScreen(false);
+      setIsFullScreen(false)
     } else {
-      setIsFullScreen(true);
+      setIsFullScreen(true)
     }
-  }, []);
+  }, [])
 
   React.useLayoutEffect((): (() => void) => {
-    addEventListener("fullscreenchange", handleFullscreenChange);
-    addEventListener("webkitfullscreenchange", handleFullscreenChange);
-    addEventListener("mozfullscreenchange", handleFullscreenChange);
-    addEventListener("MSFullscreenChange", handleFullscreenChange);
-    return (): void => {
-      removeEventListener("fullscreenchange", handleFullscreenChange);
-      removeEventListener("webkitfullscreenchange", handleFullscreenChange);
-      removeEventListener("mozfullscreenchange", handleFullscreenChange);
-      removeEventListener("MSFullscreenChange", handleFullscreenChange);
-    };
-  }, [handleFullscreenChange]);
+    addEventListener('fullscreenchange', handleFullscreenChange)
+    addEventListener('webkitfullscreenchange', handleFullscreenChange)
+    addEventListener('mozfullscreenchange', handleFullscreenChange)
+    addEventListener('MSFullscreenChange', handleFullscreenChange)
+    return () => {
+      removeEventListener('fullscreenchange', handleFullscreenChange)
+      removeEventListener('webkitfullscreenchange', handleFullscreenChange)
+      removeEventListener('mozfullscreenchange', handleFullscreenChange)
+      removeEventListener('MSFullscreenChange', handleFullscreenChange)
+    }
+  }, [handleFullscreenChange])
 
-  return { isFullscreen, handleFullscreen, handleExitFullscreen };
-};
-
-export default useFullscreen;
+  return { isFullscreen, handleFullscreen, handleExitFullscreen }
+}
