@@ -11,6 +11,7 @@ export class GameLoop {
   start(game: Game) {
     this.handle = requestAnimationFrame(() => this.onFrame(game))
   }
+
   destroy() {
     cancelAnimationFrame(Number(this.handle))
   }
@@ -22,6 +23,7 @@ export class GameLoop {
       console.error(error)
     }
   }
+
   private step(game: Game, now: number) {
     this.frames++
 

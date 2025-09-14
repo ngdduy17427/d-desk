@@ -2,7 +2,7 @@ import { EntityId, PlayerSettings } from '../@type'
 import { Game } from '../game/game'
 import { PlayerEntity } from './player-entity'
 
-export class NonPlayerEntity extends PlayerEntity {
+export class NPCEntity extends PlayerEntity {
   private messages: Array<string> = [
     'Hello, my name is Duy.',
     'Welcome to my 1AM small game.',
@@ -11,7 +11,7 @@ export class NonPlayerEntity extends PlayerEntity {
   private messageIndex: number = 0
 
   constructor(game: Game, id: EntityId, playerSettings: PlayerSettings, x: number, y: number) {
-    super(game, id, playerSettings.playerName, x, y)
+    super(game, id, playerSettings.name, x, y)
 
     this.setPlayerMessage(this.messages[this.messageIndex])
 

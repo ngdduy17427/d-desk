@@ -2,7 +2,6 @@ import { clamp } from 'utils/utils-helper'
 import { Direction, SpriteSheetState } from '../@type'
 import { PlayerEntity } from '../entities/player-entity'
 import { GameEntity } from '../game/game-entity'
-import { layerWalkable } from './layer-helper'
 
 export const createContext = (canvas: HTMLCanvasElement): CanvasRenderingContext2D => {
   return <CanvasRenderingContext2D>canvas.getContext('2d')
@@ -52,42 +51,6 @@ export const updateEntitySpriteAnimation = (entity: GameEntity, delta: number) =
 
   entity.animation.frameX = entity.animation.spriteSheetState[entity.animation.currentFrameIndex][0]
   entity.animation.frameY = entity.animation.spriteSheetState[entity.animation.currentFrameIndex][1]
-}
-
-export const updateEntityPosition = (entity: PlayerEntity, delta: number) => {
-  if (entity.position.x === 0 && entity.position.x === Number(entity.game?.gameMap?.cols)) return
-  if (entity.position.y === 0 && entity.position.y === Number(entity.game?.gameMap?.rows)) return
-
-  let distanceToMove = entity.speed * delta
-  let newX = entity.position.x
-  let newY = entity.position.y
-
-  if (
-    (entity.directions.NORTH && entity.directions.EAST) ||
-    (entity.directions.NORTH && entity.directions.WEST) ||
-    (entity.directions.SOUTH && entity.directions.EAST) ||
-    (entity.directions.SOUTH && entity.directions.WEST)
-  ) {
-    distanceToMove *= 0.7071
-  }
-
-  if (entity.directions.NORTH) newY -= isWalkable(newX, newY - distanceToMove) ? distanceToMove : 0
-  if (entity.directions.EAST) newX += isWalkable(newX + distanceToMove, newY) ? distanceToMove : 0
-  if (entity.directions.SOUTH) newY += isWalkable(newX, newY + distanceToMove) ? distanceToMove : 0
-  if (entity.directions.WEST) newX -= isWalkable(newX - distanceToMove, newY) ? distanceToMove : 0
-
-  entity.position.x = newX
-  entity.position.y = newY
-
-  entity.relPosition.x = Math.round(entity.position.x * Number(entity.game?.tileSize))
-  entity.relPosition.y = Math.round(entity.position.y * Number(entity.game?.tileSize))
-}
-
-export const isWalkable = (newX: number, newY: number): boolean => {
-  if (!layerWalkable[Math.floor(newY)] || !layerWalkable[Math.floor(newY)][Math.floor(newX)])
-    return false
-
-  return layerWalkable[Math.floor(newY)][Math.floor(newX)] === 1
 }
 
 export const reorderGameObjectsByY = (gameEntities: Array<GameEntity>): Array<GameEntity> => {

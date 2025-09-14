@@ -3,6 +3,7 @@ import path from 'node:path'
 
 const cspHeader = `
   default-src 'self';
+  connect-src 'self' https://duhi-home.ddns.net wss://duhi-home.ddns.net;
   script-src 'self' 'unsafe-eval' 'unsafe-inline';
   style-src 'self' 'unsafe-inline';
   img-src 'self' blob: data:;

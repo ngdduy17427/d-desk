@@ -12,17 +12,18 @@ type OneAMUIProps = {
 export const OneAMUIComp = ({ windowApp, playersOnline }: OneAMUIProps) => {
   const [isLogin, setIsLogin] = useState(false)
   const [playerSettings, setPlayerSettings] = useState<PlayerSettings>({
-    playerName: '',
+    name: '',
   })
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault()
-    if (playerSettings.playerName !== '') setIsLogin(true)
+    if (playerSettings.name !== '') setIsLogin(true)
   }
 
   return isLogin ? (
     <OneAMGame
       windowApp={windowApp}
+      playersOnline={playersOnline}
       playerSettings={playerSettings}
     />
   ) : (

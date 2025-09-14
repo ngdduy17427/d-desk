@@ -2,10 +2,8 @@ import { uniqueId } from 'utils/utils-helper'
 import { BigRockEntity } from '../entities/big-rock-entity'
 import { CarrotEntity } from '../entities/carrot-entity'
 import { GrassEntity } from '../entities/grass-entity'
-import { MoonEntity } from '../entities/moon-entity'
-import { NonPlayerEntity } from '../entities/non-player-entity'
+import { NPCEntity } from '../entities/npc-entity'
 import { OldTreeEntity } from '../entities/old-tree-entity'
-import { PlayerEntity } from '../entities/player-entity'
 import { SmallTreeEntity } from '../entities/small-tree-entity'
 import { TreeEntity } from '../entities/tree-entity'
 import { TulipEntity } from '../entities/tulip-entity'
@@ -17,8 +15,8 @@ import { GameEntity } from './game-entity'
 
 export class GameMap {
   private game: Game
-  private gameSkyObjects: Array<GameEntity> = []
   private gameEntities: Array<GameEntity> = []
+  private sortedDrawable: Array<GameEntity> = []
 
   cols: number = 48
   rows: number = 27
@@ -29,114 +27,121 @@ export class GameMap {
     this.game = game
     this.mapAssetCols = Number(game.gameAsset?.width) / game.baseTileSize
 
-    this.addSky(new MoonEntity(this.game, uniqueId(), 2.5, 2.5, { width: 2, height: 2 }))
-    this.addObject(new CarrotEntity(this.game, uniqueId(), 35.5, 13.5))
-    this.addObject(new CarrotEntity(this.game, uniqueId(), 36.5, 13.5))
-    this.addObject(new CarrotEntity(this.game, uniqueId(), 37.5, 13.5))
-    this.addObject(new CarrotEntity(this.game, uniqueId(), 35.5, 14.5))
-    this.addObject(new CarrotEntity(this.game, uniqueId(), 36.5, 14.5))
-    this.addObject(new CarrotEntity(this.game, uniqueId(), 37.5, 14.5))
-    this.addObject(new CarrotEntity(this.game, uniqueId(), 35.5, 15.5))
-    this.addObject(new CarrotEntity(this.game, uniqueId(), 36.5, 15.5))
-    this.addObject(new CarrotEntity(this.game, uniqueId(), 37.5, 15.5))
-    this.addObject(new CarrotEntity(this.game, uniqueId(), 35.5, 16.5))
-    this.addObject(new CarrotEntity(this.game, uniqueId(), 36.5, 16.5))
-    this.addObject(new CarrotEntity(this.game, uniqueId(), 37.5, 16.5))
-    this.addObject(new CarrotEntity(this.game, uniqueId(), 35.5, 17.5))
-    this.addObject(new CarrotEntity(this.game, uniqueId(), 36.5, 17.5))
-    this.addObject(new CarrotEntity(this.game, uniqueId(), 37.5, 17.5))
-    this.addObject(new WellsEntity(this.game, uniqueId(), 32.5, 18.5))
-    this.addObject(new GrassEntity(this.game, uniqueId(), 6.5, 26.5))
-    this.addObject(new GrassEntity(this.game, uniqueId(), 15.5, 21.5))
-    this.addObject(new GrassEntity(this.game, uniqueId(), 20.5, 20.5))
-    this.addObject(new GrassEntity(this.game, uniqueId(), 43.5, 8.5))
-    this.addObject(new TulipEntity(this.game, uniqueId(), 4.5, 23.5))
-    this.addObject(new TulipEntity(this.game, uniqueId(), 25.5, 22))
-    this.addObject(new TulipEntity(this.game, uniqueId(), 43.5, 24.5))
-    this.addObject(new TulipEntity(this.game, uniqueId(), 47.5, 11.5))
-    this.addObject(new BigRockEntity(this.game, uniqueId(), 24.5, 26.5))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 10.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 11.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 12.5, 27))
-    this.addObject(new SmallTreeEntity(this.game, uniqueId(), 13.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 14.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 15.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 16.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 17.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 18.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 19.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 20.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 21.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 22.5, 27))
-    this.addObject(new SmallTreeEntity(this.game, uniqueId(), 23.5, 27))
-    this.addObject(new SmallTreeEntity(this.game, uniqueId(), 25.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 26.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 27.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 28.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 29.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 30.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 31.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 32.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 33.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 34.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 35.5, 27))
-    this.addObject(new SmallTreeEntity(this.game, uniqueId(), 36.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 37.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 38.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 39.5, 27))
-    this.addObject(new SmallTreeEntity(this.game, uniqueId(), 40.5, 27))
-    this.addObject(new SmallTreeEntity(this.game, uniqueId(), 41.5, 27))
-    this.addObject(new SmallTreeEntity(this.game, uniqueId(), 42.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 43.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 44.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 45.5, 27))
-    this.addObject(new SmallTreeEntity(this.game, uniqueId(), 46.5, 27))
-    this.addObject(new TreeEntity(this.game, uniqueId(), 47.5, 27))
-    this.addObject(new OldTreeEntity(this.game, uniqueId(), 45.5, 6.5))
+    this.addEntity(new CarrotEntity(this.game, uniqueId(), 35.5, 13.5))
+    this.addEntity(new CarrotEntity(this.game, uniqueId(), 36.5, 13.5))
+    this.addEntity(new CarrotEntity(this.game, uniqueId(), 37.5, 13.5))
+    this.addEntity(new CarrotEntity(this.game, uniqueId(), 35.5, 14.5))
+    this.addEntity(new CarrotEntity(this.game, uniqueId(), 36.5, 14.5))
+    this.addEntity(new CarrotEntity(this.game, uniqueId(), 37.5, 14.5))
+    this.addEntity(new CarrotEntity(this.game, uniqueId(), 35.5, 15.5))
+    this.addEntity(new CarrotEntity(this.game, uniqueId(), 36.5, 15.5))
+    this.addEntity(new CarrotEntity(this.game, uniqueId(), 37.5, 15.5))
+    this.addEntity(new CarrotEntity(this.game, uniqueId(), 35.5, 16.5))
+    this.addEntity(new CarrotEntity(this.game, uniqueId(), 36.5, 16.5))
+    this.addEntity(new CarrotEntity(this.game, uniqueId(), 37.5, 16.5))
+    this.addEntity(new CarrotEntity(this.game, uniqueId(), 35.5, 17.5))
+    this.addEntity(new CarrotEntity(this.game, uniqueId(), 36.5, 17.5))
+    this.addEntity(new CarrotEntity(this.game, uniqueId(), 37.5, 17.5))
 
-    this.addObject(new NonPlayerEntity(this.game, uniqueId(), { playerName: 'Duy' }, 12, 22))
+    this.addEntity(new WellsEntity(this.game, uniqueId(), 32.5, 18.5))
 
-    this.game.gamePlayers.forEach((otherPlayer: PlayerEntity) => this.addObject(otherPlayer))
-    this.addObject(<PlayerEntity>this.game.player)
+    this.addEntity(new GrassEntity(this.game, uniqueId(), 6.5, 26.5))
+    this.addEntity(new GrassEntity(this.game, uniqueId(), 15.5, 21.5))
+    this.addEntity(new GrassEntity(this.game, uniqueId(), 20.5, 20.5))
+    this.addEntity(new GrassEntity(this.game, uniqueId(), 43.5, 8.5))
+
+    this.addEntity(new TulipEntity(this.game, uniqueId(), 4.5, 23.5))
+    this.addEntity(new TulipEntity(this.game, uniqueId(), 25.5, 22))
+    this.addEntity(new TulipEntity(this.game, uniqueId(), 43.5, 24.5))
+    this.addEntity(new TulipEntity(this.game, uniqueId(), 47.5, 11.5))
+
+    this.addEntity(new BigRockEntity(this.game, uniqueId(), 24.5, 26.5))
+
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 10.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 11.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 12.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 14.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 15.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 16.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 17.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 18.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 19.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 20.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 21.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 22.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 26.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 27.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 28.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 29.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 30.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 31.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 32.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 33.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 34.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 35.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 37.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 38.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 39.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 43.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 44.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 45.5, 27))
+    this.addEntity(new TreeEntity(this.game, uniqueId(), 47.5, 27))
+
+    this.addEntity(new SmallTreeEntity(this.game, uniqueId(), 13.5, 27))
+    this.addEntity(new SmallTreeEntity(this.game, uniqueId(), 23.5, 27))
+    this.addEntity(new SmallTreeEntity(this.game, uniqueId(), 25.5, 27))
+    this.addEntity(new SmallTreeEntity(this.game, uniqueId(), 36.5, 27))
+    this.addEntity(new SmallTreeEntity(this.game, uniqueId(), 40.5, 27))
+    this.addEntity(new SmallTreeEntity(this.game, uniqueId(), 41.5, 27))
+    this.addEntity(new SmallTreeEntity(this.game, uniqueId(), 42.5, 27))
+    this.addEntity(new SmallTreeEntity(this.game, uniqueId(), 46.5, 27))
+
+    this.addEntity(new OldTreeEntity(this.game, uniqueId(), 45.5, 6.5))
+
+    this.addEntity(new NPCEntity(this.game, uniqueId(), { name: 'Duy' }, 12, 22))
   }
 
-  addSky(entity: GameEntity) {
-    this.gameSkyObjects.push(entity)
-  }
-  addObject(entity: GameEntity) {
+  addEntity(entity: GameEntity) {
     this.gameEntities.push(entity)
   }
+
   update(delta: number) {
-    this.gameSkyObjects.forEach((entity) => entity.update(delta))
-
-    this.gameEntities = reorderGameObjectsByY(this.gameEntities)
-    this.gameEntities.forEach((entity) => entity.update(delta))
+    const allEntities: GameEntity[] = [...this.gameEntities, ...this.collectPlayers()]
+    this.sortedDrawable = reorderGameObjectsByY(allEntities)
+    for (const entity of allEntities) entity.update(delta)
   }
+
   updateMapSize() {
-    if (!this.game.gameCanvas) return
-
-    this.gameSkyObjects.forEach((entity) => entity.updateSpriteSize())
-    this.gameEntities.forEach((entity) => entity.updateSpriteSize())
+    const allEntities: GameEntity[] = [...this.gameEntities, ...this.collectPlayers()]
+    for (const entity of allEntities) entity.updateSpriteSize()
   }
-  draw() {
-    if (!this.game.gameContext) return
 
-    this.gameSkyObjects.forEach((entity) => entity.draw())
+  draw() {
     this.drawMap()
-    this.gameEntities.forEach((entity) => entity.draw())
+    for (const entity of this.sortedDrawable) entity.draw()
 
     if (this.game.debug) {
       this.drawGrid()
     }
   }
+
   destroy() {
-    this.gameEntities.forEach((entity) => entity.destroy())
+    const allEntities: GameEntity[] = [...this.gameEntities, ...this.collectPlayers()]
+    for (const entity of allEntities) entity.destroy()
+  }
+
+  private collectPlayers(): GameEntity[] {
+    const out: GameEntity[] = []
+    for (const [, p] of this.game.players) out.push(p)
+    if (this.game.player) out.push(this.game.player)
+    return out
   }
 
   private drawMap() {
     this.drawLayer(layers[0])
     this.drawLayer(layers[1])
   }
+
   private drawLayer(layer: Array<Array<number>>) {
     if (!this.game.gameContext || !this.game.gameAsset || !this.game.gameCamera) return
 
@@ -156,6 +161,15 @@ export class GameMap {
       }
     }
   }
+
+  private getTileX(layer: Array<Array<number>>, row: number, col: number): number {
+    return ((layer[row][col] - 1) * this.game.baseTileSize) % Number(this.game.gameAsset?.width)
+  }
+
+  private getTileY(layer: Array<Array<number>>, row: number, col: number): number {
+    return Math.floor((layer[row][col] - 1) / this.mapAssetCols) * this.game.baseTileSize
+  }
+
   private drawGrid() {
     if (!this.game.gameContext || !this.game.gameCamera) return
 
@@ -170,11 +184,5 @@ export class GameMap {
         )
       }
     }
-  }
-  private getTileX(layer: Array<Array<number>>, row: number, col: number): number {
-    return ((layer[row][col] - 1) * this.game.baseTileSize) % Number(this.game.gameAsset?.width)
-  }
-  private getTileY(layer: Array<Array<number>>, row: number, col: number): number {
-    return Math.floor((layer[row][col] - 1) / this.mapAssetCols) * this.game.baseTileSize
   }
 }

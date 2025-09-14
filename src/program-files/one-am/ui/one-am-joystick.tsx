@@ -1,87 +1,25 @@
 import { Joystick } from 'react-joystick-component'
-import { Direction } from '../@type'
+import { useStore } from 'store'
 import { GameService } from '../game/game-service'
 
-type OneAMChatProps = {
+type OneAMJoystickProps = {
   gameService: GameService
 }
 
-export const OneAMJoystick = ({ gameService }: OneAMChatProps) => {
-  const handleJoystickMove = (x: number, y: number) => {
-    if (x > -0.35 && x < 0.35 && y > 0.5)
-      gameService.game?.player?.setPlayerDirection({
-        NORTH: true,
-        EAST: false,
-        SOUTH: false,
-        WEST: false,
-        lastDirection: Direction.NORTH,
-      })
-    if (x > 0.35 && y > 0.35)
-      gameService.game?.player?.setPlayerDirection({
-        NORTH: true,
-        EAST: true,
-        SOUTH: false,
-        WEST: false,
-        lastDirection: gameService.game.player.directions.lastDirection,
-      })
-    if (x > 0.5 && y > -0.35 && y < 0.35)
-      gameService.game?.player?.setPlayerDirection({
-        NORTH: false,
-        EAST: true,
-        SOUTH: false,
-        WEST: false,
-        lastDirection: Direction.EAST,
-      })
-    if (x > 0.35 && y < -0.35)
-      gameService.game?.player?.setPlayerDirection({
-        NORTH: false,
-        EAST: true,
-        SOUTH: true,
-        WEST: false,
-        lastDirection: gameService.game.player.directions.lastDirection,
-      })
-    if (x > -0.35 && x < 0.35 && y < -0.5)
-      gameService.game?.player?.setPlayerDirection({
-        NORTH: false,
-        EAST: false,
-        SOUTH: true,
-        WEST: false,
-        lastDirection: Direction.SOUTH,
-      })
-    if (x < -0.35 && y < -0.35)
-      gameService.game?.player?.setPlayerDirection({
-        NORTH: false,
-        EAST: false,
-        SOUTH: true,
-        WEST: true,
-        lastDirection: gameService.game.player.directions.lastDirection,
-      })
-    if (x < -0.5 && y > -0.35 && y < 0.35)
-      gameService.game?.player?.setPlayerDirection({
-        NORTH: false,
-        EAST: false,
-        SOUTH: false,
-        WEST: true,
-        lastDirection: Direction.WEST,
-      })
-    if (x < -0.35 && y > 0.35)
-      gameService.game?.player?.setPlayerDirection({
-        NORTH: true,
-        EAST: false,
-        SOUTH: false,
-        WEST: true,
-        lastDirection: gameService.game.player.directions.lastDirection,
-      })
+export const OneAMJoystick = ({ gameService }: OneAMJoystickProps) => {
+  const isOpenChat = useStore((store) => store.oneAMStore.isOpenChat)
+
+  if (isOpenChat) return null
+
+  const handleMove = (event: any) => {
+    const x = Number(event.x ?? 0)
+    const y = Number(event.y ?? 0)
+    gameService.game?.player?.inputHelper?.setFromJoystickVector(x, y)
   }
 
-  const handleJoystickStop = () =>
-    gameService.game?.player?.setPlayerDirection({
-      NORTH: false,
-      EAST: false,
-      SOUTH: false,
-      WEST: false,
-      lastDirection: gameService.game.player.directions.lastDirection,
-    })
+  const handleStop = () => {
+    gameService.game?.player?.inputHelper?.clearJoystick()
+  }
 
   return (
     <div className='one-am-game-joystick-container'>
@@ -89,8 +27,8 @@ export const OneAMJoystick = ({ gameService }: OneAMChatProps) => {
         size={75}
         baseColor='#4b4b4b70'
         stickColor='#fcd53f80'
-        move={(event) => handleJoystickMove(Number(event.x), Number(event.y))}
-        stop={handleJoystickStop}
+        move={handleMove}
+        stop={handleStop}
       />
     </div>
   )

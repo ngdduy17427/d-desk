@@ -3,7 +3,8 @@
 import { DDesktop } from 'components/d-desktop'
 import { DTaskbar } from 'components/d-taskbar'
 import { AppBackgroundOptions, AppCursorOptions, AppThemeOptions } from 'config'
-import { Fragment, useCallback, useLayoutEffect } from 'react'
+import { ProjectsProgram } from 'program-files/projects'
+import { Fragment, useCallback, useEffect, useLayoutEffect } from 'react'
 import { useStore } from 'store'
 import { AppSettings } from 'types'
 import { localStorageHelper } from 'utils/local-storage-helper'
@@ -11,6 +12,7 @@ import { isUndefined } from 'utils/utils-helper'
 
 export const AppInit = () => {
   const updateAppSetting = useStore((store) => store.appStore.updateAppSetting)
+  const runProgram = useStore((store) => store.appStore.runProgram)
 
   const localLocalSettings = useCallback(() => {
     const localStorageSettingsStr: string = String(localStorageHelper.get('appSettings'))
@@ -42,6 +44,8 @@ export const AppInit = () => {
     addEventListener('storage', localLocalSettings)
     return () => removeEventListener('storage', localLocalSettings)
   }, [localLocalSettings])
+
+  useEffect(() => runProgram(ProjectsProgram), [runProgram])
 
   return (
     <Fragment>

@@ -1,24 +1,11 @@
 export enum Direction {
-  IDLE,
-  NORTH,
-  EAST,
-  SOUTH,
-  WEST,
+  IDLE = 'I',
+  NORTH = 'N',
+  EAST = 'E',
+  SOUTH = 'S',
+  WEST = 'W',
 }
 
-export type EntityId = string
-export type EntitySpeed = number
-export type SpriteSheetState = Array<Array<number>>
-export type PlayerName = string
-
-export type EntityPosition = {
-  x: number
-  y: number
-}
-export type EntityScale = {
-  width: number
-  height: number
-}
 export type SpriteSheet = {
   IDLE: SpriteSheetState
   IDLE_NORTH?: SpriteSheetState
@@ -34,6 +21,18 @@ export type SpriteSheet = {
   SOUTH_EAST?: SpriteSheetState
   SOUTH_WEST?: SpriteSheetState
   SLEEP?: SpriteSheetState
+}
+export type EntityId = string
+export type EntitySpeed = number
+export type SpriteSheetState = Array<Array<number>>
+export type PlayerName = string
+export type EntityPosition = {
+  x: number
+  y: number
+}
+export type EntityScale = {
+  width: number
+  height: number
 }
 export type EntityAnimation = {
   spriteSheet: SpriteSheet
@@ -51,16 +50,37 @@ export type EntityDirections = {
   lastDirection: Direction
 }
 export type PlayerSettings = {
-  playerName: PlayerName
-}
-export type PlayerEntity = {
-  id: EntityId
-  playerName: PlayerName
-  x: number
-  y: number
+  name: PlayerName
 }
 export type PlayerMessage = {
   id: EntityId
   name: PlayerName
   message: string
+  time: number
+}
+export type InputState = {
+  pressed: Record<Direction, boolean>
+}
+export type PlayerSnapshotLite = {
+  id: string
+  name: string
+  x: number
+  y: number
+}
+export type WorldSnapshotLite = {
+  players: PlayerSnapshotLite[]
+}
+export type PlayerSnapshot = {
+  id: EntityId
+  name: PlayerName
+  x: number
+  y: number
+  vx: number
+  vy: number
+  lastDir: Direction | null
+}
+export type WorldSnapshot = {
+  tick: number
+  serverTime: number
+  players: PlayerSnapshot[]
 }
